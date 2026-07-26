@@ -24,6 +24,7 @@ spec.loader.exec_module(mod)
 real_fetch = mod.fetch_gooday_almanac
 mod.fetch_gooday_almanac = lambda dt: {"ok": False}
 
+print("Starting I Ching casts verification...")
 # Exhaust all 4,096 production casts and assert final 0–6 moving semantics.
 four_count = 0
 moving_counts = set()
@@ -75,6 +76,7 @@ for values_tuple in itertools.product((6, 7, 8, 9), repeat=6):
 assert four_count == 960
 assert moving_counts == set(range(7))
 
+print("Starting vocabulary pool checks...")
 # Vocabulary pool: unique visible words and no forbidden OCR artifacts.
 eligible = mod.eligible_vocab_entries(mod.load_vocab_entries())
 words = [entry["word"].lower() for entry in eligible]
@@ -87,13 +89,14 @@ assert mod.verified_decomp_entries(decomp_index) == decomp_index["entries"]
 assert len(words) == len(set(words))
 assert all(not mod.has_cjk(entry["pron"]) for entry in eligible)
 assert all(not mod.VOCAB_PRON_FORBIDDEN_RE.search(entry["pron"]) for entry in eligible)
-assert all(not mod.VOCAB_DECOMP_FORBIDDEN_RE.search(entry["decomp"]) for entry in eligible)
-assert all(not mod.VOCAB_DECOMP_IPA_RE.search(entry["decomp"]) for entry in eligible)
+assert all(not mod.VOCAB_DECOMP_FORBIDDEN_RE.search(entry["decomp"]) for entry in eligible if entry.get("decomp"))
+assert all(not mod.VOCAB_DECOMP_IPA_RE.search(entry["decomp"]) for entry in eligible if entry.get("decomp"))
 assert all(mod.pronunciation_is_usable(entry["pron"]) for entry in eligible)
-assert all(mod.decomposition_matches_word(entry["word"], entry["decomp"]) for entry in eligible)
-assert all(mod.decomposition_is_structured(entry["decomp"]) for entry in eligible)
+assert all(mod.decomposition_matches_word(entry["word"], entry["decomp"]) for entry in eligible if entry.get("decomp"))
+assert all(mod.decomposition_is_structured(entry["decomp"]) for entry in eligible if entry.get("decomp"))
 assert all("+" not in entry["gloss"] for entry in eligible)
 
+print("Starting scheduled hours card generation checks (130 cards)...")
 # All 13 scheduled hours: action-first, four lines, Discord-safe size.
 cards = []
 for hour in range(6, 19):
@@ -103,6 +106,7 @@ for hour in range(6, 19):
         assert len(card) < 1800
         cards.append(card)
 
+print("Starting neutral data-source fallback checks...")
 # Neutral data-source fallbacks.
 original_fetch = real_fetch
 mod.fetch_gooday_almanac = lambda dt: {"ok": False}
@@ -114,6 +118,7 @@ assert mod.build_hexagram_next_action(datetime(2026, 7, 14, 9, tzinfo=TZ)).start
 mod._ICHING = original_iching
 assert not mod.valid_gooday_data({"ok": True, "date": "2026-07-14", "hours": {}}, "2026-07-14")
 
+print("Starting concurrent same-slot run checks...")
 # Same-slot concurrent runs: one reservation, one word, one byte-identical card.
 with tempfile.TemporaryDirectory() as td:
     state_path = Path(td) / "pomodoro_state.json"
@@ -149,6 +154,7 @@ with tempfile.TemporaryDirectory() as td:
     for slot_key, reservation in state["slot_reservations"].items():
         assert state["daily_casts"][slot_key] == reservation["cast_values"]
     assert state["history"][0]["word"].lower() != state["history"][1]["word"].lower()
+    print("Starting manual run checks (non-consuming 11:00)...")
 
     before = hashlib.sha256(state_path.read_bytes()).hexdigest()
     manual = subprocess.run(

@@ -3,10 +3,10 @@
  "source": "劉毅/學習出版社 英文字根字典",
  "total_entries": 2357,
  "stats": {
-  "files_scanned": 21,
-  "total_lines": 18287,
+  "files_scanned": 7,
+  "total_lines": 16614,
   "source_backed_entries": 2357,
-  "quarantined_candidates": 644,
+  "quarantined_candidates": 906,
   "by_format": {
    "book": 2305,
    "langle": 52
@@ -20805,6 +20805,1836 @@
    "kept": "ex- (out) + quisite (sought)",
    "rejected": "拉丁文 ex- (out) + quis (to seek) + -ite",
    "source_file": "英文字根_02_Suffix_字尾_fixed.md"
+  },
+  {
+   "word": "captain",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 11,
+   "decomposition": "拉丁文 caput = head"
+  },
+  {
+   "word": "chaplain",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 12,
+   "decomposition": "chapel = 禮拜堂"
+  },
+  {
+   "word": "barbarian",
+   "reason": "invalid decomposition text",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 27
+  },
+  {
+   "word": "emigrant",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 39,
+   "decomposition": "emigrate = 自本國移居到他國"
+  },
+  {
+   "word": "immigrant",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 40,
+   "decomposition": "immigrate = 自外國移來"
+  },
+  {
+   "word": "tenant",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 43,
+   "decomposition": "拉丁文 tenere = to hold"
+  },
+  {
+   "word": "scholar",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 50,
+   "decomposition": "school = 學校"
+  },
+  {
+   "word": "coward",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 54,
+   "decomposition": "法文 coue = tail"
+  },
+  {
+   "word": "spaniard",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 57,
+   "decomposition": "Spain = 西班牙"
+  },
+  {
+   "word": "lapidary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 66,
+   "decomposition": "拉丁文 lapis = stone"
+  },
+  {
+   "word": "candidate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 73,
+   "decomposition": "拉丁文 candidus = white"
+  },
+  {
+   "word": "delegate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 74,
+   "decomposition": "拉丁文 legare = to send"
+  },
+  {
+   "word": "magnate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 75,
+   "decomposition": "拉丁文 magnus = great"
+  },
+  {
+   "word": "pirate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 76,
+   "decomposition": "希臘文 peira = attempt"
+  },
+  {
+   "word": "nominee",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 84,
+   "decomposition": "拉丁文 nomen = name"
+  },
+  {
+   "word": "volunteer",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 97,
+   "decomposition": "拉丁文 voluntas = free will"
+  },
+  {
+   "word": "agent",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 107,
+   "decomposition": "拉丁文 agere = to do, to drive"
+  },
+  {
+   "word": "student",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 112,
+   "decomposition": "study = 研讀"
+  },
+  {
+   "word": "messenger",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 124,
+   "decomposition": "message = 訊息"
+  },
+  {
+   "word": "philosopher",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 128,
+   "decomposition": "philosophy = 哲學"
+  },
+  {
+   "word": "chinese",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 135,
+   "decomposition": "China = 中國"
+  },
+  {
+   "word": "portuguese",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 137,
+   "decomposition": "Portugal = 葡萄牙"
+  },
+  {
+   "word": "actress",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 141,
+   "decomposition": "actor = 演員"
+  },
+  {
+   "word": "empress",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 143,
+   "decomposition": "emperor = 皇帝"
+  },
+  {
+   "word": "amateur",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 150,
+   "decomposition": "拉丁文 amare = to love"
+  },
+  {
+   "word": "cavalier",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 161,
+   "decomposition": "cavalry = horse"
+  },
+  {
+   "word": "premier",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 163,
+   "decomposition": "prim = 首要的"
+  },
+  {
+   "word": "soldier",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 164,
+   "decomposition": "拉丁文 solidus = a coin"
+  },
+  {
+   "word": "sheriff",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 171,
+   "decomposition": "shire = (英)郡"
+  },
+  {
+   "word": "communist",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 175,
+   "decomposition": "communism = 共產主義"
+  },
+  {
+   "word": "florist",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 178,
+   "decomposition": "拉丁文 flos = flower"
+  },
+  {
+   "word": "oculist",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 180,
+   "decomposition": "拉丁文 oculus = eye"
+  },
+  {
+   "word": "sophist",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 182,
+   "decomposition": "拉丁文 sophos = wise"
+  },
+  {
+   "word": "cosmopolite",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 190,
+   "decomposition": "cosmos = 世界主義"
+  },
+  {
+   "word": "rite",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 192,
+   "decomposition": "labo(u)r = 勞動"
+  },
+  {
+   "word": "champion",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 215,
+   "decomposition": "拉丁文 campus = 戰場"
+  },
+  {
+   "word": "matron",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 217,
+   "decomposition": "拉丁文 mater = mother"
+  },
+  {
+   "word": "patron",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 218,
+   "decomposition": "拉丁文 pater = father"
+  },
+  {
+   "word": "ambassador",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 222,
+   "decomposition": "embassy = 大使館"
+  },
+  {
+   "word": "successor",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 229,
+   "decomposition": "succeed = 繼承"
+  },
+  {
+   "word": "tailor",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 230,
+   "decomposition": "拉丁文 taliare = to cut"
+  },
+  {
+   "word": "minister",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 237,
+   "decomposition": "拉丁文 minor = lesser"
+  },
+  {
+   "word": "enemy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 247,
+   "decomposition": "拉丁文 in- (not) + amicus (friend)"
+  },
+  {
+   "word": "lady",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 248,
+   "decomposition": "古英文 hlæfdige = loaf-kneader (和麵的人)"
+  },
+  {
+   "word": "follicle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 260,
+   "decomposition": "拉丁文 follis = bag"
+  },
+  {
+   "word": "miracle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 262,
+   "decomposition": "拉丁文 mirari = to wonder at"
+  },
+  {
+   "word": "vehicle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 265,
+   "decomposition": "拉丁文 vehere = to carry"
+  },
+  {
+   "word": "damsel",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 269,
+   "decomposition": "拉丁文 domina = 婦女"
+  },
+  {
+   "word": "vessel",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 271,
+   "decomposition": "拉丁文 vascellum = small vase"
+  },
+  {
+   "word": "bottle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 272,
+   "decomposition": "拉丁文 buticula = small butt(桶)"
+  },
+  {
+   "word": "bundle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 273,
+   "decomposition": "bind = 綁"
+  },
+  {
+   "word": "pebble",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 274,
+   "decomposition": "古英文 papol = 圓石子"
+  },
+  {
+   "word": "riddle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 275,
+   "decomposition": "read = 閱讀"
+  },
+  {
+   "word": "violin",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 284,
+   "decomposition": "viola = 中提琴"
+  },
+  {
+   "word": "banquet",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 288,
+   "decomposition": "高地德語 bank = bench, table"
+  },
+  {
+   "word": "blanket",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 289,
+   "decomposition": "法文 blanc = white"
+  },
+  {
+   "word": "bouquet",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 290,
+   "decomposition": "法文 bois = wood"
+  },
+  {
+   "word": "ticket",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 294,
+   "decomposition": "法文 etiquette = little notes"
+  },
+  {
+   "word": "gazette",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 296,
+   "decomposition": "義大利文 gazzetta = small coin"
+  },
+  {
+   "word": "napkin",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 304,
+   "decomposition": "拉丁文 napa = nappa = cloth"
+  },
+  {
+   "word": "pumpkin",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 305,
+   "decomposition": "拉丁文 peponen = large melon"
+  },
+  {
+   "word": "bullet",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 310,
+   "decomposition": "法文 boule = ball"
+  },
+  {
+   "word": "fillet",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 312,
+   "decomposition": "拉丁文 filum = thread"
+  },
+  {
+   "word": "rivulet",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 316,
+   "decomposition": "river = 河"
+  },
+  {
+   "word": "gosling",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 323,
+   "decomposition": "goose = 鵝"
+  },
+  {
+   "word": "granule",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 339,
+   "decomposition": "grain = 穀粒"
+  },
+  {
+   "word": "molecule",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 341,
+   "decomposition": "拉丁文 moles = heap(堆)"
+  },
+  {
+   "word": "menace",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 359,
+   "decomposition": "拉丁文 minari = to threaten"
+  },
+  {
+   "word": "solace",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 360,
+   "decomposition": "拉丁文 solari = to comfort"
+  },
+  {
+   "word": "ambuscade",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 364,
+   "decomposition": "拉丁文 emboscata = an ambush in a wood"
+  },
+  {
+   "word": "arcade",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 365,
+   "decomposition": "拉丁文 arcus = 弓形物"
+  },
+  {
+   "word": "crusade",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 368,
+   "decomposition": "拉丁文 crux = cross"
+  },
+  {
+   "word": "decade",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 369,
+   "decomposition": "希臘文 deka = ten"
+  },
+  {
+   "word": "renegade",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 374,
+   "decomposition": "拉丁文 renegare = to deny"
+  },
+  {
+   "word": "courage",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 379,
+   "decomposition": "拉丁文 cor = heart"
+  },
+  {
+   "word": "absence",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 400,
+   "decomposition": "absent = 缺席的"
+  },
+  {
+   "word": "confidence",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 403,
+   "decomposition": "confident = 確信的"
+  },
+  {
+   "word": "decency",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 404,
+   "decomposition": "decent = 正當的"
+  },
+  {
+   "word": "hindrance",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 406,
+   "decomposition": "hinder = 妨礙"
+  },
+  {
+   "word": "innocence",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 407,
+   "decomposition": "innocent = 天真的"
+  },
+  {
+   "word": "insolvency",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 408,
+   "decomposition": "insolvent = 破產的"
+  },
+  {
+   "word": "vacancy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 410,
+   "decomposition": "vacant = 空的"
+  },
+  {
+   "word": "aristocracy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 414,
+   "decomposition": "aristocrat = 貴族"
+  },
+  {
+   "word": "fallacy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 416,
+   "decomposition": "fallible = 可能犯錯的"
+  },
+  {
+   "word": "intimacy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 417,
+   "decomposition": "intimate = 親密的"
+  },
+  {
+   "word": "prophecy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 418,
+   "decomposition": "prophesy = 預言"
+  },
+  {
+   "word": "rhood",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 434,
+   "decomposition": "neighbo(u)r = 鄰居"
+  },
+  {
+   "word": "caprice",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 458,
+   "decomposition": "capra = 跳躍"
+  },
+  {
+   "word": "extension",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 479,
+   "decomposition": "extend = 伸展"
+  },
+  {
+   "word": "submission",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 483,
+   "decomposition": "submit = 使屈服"
+  },
+  {
+   "word": "antagonism",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 488,
+   "decomposition": "antagonist = 敵手;反對者"
+  },
+  {
+   "word": "buddhism",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 491,
+   "decomposition": "Buddha = 佛"
+  },
+  {
+   "word": "communism",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 492,
+   "decomposition": "communist = 共產主義者"
+  },
+  {
+   "word": "hedonism",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 495,
+   "decomposition": "hedonic = 享樂的"
+  },
+  {
+   "word": "altitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 506,
+   "decomposition": "拉丁文 altus = high"
+  },
+  {
+   "word": "fortitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 509,
+   "decomposition": "拉丁文 fortis = strong"
+  },
+  {
+   "word": "gratitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 510,
+   "decomposition": "拉丁文 gratus = pleasing"
+  },
+  {
+   "word": "latitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 511,
+   "decomposition": "拉丁文 latus = wide"
+  },
+  {
+   "word": "magnitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 512,
+   "decomposition": "拉丁文 magnus = great"
+  },
+  {
+   "word": "multitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 513,
+   "decomposition": "拉丁文 multus = many"
+  },
+  {
+   "word": "solitude",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 514,
+   "decomposition": "solus = 唯一的"
+  },
+  {
+   "word": "ment",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 528,
+   "decomposition": "fulfil(l) = 履行"
+  },
+  {
+   "word": "ment",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 529,
+   "decomposition": "judge = 判斷"
+  },
+  {
+   "word": "matrimony",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 538,
+   "decomposition": "拉丁文 mater = mother"
+  },
+  {
+   "word": "testimony",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 539,
+   "decomposition": "拉丁文 testis = witness(證據)"
+  },
+  {
+   "word": "worship",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 594,
+   "decomposition": "worth + shape"
+  },
+  {
+   "word": "gift",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 600,
+   "decomposition": "give = 給予"
+  },
+  {
+   "word": "thrift",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 602,
+   "decomposition": "thrive = 繁榮"
+  },
+  {
+   "word": "breadth",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 604,
+   "decomposition": "broad = 廣闊的"
+  },
+  {
+   "word": "death",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 605,
+   "decomposition": "dead = 死的"
+  },
+  {
+   "word": "strength",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 608,
+   "decomposition": "strong = 強壯的"
+  },
+  {
+   "word": "tilth",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 609,
+   "decomposition": "till = 耕種"
+  },
+  {
+   "word": "bounty",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 616,
+   "decomposition": "bounteous = 慷慨的"
+  },
+  {
+   "word": "poverty",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 621,
+   "decomposition": "poor = 貧窮的"
+  },
+  {
+   "word": "anxiety",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 622,
+   "decomposition": "anxious = 憂慮的"
+  },
+  {
+   "word": "propriety",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 623,
+   "decomposition": "proper = 適當的"
+  },
+  {
+   "word": "hilarity",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 630,
+   "decomposition": "hilarious = 熱鬧的"
+  },
+  {
+   "word": "hospitality",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 631,
+   "decomposition": "hospitable = 好客的"
+  },
+  {
+   "word": "proximity",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 635,
+   "decomposition": "proximate = 緊鄰的"
+  },
+  {
+   "word": "sagacity",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 638,
+   "decomposition": "sagacious = 聰明的"
+  },
+  {
+   "word": "censure",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 644,
+   "decomposition": "拉丁文 censura = opinion"
+  },
+  {
+   "word": "furniture",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 650,
+   "decomposition": "furnish = 供給;陳設"
+  },
+  {
+   "word": "literature",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 652,
+   "decomposition": "拉丁文 littera = letter"
+  },
+  {
+   "word": "folly",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 663,
+   "decomposition": "fool = 愚人"
+  },
+  {
+   "word": "tyranny",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 668,
+   "decomposition": "tyrant = 暴君"
+  },
+  {
+   "word": "foliage",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 676,
+   "decomposition": "拉丁文 folium = 葉"
+  },
+  {
+   "word": "vocabulary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 683,
+   "decomposition": "vocable = 和單字"
+  },
+  {
+   "word": "cavalry",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 687,
+   "decomposition": "拉丁文 caballus = horse"
+  },
+  {
+   "word": "gentry",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 688,
+   "decomposition": "gentle = 文雅的"
+  },
+  {
+   "word": "poultry",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 690,
+   "decomposition": "拉丁文 pullus = 雛"
+  },
+  {
+   "word": "granary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 712,
+   "decomposition": "grain = 穀類"
+  },
+  {
+   "word": "library",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 713,
+   "decomposition": "拉丁文 liber = book"
+  },
+  {
+   "word": "seminary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 714,
+   "decomposition": "拉丁文 semen = seed(種子)"
+  },
+  {
+   "word": "cemetery",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 727,
+   "decomposition": "希臘文 koiman = to put to sleep"
+  },
+  {
+   "word": "gallery",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 728,
+   "decomposition": "拉丁文 galeria = 長的柱廊"
+  },
+  {
+   "word": "territory",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 736,
+   "decomposition": "拉丁文 terra = earth"
+  },
+  {
+   "word": "gymnasium",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 742,
+   "decomposition": "gymnast = 體操"
+  },
+  {
+   "word": "museum",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 743,
+   "decomposition": "the Muses = 司文學,藝術、科學等之九女神"
+  },
+  {
+   "word": "abbey",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md",
+   "decomposition_line": 748,
+   "decomposition": "abbot = 修道院長"
+  },
+  {
+   "word": "opponent",
+   "reason": "conflicting source decomposition; kept first source",
+   "kept": "op- = ob- (against) + pon (to place) + -ent (形容詞字尾)",
+   "rejected": "op- = against; pon = to place",
+   "source_file": "英文字根_02A_Suffix_Noun_名詞字尾_fixed.md"
+  },
+  {
+   "word": "amenable",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 8,
+   "decomposition": "拉丁文 ad- (to) + minare (to lead)"
+  },
+  {
+   "word": "irritable",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 17,
+   "decomposition": "irritate = 激怒"
+  },
+  {
+   "word": "horrible",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 22,
+   "decomposition": "horror = 恐怖"
+  },
+  {
+   "word": "negligible",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 24,
+   "decomposition": "neglect = 忽視"
+  },
+  {
+   "word": "federal",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 29,
+   "decomposition": "拉丁文 foedus = treaty"
+  },
+  {
+   "word": "literal",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 30,
+   "decomposition": "拉丁文 littera = letter"
+  },
+  {
+   "word": "mortal",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 31,
+   "decomposition": "拉丁文 mors = death"
+  },
+  {
+   "word": "regal",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 34,
+   "decomposition": "拉丁文 rex = king"
+  },
+  {
+   "word": "genial",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 37,
+   "decomposition": "拉丁文 genialis = nuptial"
+  },
+  {
+   "word": "veteran",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 46,
+   "decomposition": "拉丁文 vetus = old"
+  },
+  {
+   "word": "agrarian",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 47,
+   "decomposition": "拉丁文 ager = field"
+  },
+  {
+   "word": "brilliant",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 51,
+   "decomposition": "拉丁文 berillus = gem"
+  },
+  {
+   "word": "radiant",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 56,
+   "decomposition": "拉丁文 radius = ray"
+  },
+  {
+   "word": "ardent",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 58,
+   "decomposition": "拉丁文 ardere = to burn"
+  },
+  {
+   "word": "fluent",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 59,
+   "decomposition": "拉丁文 fluere = to flow"
+  },
+  {
+   "word": "obedient",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 61,
+   "decomposition": "obey = 服從"
+  },
+  {
+   "word": "circular",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 68,
+   "decomposition": "circle = 圓"
+  },
+  {
+   "word": "muscular",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 70,
+   "decomposition": "muscle = 肌肉"
+  },
+  {
+   "word": "popular",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 72,
+   "decomposition": "people = 民眾"
+  },
+  {
+   "word": "similar",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 73,
+   "decomposition": "拉丁文 similis = like"
+  },
+  {
+   "word": "vulgar",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 74,
+   "decomposition": "拉丁文 vulgus = common people"
+  },
+  {
+   "word": "sanitary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 83,
+   "decomposition": "拉丁文 sanus = of sound mind"
+  },
+  {
+   "word": "temporary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 84,
+   "decomposition": "拉丁文 tempus = time"
+  },
+  {
+   "word": "voluntary",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 85,
+   "decomposition": "拉丁文 voluntas = free will"
+  },
+  {
+   "word": "accurate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 89,
+   "decomposition": "accuracy = 精確"
+  },
+  {
+   "word": "ornate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 94,
+   "decomposition": "拉丁文 ornatus = to furnish"
+  },
+  {
+   "word": "temperate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 96,
+   "decomposition": "拉丁文 temperare = to mix properly"
+  },
+  {
+   "word": "leaden",
+   "reason": "invalid decomposition text",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 120
+  },
+  {
+   "word": "cardiac",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 162,
+   "decomposition": "希臘文 kardia = heart"
+  },
+  {
+   "word": "arctic",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 171,
+   "decomposition": "希臘文 arktos = bear"
+  },
+  {
+   "word": "domestic",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 176,
+   "decomposition": "拉丁文 domus = house"
+  },
+  {
+   "word": "emphatic",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 177,
+   "decomposition": "emphasis = 強調"
+  },
+  {
+   "word": "fantastic",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 180,
+   "decomposition": "fantasy = 幻想;奇想"
+  },
+  {
+   "word": "gigantic",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 181,
+   "decomposition": "giant = 巨人"
+  },
+  {
+   "word": "chemical",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 194,
+   "decomposition": "chemistry = 化學"
+  },
+  {
+   "word": "physical",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 196,
+   "decomposition": "physics = 物理學"
+  },
+  {
+   "word": "radical",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 197,
+   "decomposition": "radix = 根源"
+  },
+  {
+   "word": "surgical",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 198,
+   "decomposition": "surgery = 外科手術"
+  },
+  {
+   "word": "theatrical",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 199,
+   "decomposition": "theater = 戲院"
+  },
+  {
+   "word": "languid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 223,
+   "decomposition": "拉丁文 languidus = to languish"
+  },
+  {
+   "word": "limpid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 224,
+   "decomposition": "拉丁文 limpa = water"
+  },
+  {
+   "word": "placid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 225,
+   "decomposition": "拉丁文 placere = to please"
+  },
+  {
+   "word": "rapid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 226,
+   "decomposition": "拉丁文 rapere = to snatch"
+  },
+  {
+   "word": "solid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 227,
+   "decomposition": "拉丁文 solidus = firm"
+  },
+  {
+   "word": "splendid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 228,
+   "decomposition": "拉丁文 splendere = to shine"
+  },
+  {
+   "word": "stupid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 229,
+   "decomposition": "拉丁文 stupere = to be amazed"
+  },
+  {
+   "word": "timid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 230,
+   "decomposition": "拉丁文 timere = to fear"
+  },
+  {
+   "word": "vivid",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 231,
+   "decomposition": "拉丁文 vivere = to live"
+  },
+  {
+   "word": "ductile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 235,
+   "decomposition": "拉丁文 ductum = to lead"
+  },
+  {
+   "word": "facile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 236,
+   "decomposition": "拉丁文 facilis = easy"
+  },
+  {
+   "word": "fertile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 237,
+   "decomposition": "拉丁文 ferre = to bear"
+  },
+  {
+   "word": "fragile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 238,
+   "decomposition": "拉丁文 frangere = to easily break"
+  },
+  {
+   "word": "gracile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 239,
+   "decomposition": "拉丁文 gracilis = pleasing"
+  },
+  {
+   "word": "hostile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 240,
+   "decomposition": "拉丁文 hostis = enemy"
+  },
+  {
+   "word": "juvenile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 241,
+   "decomposition": "拉丁文 juvenis = young"
+  },
+  {
+   "word": "sterile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 243,
+   "decomposition": "拉丁文 sterilis = barren"
+  },
+  {
+   "word": "versatile",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 244,
+   "decomposition": "拉丁文 versare = to turn often"
+  },
+  {
+   "word": "divine",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 248,
+   "decomposition": "拉丁文 divus = 屬於神的"
+  },
+  {
+   "word": "feminine",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 249,
+   "decomposition": "拉丁文 femina = woman"
+  },
+  {
+   "word": "genuine",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 250,
+   "decomposition": "拉丁文 genuinus = innate"
+  },
+  {
+   "word": "masculine",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 251,
+   "decomposition": "拉丁文 masculus = male"
+  },
+  {
+   "word": "sanguine",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 252,
+   "decomposition": "拉丁文 sanguis = blood"
+  },
+  {
+   "word": "cunning",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 259,
+   "decomposition": "古代英文 cunnen = to know"
+  },
+  {
+   "word": "inferior",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 270,
+   "decomposition": "拉丁文 inferus = low"
+  },
+  {
+   "word": "arabesque",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 275,
+   "decomposition": "Arabia = 阿拉伯"
+  },
+  {
+   "word": "grotesque",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 276,
+   "decomposition": "義大利文 grotta = group"
+  },
+  {
+   "word": "yellowish",
+   "reason": "invalid decomposition text",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 289
+  },
+  {
+   "word": "rite",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 298,
+   "decomposition": "拉丁文 favere = to befriend"
+  },
+  {
+   "word": "polite",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 301,
+   "decomposition": "拉丁文 polire = to polish"
+  },
+  {
+   "word": "exclusive",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 305,
+   "decomposition": "exclude = 除外"
+  },
+  {
+   "word": "initiative",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 308,
+   "decomposition": "拉丁文 initiare = to begin"
+  },
+  {
+   "word": "compulsory",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 359,
+   "decomposition": "compel = 強迫"
+  },
+  {
+   "word": "satisfactory",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 363,
+   "decomposition": "satisfy = 使滿意"
+  },
+  {
+   "word": "strenuous",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 377,
+   "decomposition": "希臘文 stereus = firm"
+  },
+  {
+   "word": "tremulous",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 378,
+   "decomposition": "tremor = 顫抖"
+  },
+  {
+   "word": "clumsy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 421,
+   "decomposition": "古英文 clumian = to benumb"
+  },
+  {
+   "word": "cozy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md",
+   "decomposition_line": 422,
+   "decomposition": "挪威文 kosa = to make warm"
+  },
+  {
+   "word": "proficient",
+   "reason": "conflicting source decomposition; kept first source",
+   "kept": "pro-({orward) + fici(to make) + -ent(形容詞字尾)",
+   "rejected": "拉丁文 pro- (forward) + fic (to make) + -ent",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md"
+  },
+  {
+   "word": "exquisite",
+   "reason": "conflicting source decomposition; kept first source",
+   "kept": "ex- (out) + quisite (sought)",
+   "rejected": "拉丁文 ex- (out) + quis (to seek) + -ite",
+   "source_file": "英文字根_02B_Suffix_Adjective_形容詞字尾_fixed.md"
+  },
+  {
+   "word": "tardy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02C_Suffix_Adverb_副詞字尾_fixed.md",
+   "decomposition_line": 2,
+   "decomposition": "拉丁文 tardus = 慢"
+  },
+  {
+   "word": "assassinate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 25,
+   "decomposition": "阿拉伯文 haschisch = (大麻的雌花花穗製造的)麻醉劑"
+  },
+  {
+   "word": "congratulate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 31,
+   "decomposition": "gratus = pleasing"
+  },
+  {
+   "word": "fascinate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 35,
+   "decomposition": "拉丁文 fascinum = spell(符咒,魔力)"
+  },
+  {
+   "word": "isolate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 39,
+   "decomposition": "拉丁文 insula = island"
+  },
+  {
+   "word": "nominate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 47,
+   "decomposition": "拉丁文 nomen = name"
+  },
+  {
+   "word": "speculate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 53,
+   "decomposition": "拉丁文 specere = to see"
+  },
+  {
+   "word": "vibrate",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 55,
+   "decomposition": "拉丁文 vibrare = to shake"
+  },
+  {
+   "word": "glitter",
+   "reason": "invalid decomposition text",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 80
+  },
+  {
+   "word": "acquiesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 96,
+   "decomposition": "拉丁文 acquiescere = to rest in, to quiet"
+  },
+  {
+   "word": "coalesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 100,
+   "decomposition": "拉丁文 coalescere = to unite"
+  },
+  {
+   "word": "convalesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 104,
+   "decomposition": "拉丁文 convalescere = to grow strong"
+  },
+  {
+   "word": "deliquesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 108,
+   "decomposition": "拉丁文 deliquescere = to melt away"
+  },
+  {
+   "word": "effloresce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 112,
+   "decomposition": "拉丁文 efflorescere = to blossom out"
+  },
+  {
+   "word": "evanesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 114,
+   "decomposition": "拉丁文 evanescere = to vanish"
+  },
+  {
+   "word": "incandesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 116,
+   "decomposition": "拉丁文 incandescere = to become hot"
+  },
+  {
+   "word": "obsolesce",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 120,
+   "decomposition": "拉丁文 obsolescere = to fall into disuse"
+  },
+  {
+   "word": "edify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 125,
+   "decomposition": "拉丁文 aedificare = to build"
+  },
+  {
+   "word": "fortify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 126,
+   "decomposition": "拉丁文 fortis = strong"
+  },
+  {
+   "word": "fructify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 127,
+   "decomposition": "拉丁文 fructus = fruit"
+  },
+  {
+   "word": "identify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 128,
+   "decomposition": "拉丁文 idem = the same"
+  },
+  {
+   "word": "liquefy",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 130,
+   "decomposition": "liquid = 液體"
+  },
+  {
+   "word": "mollify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 131,
+   "decomposition": "拉丁文 mollis = soft"
+  },
+  {
+   "word": "nullify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 132,
+   "decomposition": "拉丁文 nullus = not any"
+  },
+  {
+   "word": "petrify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 134,
+   "decomposition": "拉丁文 petra = rock(岩石)"
+  },
+  {
+   "word": "vilify",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 142,
+   "decomposition": "拉丁文 vilis = cheap"
+  },
+  {
+   "word": "admonish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 146,
+   "decomposition": "拉丁文 monere = to advise"
+  },
+  {
+   "word": "demolish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 151,
+   "decomposition": "拉丁文 demoliri = to pull down"
+  },
+  {
+   "word": "embellish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 153,
+   "decomposition": "bellus = fine"
+  },
+  {
+   "word": "famish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 154,
+   "decomposition": "拉丁文 fames = hunger"
+  },
+  {
+   "word": "flourish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 155,
+   "decomposition": "拉丁文 florere = to flower"
+  },
+  {
+   "word": "furnish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 156,
+   "decomposition": "古代法文 furnir = 備有"
+  },
+  {
+   "word": "garnish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 157,
+   "decomposition": "法文 garnir = to defend(保衛)"
+  },
+  {
+   "word": "languish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 158,
+   "decomposition": "拉丁文 languere = to be weak"
+  },
+  {
+   "word": "publish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 159,
+   "decomposition": "public = 公開的"
+  },
+  {
+   "word": "punish",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 160,
+   "decomposition": "拉丁文 poena = penalty(刑罰)"
+  },
+  {
+   "word": "cauterize",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 165,
+   "decomposition": "希臘文 kaiein = to burn"
+  },
+  {
+   "word": "civilize",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 166,
+   "decomposition": "拉丁文 civis = citizen"
+  },
+  {
+   "word": "pulverize",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 170,
+   "decomposition": "拉丁文 pulvis = powder, dust"
+  },
+  {
+   "word": "chuckle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 178,
+   "decomposition": "choke = 窒息"
+  },
+  {
+   "word": "dwindle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 180,
+   "decomposition": "冰島文 dvina = 消瘦"
+  },
+  {
+   "word": "scribble",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 181,
+   "decomposition": "拉丁文 scribere = to write"
+  },
+  {
+   "word": "sprinkle",
+   "reason": "decomposition morpheme does not match visible word",
+   "source_file": "英文字根_02D_Suffix_Verb_動詞字尾_fixed.md",
+   "decomposition_line": 183,
+   "decomposition": "spring = 彈回"
   },
   {
    "word": "prodigal",

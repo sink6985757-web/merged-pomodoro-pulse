@@ -487,12 +487,19 @@ def stable_vocab_id(word: str, pron: str, pos: str, gloss: str, source: str) -> 
     return hashlib.sha1(raw).hexdigest()[:16]
 
 
+_VOCAB_ENTRIES_CACHE: list[dict[str, str]] | None = None
+
+
 def load_vocab_entries() -> list[dict[str, str]]:
     """Parse archived 英文字根 markdown into lightweight word cards.
 
     Failure is intentionally non-fatal: Pomodoro delivery should never break
     just because the archive path moved or one OCR line is malformed.
     """
+    global _VOCAB_ENTRIES_CACHE
+    if _VOCAB_ENTRIES_CACHE is not None:
+        return _VOCAB_ENTRIES_CACHE
+
     if not VOCAB_DIR.exists():
         return []
 
@@ -544,6 +551,7 @@ def load_vocab_entries() -> list[dict[str, str]]:
                 })
 
     entries.sort(key=lambda e: (e["word"], e["source"], e["id"]))
+    _VOCAB_ENTRIES_CACHE = entries
     return entries
 
 
@@ -583,26 +591,28 @@ def decomposition_is_structured(decomposition: str) -> bool:
 
 
 def eligible_vocab_entries(entries: list[dict[str, str]]) -> list[dict[str, str]]:
-    """Keep the hourly card focused on useful, decomposable, non-damaged words."""
+    """Keep the hourly card focused on useful, non-damaged words from the 7000 common words corpus."""
     decomp_map = _load_decomp_map()
     canonical: dict[str, dict[str, str]] = {}
     for entry in entries:
         word = entry["word"].lower()
-        decomp = decomp_map.get(word, "")
-        if not decomp or word in VOCAB_DISPLAY_BLOCKLIST or word in canonical:
+        if word in VOCAB_DISPLAY_BLOCKLIST or word in canonical:
             continue
         pron = entry.get("pron", "")
         gloss = entry.get("gloss", "")
         if not pronunciation_is_usable(pron) or VOCAB_GLOSS_OCR_NOISE_RE.search(gloss) or "+" in gloss:
             continue
-        if VOCAB_DECOMP_FORBIDDEN_RE.search(decomp) or VOCAB_DECOMP_IPA_RE.search(decomp):
-            continue
-        if decomp.count("《") != decomp.count("》"):
-            continue
-        if not decomposition_matches_word(word, decomp):
-            continue
-        if not decomposition_is_structured(decomp):
-            continue
+        decomp = decomp_map.get(word, "")
+        # Run quality gates ONLY if decomposition exists (decompositions are optional now)
+        if decomp:
+            if VOCAB_DECOMP_FORBIDDEN_RE.search(decomp) or VOCAB_DECOMP_IPA_RE.search(decomp):
+                continue
+            if decomp.count("《") != decomp.count("》"):
+                continue
+            if not decomposition_matches_word(word, decomp):
+                continue
+            if not decomposition_is_structured(decomp):
+                continue
         item = dict(entry)
         item["decomp"] = decomp
         canonical[word] = item
