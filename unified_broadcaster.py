@@ -255,24 +255,35 @@ def main():
     # 1. Build the raw message text from the core engine
     raw_message = pomodoro_chat_original.build_message(now, consume_vocab=args.consume)
     if not raw_message:
-        print(f"⚠️ 該時段 ({now.strftime('%H:%M')}) 非播報時間區間，且未被強制執行。工作暫時安靜。")
         sys.exit(0)
 
-    # 2. Parse raw lines into a rich structured layout
-    structured_data = parse_card_lines(raw_message, now)
-
-    # 3. Create the gorgeous Discord Embed payload
-    payload = build_discord_payload(structured_data, now)
+    # 2. Parse out the vocab entry so we can restore the decomp to the string
+    vocab_entry = pomodoro_chat_original.choose_vocab_entry(now, consume=False)
+    
+    # Reconstruct the strict 5-line format
+    lines = raw_message.splitlines()
+    final_lines = []
+    for line in lines:
+        if line.startswith("｜字｜") and vocab_entry and vocab_entry.get("decomp"):
+            # Restore the decomp (etymology) data to the end of the line
+            line = f"{line}｜{vocab_entry['decomp']}"
+        final_lines.append(line)
+    
+    # 3. Append the working URL
+    public_index_url = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
+    final_lines.append(f"｜記｜[點此開啟紀錄儀表板]({public_index_url})")
+    
+    final_output = "\n".join(final_lines)
 
     if args.dry_run:
-        print("🔍 [Dry Run] 產生的 Discord Embed Payload 如下:")
-        print(json.dumps(payload, indent=2, ensure_ascii=False))
+        print("🔍 [Dry Run] 產生的本機 Markdown 卡片預覽如下:")
+        print(final_output)
         sys.exit(0)
 
     # 4. Resolve webhook and send
     webhook_url = load_webhook_url(args.webhook)
     if webhook_url == DEFAULT_WEBHOOK:
-        print(build_markdown_fallback(structured_data, now))
+        print(final_output)
         sys.exit(0)
 
     print(f"🚀 正在傳送番茄工作脈搏 ({now.strftime('%H:%M')}) 至 Discord...")
