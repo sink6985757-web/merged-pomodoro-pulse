@@ -284,9 +284,6 @@ def main():
     # 4. Resolve webhook and send
     webhook_url = load_webhook_url(args.webhook)
     if webhook_url == DEFAULT_WEBHOOK:
-        print("⚠️ 警告: 目前使用預設 Webhook URL 佔位符，使用 Markdown 格式本機 stdout 播報。", file=sys.stderr)
-        print("💡 請在 .env 檔案中設定 DISCORD_WEBHOOK_URL=<您的 webhook 網址> 以啟用 Discord Embed 富文字卡片。", file=sys.stderr)
-        print("📋 產生的本機 Markdown 卡片預覽如下:", file=sys.stderr)
         print(build_markdown_fallback(structured_data, now))
         sys.exit(0)
 
