@@ -220,7 +220,7 @@ def build_markdown_fallback(data: dict, now: datetime) -> str:
 > **勢**｜{data['hexagrams']} (變爻: `{data['moving_lines']}`)
 > **護**｜{data['hint']}
 > 
-> 🔗 [開啟工作脈搏紀錄儀表板]({public_index_url})"""
+> 🔗 [記]({public_index_url})"""
     return md
 
 
