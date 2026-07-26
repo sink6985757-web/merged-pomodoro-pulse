@@ -206,33 +206,21 @@ def build_markdown_fallback(data: dict, now: datetime) -> str:
     """
     time_str = now.strftime("%H:%M")
     segment_str = data["segment"] if data["segment"] != "無" else "日常"
-    local_index_path = str(BASE_DIR / 'index.html').replace('\\', '/')
     
-    decomp_str = f"\n📖 **字根**: `{data['decomp']}`" if data['decomp'] else ""
+    # Use GitHack to serve the repository's index.html as a web page, 
+    # making it clickable on Discord across mobile and desktop.
+    public_index_url = "https://raw.githack.com/sink6985757-web/merged-pomodoro-pulse/master/index.html"
+    
+    decomp_str = f" `{data['decomp']}`" if data['decomp'] else ""
     
     md = f"""🍅 **番茄工作脈搏 | {time_str} ({segment_str})**
-
-**｜ 行 ｜ 專注行動 (90 分鐘節奏)**
-🕒 **時段**: `{data['time_range']}`
-🚀 **行動**: {data['action']}
-
-**｜ 字 ｜ 零 Token 英文字根**
-📝 **單字**: **{data['word']}**  `{data['pron']}`
-🏷️ **釋義**: *{data['pos']}.* {data['gloss']}{decomp_str}
-
-**｜ 時 ｜ 離線農民曆宜忌**
-📅 **今日宜忌**: {data['day_yi_ji']}
-⏰ **時辰宜忌**: {data['hour_yi_ji']}
-⚠️ **沖煞提示**: `{data['chong_sha']}`
-🎯 **決策導向**: {data['priority']}
-
-**｜ 勢 ｜ 易經決策護欄**
-☯ **卦象**: {data['hexagrams']}
-🎴 **變爻**: `{data['moving_lines']}`
-🛡️ **決策護欄**: {data['hint']}
-
-**📝 本機狀態紀錄**
-[開啟本機工作脈搏紀錄儀表板](file:///{local_index_path})"""
+> **行**｜`{data['time_range']}` {data['action']}
+> **字**｜**{data['word']}** `{data['pron']}` (*{data['pos']}.*) {data['gloss']}{decomp_str}
+> **時**｜**日**: {data['day_yi_ji']}／**時**: {data['hour_yi_ji']}／`{data['chong_sha']}`
+> **勢**｜{data['hexagrams']} (變爻: `{data['moving_lines']}`)
+> **護**｜{data['hint']}
+> 
+> 🔗 [開啟工作脈搏紀錄儀表板]({public_index_url})"""
     return md
 
 
