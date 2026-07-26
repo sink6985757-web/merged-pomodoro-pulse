@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-ic_layout_pomodoro.py — IC Layout / IC Design 專屬 90 分鐘番茄鐘
-設計導向：專注深度、量化產出、休息補充、年資累積視角。
-休息動作刻意具體（離螢幕/喝水/伸展），避免「繼續窩在椅子上划手機」。
-區段切換提醒：聚焦 IC Layout 駐廠工程的思維錨點。
+pomodoro_focus.py — 專注 90 分鐘番茄鐘與休息提示
+設計導向：專注深度、量化產出、休息補充、思維沉澱與專注力高原。
+休息動作刻意具體（離螢幕/喝水/伸展），避免「繼續窩在椅子上滑手機」。
+區段切換提醒：聚焦深度工作與學習的思維錨點。
 """
 import random
 from datetime import datetime, timezone, timedelta

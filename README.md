@@ -23,7 +23,7 @@ merged-pomodoro-pulse/
 ├── pomodoro_iching_data.py     # ☯ 易經資料庫：曾仕強教授 64 卦、384 爻辭、變爻規則
 ├── index.html                  # 📊 脈搏紀錄儀表板：單檔網網頁，使用 LocalStorage 儲存
 ├── vocab_decomp_extract.py     # 📖 字根索引提取工具：從 markdown 語料庫提取並重建
-├── ic_layout_pomodoro.py       # 🔧 IC Layout 工程師專用番茄鐘變體邏輯
+├── pomodoro_focus.py           # 🔧 專注 90 分鐘番茄鐘與休息提示變體邏輯
 ├── requirements.txt            # 📦 相依性清單（純 Python 標準函式庫，無需安裝外部依賴）
 ├── LICENSE                     # MIT 授權條款
 ├── data/
