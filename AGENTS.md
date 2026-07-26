@@ -1,18 +1,26 @@
-# AGENTS.md - 專案狀態紀錄
+# Merged Pomodoro Pulse
 
-## 專案名稱：Merged Pomodoro Pulse (整合番茄脈搏系統)
-**目標**：將 Pomodoro、Micro Card 與 Hour Work Plus 整合為全離線、自動化播報的 Windows/Discord 輔助系統。
+## 目標
+整合番茄鐘、微卡片與脈搏紀錄，提供全離線 Discord 播報與本機狀態追蹤系統。
 
-### 當前狀態 (2026-07-26)
-- **整合進度**：核心邏輯已遷移至 `merged-pomodoro-pulse/`。
-- **離線單字**：已產生 `data/vocab_decomposition.json` (2,357 筆)。
-- **離線農曆**：`lunar_almanac.py` 已完成，提供基本宜忌、沖煞。
-- **播報系統**：`unified_broadcaster.py` 已完成，支援 Discord Embed 推送與本機脈搏網頁連結。
+## 路線圖
+- [x] 核心邏輯整合 (Pomodoro, Micro Card, Hour Pulse)
+- [x] 離線單字與農曆資料庫建立
+- [x] Discord Webhook 播報腳本撰寫
+- [ ] 設定第二台 Hermes 自動化排程
 
-### 待辦事項 (Pending)
-1. [ ] 填寫 `unified_broadcaster.py` 中的 Discord Webhook URL。
-2. [ ] 在第二台 Hermes 機器上設定 Cron 排程 (`0 6-18 * * *`)。
-3. [ ] (選選) 將紀錄資料庫從 localStorage 遷移至 SQLite (目前仍使用原本的 index.html)。
+## 專案結構
+- `unified_broadcaster.py`：Discord 播報主腳本
+- `lunar_almanac.py`：本機農曆與宜忌邏輯
+- `data/vocab_decomposition.json`：離線單字拆解庫
+- `index.html`：本機脈搏紀錄儀表板
 
----
-*最後更新者：Gemini-3-Flash @ Yulin-SFG16-72*
+## 共用規則
+1. 每個 Agent 開工先讀本檔與 `handoff.md`。
+2. 保留既有修改；不提交 secret、credential 或未知檔案。
+3. 所有 canonical 路徑使用專案相對路徑。
+4. 開工只讀；收工才更新交接、GitHub 與 Obsidian。
+
+## 整合
+- GitHub：https://github.com/sink6985757-web/merged-pomodoro-pulse.git
+- Obsidian：merged-pomodoro-pulse/README.md
