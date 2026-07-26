@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6f7f9" />
+  <title>整點工作脈搏｜共通版</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --good: #166534;
+      --good-soft: #f0fdf4;
+      --bad: #991b1b;
+      --bad-soft: #fef2f2;
+      --shadow: 0 8px 24px rgba(17, 24, 39, .06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
+      line-height: 1.45;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 96px; }
+    header { margin: 4px 2px 16px; }
+    h1 { margin: 0 0 6px; font-size: clamp(24px, 7vw, 34px); letter-spacing: -.03em; }
+    .subtitle { color: var(--muted); font-size: 14px; }
+    .now { margin-top: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin: 12px 0;
+    }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    .hint { color: var(--muted); font-size: 13px; margin-top: -6px; margin-bottom: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+    .grid.five { grid-template-columns: repeat(5, minmax(0,1fr)); }
+    button, textarea { font: inherit; }
+    .choice {
+      min-height: 52px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 13px;
+      padding: 9px 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: .15s ease;
+      user-select: none;
+    }
+    .choice:hover { border-color: #9ca3af; }
+    .choice.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #1d4ed8;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+    .emoji { font-size: 24px; display: block; margin-bottom: 2px; }
+    .score { font-size: 21px; font-weight: 800; display: block; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+    .tag.selected {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #1d4ed8;
+      font-weight: 700;
+    }
+    details summary { cursor: pointer; font-weight: 700; color: #374151; }
+    textarea {
+      width: 100%;
+      margin-top: 12px;
+      min-height: 74px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px;
+      background: #fbfbfc;
+    }
+    .row { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; }
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 750;
+    }
+    .btn.primary { background: var(--accent); color: #fff; }
+    .btn.secondary { background: #eef2f7; color: #374151; }
+    .btn.danger { background: var(--bad-soft); color: var(--bad); }
+    .savebar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      background: rgba(246,247,249,.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+      z-index: 10;
+    }
+    .savebar .inner { max-width: 732px; margin: auto; display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+    .savebar .btn { min-height: 48px; font-size: 16px; }
+    .status { min-height: 48px; display: flex; align-items: center; color: var(--muted); font-size: 13px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .stat {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+    .stat strong { display: block; font-size: 24px; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .entry { border-top: 1px solid var(--line); padding: 11px 0; font-size: 14px; }
+    .entry:first-child { border-top: 0; }
+    .entry-head { display: flex; justify-content: space-between; gap: 8px; font-weight: 750; }
+    .entry-meta { color: var(--muted); margin-top: 3px; }
+    .empty { color: var(--muted); text-align: center; padding: 14px 0; }
+    .notice {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 13px;
+      padding: 11px 12px;
+      color: #78350f;
+      font-size: 13px;
+    }
+    @media (max-width: 520px) {
+      .wrap { padding-left: 10px; padding-right: 10px; }
+      .card { padding: 14px; border-radius: 16px; }
+      .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .grid.five { grid-template-columns: repeat(5, minmax(54px,1fr)); overflow-x: auto; }
+      .choice { min-height: 50px; font-size: 13px; }
+      .emoji { font-size: 21px; }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>整點工作脈搏</h1>
+      <div class="subtitle">共通版｜每小時用 10 秒留下工作活動、感受、進度與精力。</div>
+      <div class="now" id="now"></div>
+    </header>
+
+    <div class="notice">建議流程：整點響鈴 → 10 秒點選 → 儲存 → 回去休息或工作。職涯結論只在週／月回顧時做。</div>
+
+    <section class="card">
+      <h2>1. 剛才主要在做什麼？</h2>
+      <div class="grid" data-single="activity">
+        <button class="choice" data-value="專注產出">專注產出</button>
+        <button class="choice" data-value="技術／專業工作">技術／專業工作</button>
+        <button class="choice" data-value="溝通／協作">溝通／協作</button>
+        <button class="choice" data-value="問題排除">問題排除</button>
+        <button class="choice" data-value="文件／行政">文件／行政</button>
+        <button class="choice" data-value="學習／研究">學習／研究</button>
+        <button class="choice" data-value="等待／受阻">等待／受阻</button>
+        <button class="choice" data-value="休息／恢復">休息／恢復</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. 這一小時對你的感受是？</h2>
+      <div class="hint">只評估剛才的活動，不評價整份工作或自己。</div>
+      <div class="grid five" data-single="satisfaction">
+        <button class="choice" data-value="-2"><span class="emoji">😣</span><span class="score">−2</span></button>
+        <button class="choice" data-value="-1"><span class="emoji">🙁</span><span class="score">−1</span></button>
+        <button class="choice" data-value="0"><span class="emoji">😐</span><span class="score">0</span></button>
+        <button class="choice" data-value="1"><span class="emoji">🙂</span><span class="score">+1</span></button>
+        <button class="choice" data-value="2"><span class="emoji">😊</span><span class="score">+2</span></button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. 現在的進度狀態？</h2>
+      <div class="grid" data-single="progress">
+        <button class="choice" data-value="順利推進">✅ 順利推進</button>
+        <button class="choice" data-value="完成一段">🏁 完成一段</button>
+        <button class="choice" data-value="卡住待解">🧩 卡住待解</button>
+        <button class="choice" data-value="等待他人">⏳ 等待他人</button>
+        <button class="choice" data-value="被打斷">🔔 被打斷</button>
+        <button class="choice" data-value="正在恢復">🌿 正在恢復</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. 精力剩多少？</h2>
+      <div class="grid five" data-single="energy">
+        <button class="choice" data-value="1"><span class="score">1</span>很低</button>
+        <button class="choice" data-value="2"><span class="score">2</span>偏低</button>
+        <button class="choice" data-value="3"><span class="score">3</span>普通</button>
+        <button class="choice" data-value="4"><span class="score">4</span>不錯</button>
+        <button class="choice" data-value="5"><span class="score">5</span>充足</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. 哪些因素影響最大？（可複選／可略過）</h2>
+      <div class="tags" id="factors">
+        <button class="tag" data-value="目標清楚">目標清楚</button>
+        <button class="tag" data-value="解決問題">解決問題</button>
+        <button class="tag" data-value="有學到東西">有學到東西</button>
+        <button class="tag" data-value="有自主性">有自主性</button>
+        <button class="tag" data-value="需求不清">需求不清</button>
+        <button class="tag" data-value="反覆修改">反覆修改</button>
+        <button class="tag" data-value="等待／依賴">等待／依賴</button>
+        <button class="tag" data-value="人際干擾">人際干擾</button>
+        <button class="tag" data-value="環境干擾">環境干擾</button>
+        <button class="tag" data-value="身體疲勞">身體疲勞</button>
+      </div>
+    </section>
+
+    <details class="card">
+      <summary>選填：一句話或語音備註</summary>
+      <textarea id="note" maxlength="240" placeholder="不用完整敘述，例如：等待回覆／完成一段／下一輪先確認需求。"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn secondary" id="voiceBtn" type="button">🎙️ 語音輸入</button>
+        <span class="subtitle" id="voiceStatus">支援程度依瀏覽器而定</span>
+      </div>
+    </details>
+
+    <section class="card">
+      <h2>今日概況</h2>
+      <div class="stats">
+        <div class="stat"><strong id="countStat">0</strong><span>打點次數</span></div>
+        <div class="stat"><strong id="satStat">—</strong><span>平均感受</span></div>
+        <div class="stat"><strong id="energyStat">—</strong><span>平均精力</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>最近紀錄</h2>
+      <div id="history"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn secondary" id="copyPrompt">複製 AI 回顧 Prompt</button>
+        <button class="btn secondary" id="exportCsv">匯出 CSV</button>
+        <button class="btn secondary" id="exportJson">備份 JSON</button>
+        <button class="btn secondary" id="importJson">匯入 JSON</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+        <button class="btn danger" id="clearData">清除全部</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="savebar">
+    <div class="inner">
+      <div class="status" id="saveStatus">請完成前 4 項；因素與備註可略過。</div>
+      <button class="btn primary" id="saveBtn">儲存這一點</button>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const KEY = "hourly_work_pulse_v1";
+  const selections = { activity: "", satisfaction: "", progress: "", energy: "" };
+  let factors = [];
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const pad = n => String(n).padStart(2, "0");
+  const localDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const localTime = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+  function updateClock() {
+    const d = new Date();
+    $("#now").textContent = `${localDate(d)}（${["日","一","二","三","四","五","六"][d.getDay()]}） ${localTime(d)}`;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  $$('[data-single]').forEach(group => {
+    const field = group.dataset.single;
+    group.querySelectorAll('.choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('.choice').forEach(x => x.classList.remove('selected'));
+        btn.classList.add('selected');
+        selections[field] = btn.dataset.value;
+        validate();
+      });
+    });
+  });
+
+  $$('#factors .tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('selected');
+      factors = $$('#factors .tag.selected').map(x => x.dataset.value);
+    });
+  });
+
+  function validate() {
+    const missing = Object.values(selections).some(v => v === '');
+    $('#saveStatus').textContent = missing ? '請完成前 4 項；因素與備註可略過。' : '可以儲存了。';
+    $('#saveBtn').disabled = missing;
+    $('#saveBtn').style.opacity = missing ? '.55' : '1';
+  }
+  validate();
+
+  function getEntries() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+    catch { return []; }
+  }
+  function setEntries(entries) { localStorage.setItem(KEY, JSON.stringify(entries)); }
+
+  function resetForm() {
+    Object.keys(selections).forEach(k => selections[k] = '');
+    factors = [];
+    $$('.selected').forEach(x => x.classList.remove('selected'));
+    $('#note').value = '';
+    validate();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  $('#saveBtn').addEventListener('click', () => {
+    if (Object.values(selections).some(v => v === '')) return;
+    const now = new Date();
+    const entry = {
+      id: now.getTime(), timestamp: now.toISOString(), localDate: localDate(now), localTime: localTime(now),
+      activity: selections.activity, satisfaction: Number(selections.satisfaction), progress: selections.progress,
+      energy: Number(selections.energy), factors: [...factors], note: $('#note').value.trim()
+    };
+    const entries = getEntries();
+    entries.unshift(entry);
+    setEntries(entries);
+    $('#saveStatus').textContent = '已儲存。回去工作或休息，不必繼續分析。';
+    render();
+    setTimeout(resetForm, 650);
+  });
+
+  const avg = nums => nums.length ? nums.reduce((a,b) => a+b, 0) / nums.length : null;
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+  }
+
+  function render() {
+    const entries = getEntries();
+    const todayEntries = entries.filter(e => e.localDate === localDate(new Date()));
+    $('#countStat').textContent = todayEntries.length;
+    const sat = avg(todayEntries.map(e => e.satisfaction));
+    const energy = avg(todayEntries.map(e => e.energy));
+    $('#satStat').textContent = sat === null ? '—' : (sat > 0 ? '+' : '') + sat.toFixed(1);
+    $('#energyStat').textContent = energy === null ? '—' : energy.toFixed(1);
+    const recent = entries.slice(0,12);
+    $('#history').innerHTML = recent.length ? recent.map(e => `
+      <div class="entry">
+        <div class="entry-head"><span>${escapeHtml(e.activity)}</span><span>${e.satisfaction > 0 ? '+' : ''}${e.satisfaction}</span></div>
+        <div class="entry-meta">${escapeHtml(e.localDate)} ${escapeHtml(e.localTime)} · ${escapeHtml(e.progress)} · 精力 ${e.energy}</div>
+        ${e.factors?.length ? `<div class="entry-meta">${e.factors.map(escapeHtml).join('、')}</div>` : ''}
+        ${e.note ? `<div style="margin-top:4px">${escapeHtml(e.note)}</div>` : ''}
+      </div>`).join('') : '<div class="empty">尚無紀錄。第一次只要點完四項即可。</div>';
+  }
+
+  function download(filename, content, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  $('#exportJson').addEventListener('click', () => {
+    download(`work-pulse-${localDate(new Date())}.json`, JSON.stringify(getEntries(), null, 2), 'application/json;charset=utf-8');
+  });
+
+  $('#importJson').addEventListener('click', () => $('#importFile').click());
+  $('#importFile').addEventListener('change', async event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text());
+      if (!Array.isArray(parsed)) throw new Error('格式不是紀錄陣列');
+      const valid = parsed.filter(e => e && e.timestamp && e.activity && Number.isFinite(Number(e.satisfaction)));
+      const byId = new Map();
+      [...getEntries(), ...valid].forEach(e => byId.set(String(e.id ?? e.timestamp), e));
+      const entries = [...byId.values()].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      setEntries(entries);
+      render();
+      $('#saveStatus').textContent = `已匯入並合併 ${valid.length} 筆紀錄。`;
+    } catch (error) {
+      alert(`匯入失敗：${error.message}`);
+    } finally { event.target.value = ''; }
+  });
+
+  $('#exportCsv').addEventListener('click', () => {
+    const rows = [['日期','時間','活動','感受(-2~2)','進度','精力(1~5)','影響因素','備註']];
+    getEntries().slice().reverse().forEach(e => rows.push([e.localDate,e.localTime,e.activity,e.satisfaction,e.progress,e.energy,(e.factors||[]).join('|'),e.note||'']));
+    const csv = '\uFEFF' + rows.map(row => row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    download(`work-pulse-${localDate(new Date())}.csv`, csv, 'text/csv;charset=utf-8');
+  });
+
+  $('#clearData').addEventListener('click', () => {
+    if (confirm('確定清除全部紀錄？建議先備份 JSON。')) { localStorage.removeItem(KEY); render(); }
+  });
+
+  $('#copyPrompt').addEventListener('click', async () => {
+    const cutoff = Date.now() - 30*24*60*60*1000;
+    const recent = getEntries().filter(e => new Date(e.timestamp).getTime() >= cutoff);
+    const prompt = `你是我的工作紀錄分析助手。以下是最近 30 天的「整點工作脈搏」資料。\n\n分析原則：\n1. 把工作拆成具體活動，再觀察各活動帶來正負感受。\n2. 不因單一小時或單一負面情緒，直接推論我不適合這份工作。\n3. 分開分析工作活動、進度阻力、精力、人際與環境因素。\n4. 找出高頻正值活動、高頻負值活動、反覆卡點與時段差異。\n5. 將因素區分為可立即調整、需要溝通或制度處理、暫時不可控。\n6. 提出最多 3 個低成本工作塑造調整。\n7. 輸出摘要、證據、模式、風險與下週實驗。\n8. 樣本不足時明確說明，不要過度解讀。\n\n資料：\n${JSON.stringify(recent,null,2)}`;
+    try {
+      await navigator.clipboard.writeText(prompt);
+      $('#saveStatus').textContent = `已複製 AI Prompt（含 ${recent.length} 筆紀錄）。`;
+    } catch { alert(prompt); }
+  });
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'zh-TW';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    $('#voiceBtn').addEventListener('click', () => { $('#voiceStatus').textContent = '正在聽…'; recognition.start(); });
+    recognition.onresult = e => {
+      $('#note').value = ($('#note').value + ' ' + e.results[0][0].transcript).trim().slice(0,240);
+      $('#voiceStatus').textContent = '已加入語音內容';
+    };
+    recognition.onerror = () => $('#voiceStatus').textContent = '語音辨識未成功，可直接略過';
+    recognition.onend = () => { if ($('#voiceStatus').textContent === '正在聽…') $('#voiceStatus').textContent = '已停止'; };
+  } else {
+    $('#voiceBtn').disabled = true;
+    $('#voiceStatus').textContent = '此瀏覽器不支援語音辨識';
+  }
+  render();
+})();
+</script>
+</body>
+</html>
