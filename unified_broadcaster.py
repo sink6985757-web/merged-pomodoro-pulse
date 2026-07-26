@@ -18,7 +18,10 @@ from pathlib import Path
 
 # 1. Force the database and state directories to be self-contained in this workspace
 BASE_DIR = Path(__file__).parent.resolve()
-os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR)
+if (BASE_DIR / "data").exists():
+    os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR)
+else:
+    os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR.parent)
 
 # Import the core logic (now that POMODORO_DATA_DIR is set)
 try:
