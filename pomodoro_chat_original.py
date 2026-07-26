@@ -399,7 +399,7 @@ def build_rhythm_line(dt: datetime) -> str:
     else:
         # current == last (18:00)
         mode, action = rhythm_mode_and_action(dt, "final")
-        return f"｜行｜{format_clock(current)}｜{mode} 完成｜{action}"
+        return f"｜行｜{format_clock(current)}｜完成｜{action}"
 
     prev_anchor = anchors[seg]
     next_anchor = anchors[seg + 1]
@@ -423,7 +423,12 @@ def build_rhythm_line(dt: datetime) -> str:
         phase = "mid"
         closing = ""
 
-    mode, action = rhythm_mode_and_action(dt, phase)
+    # Use segment midpoint for mode determination, so opener and closer
+    # of same segment share the same mode label. This corrects S5 (午休)
+    # wrapping into 工作 and S8 (收工) starting as 工作.
+    mid_pt = (prev_anchor + next_anchor) // 2
+    mid_dt = dt.replace(hour=mid_pt // 60, minute=mid_pt % 60)
+    mode, action = rhythm_mode_and_action(mid_dt, phase)
     return f"｜行｜{prev_label}→{next_label}｜{mode} {seg_display}{closing}｜{action}"
 
 
