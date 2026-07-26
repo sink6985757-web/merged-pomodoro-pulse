@@ -1,0 +1,6 @@
+# Pomodoro Micro-Card System
+# Zero external dependencies — pure Python stdlib only.
+# Python 3.8+ required.
+#
+# Optional: requests library if you want Gooday almanac fetching
+# (the script uses urllib by default, no pip install needed)

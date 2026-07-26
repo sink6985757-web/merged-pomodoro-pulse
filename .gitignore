@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment
+.env
+.venv/
+venv/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Data (user-local, not part of the project)
+data/
+pomodoro_vocab_state.json
+vocab_decomposition.json
+gooday_almanac_cache.json
+
+# Logs
+*.log
