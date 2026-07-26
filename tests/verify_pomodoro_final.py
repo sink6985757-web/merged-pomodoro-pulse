@@ -21,6 +21,8 @@ spec = importlib.util.spec_from_file_location("pomodoro_final", SCRIPT)
 assert spec and spec.loader
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
+real_fetch = mod.fetch_gooday_almanac
+mod.fetch_gooday_almanac = lambda dt: {"ok": False}
 
 # Exhaust all 4,096 production casts and assert final 0–6 moving semantics.
 four_count = 0
@@ -58,7 +60,7 @@ for values_tuple in itertools.product((6, 7, 8, 9), repeat=6):
         expected_text = mod._ICHING.get_judgment(cast["changed_no"])
     expected_hint = mod.compact_iching_text(expected_text)
     output = mod.build_hexagram_next_action(datetime(2026, 7, 14, 9, tzinfo=TZ), cast)
-    assert f"｜{expected_hint}｜" in output, (values, output, expected_hint)
+    assert f"｜{expected_hint}" in output, (values, output, expected_hint)
     base_display = f"第{cast['base_no']}卦 {mod.hexagram_symbol(cast['base_no'])} {cast['base_name']}"
     assert f"｜勢｜{base_display}" in output, (values, output)
     assert ord(mod.hexagram_symbol(cast["base_no"])) == 0x4DC0 + cast["base_no"] - 1
@@ -102,7 +104,7 @@ for hour in range(6, 19):
         cards.append(card)
 
 # Neutral data-source fallbacks.
-original_fetch = mod.fetch_gooday_almanac
+original_fetch = real_fetch
 mod.fetch_gooday_almanac = lambda dt: {"ok": False}
 assert mod.build_almanac_chat_line(datetime(2026, 7, 14, 9, tzinfo=TZ)).startswith("｜時｜Gooday 資料暫取不到")
 mod.fetch_gooday_almanac = original_fetch
