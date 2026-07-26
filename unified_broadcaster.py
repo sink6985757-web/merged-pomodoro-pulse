@@ -21,7 +21,10 @@ BASE_DIR = Path(__file__).parent.resolve()
 if (BASE_DIR / "data").exists():
     os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR)
 else:
-    os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR.parent)
+    # If running in Hermes live scripts directory, let it fall back to standard
+    # LOCALAPPDATA/hermes native Windows pathing (clear any override)
+    if "POMODORO_DATA_DIR" in os.environ:
+        del os.environ["POMODORO_DATA_DIR"]
 
 # Import the core logic (now that POMODORO_DATA_DIR is set)
 try:
@@ -197,6 +200,42 @@ def build_discord_payload(data: dict, now: datetime) -> dict:
     return {"embeds": [embed]}
 
 
+def build_markdown_fallback(data: dict, now: datetime) -> str:
+    """Build a rich, beautiful Discord Markdown fallback message (without Embed)
+    when no Webhook URL is configured.
+    """
+    time_str = now.strftime("%H:%M")
+    segment_str = data["segment"] if data["segment"] != "無" else "日常"
+    local_index_path = str(BASE_DIR / 'index.html').replace('\\', '/')
+    
+    decomp_str = f"\n📖 **字根**: `{data['decomp']}`" if data['decomp'] else ""
+    
+    md = f"""🍅 **番茄工作脈搏 | {time_str} ({segment_str})**
+
+**｜ 行 ｜ 專注行動 (90 分鐘節奏)**
+🕒 **時段**: `{data['time_range']}`
+🚀 **行動**: {data['action']}
+
+**｜ 字 ｜ 零 Token 英文字根**
+📝 **單字**: **{data['word']}**  `{data['pron']}`
+🏷️ **釋義**: *{data['pos']}.* {data['gloss']}{decomp_str}
+
+**｜ 時 ｜ 離線農民曆宜忌**
+📅 **今日宜忌**: {data['day_yi_ji']}
+⏰ **時辰宜忌**: {data['hour_yi_ji']}
+⚠️ **沖煞提示**: `{data['chong_sha']}`
+🎯 **決策導向**: {data['priority']}
+
+**｜ 勢 ｜ 易經決策護欄**
+☯ **卦象**: {data['hexagrams']}
+🎴 **變爻**: `{data['moving_lines']}`
+🛡️ **決策護欄**: {data['hint']}
+
+**📝 本機狀態紀錄**
+[開啟本機工作脈搏紀錄儀表板](file:///{local_index_path})"""
+    return md
+
+
 def send_to_discord(webhook_url: str, payload: dict) -> int:
     """Send payload to Discord webhook and return HTTP status code."""
     req = urllib.request.Request(
@@ -245,10 +284,10 @@ def main():
     # 4. Resolve webhook and send
     webhook_url = load_webhook_url(args.webhook)
     if webhook_url == DEFAULT_WEBHOOK:
-        print("⚠️ 警告: 目前使用預設 Webhook URL 佔位符，可能無法發送。")
-        print("💡 請在 .env 檔案中設定 DISCORD_WEBHOOK_URL=<您的 webhook 網址>")
-        print("📋 產生的文字預覽如下:")
-        print(raw_message)
+        print("⚠️ 警告: 目前使用預設 Webhook URL 佔位符，使用 Markdown 格式本機 stdout 播報。", file=sys.stderr)
+        print("💡 請在 .env 檔案中設定 DISCORD_WEBHOOK_URL=<您的 webhook 網址> 以啟用 Discord Embed 富文字卡片。", file=sys.stderr)
+        print("📋 產生的本機 Markdown 卡片預覽如下:", file=sys.stderr)
+        print(build_markdown_fallback(structured_data, now))
         sys.exit(0)
 
     print(f"🚀 正在傳送番茄工作脈搏 ({now.strftime('%H:%M')}) 至 Discord...")
