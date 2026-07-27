@@ -1,146 +1,114 @@
 # 🍅 番茄工作脈搏系統 · Merged Pomodoro Pulse
 
-一個 **零 Token 消耗**、純 Python 核心與 HTML 雙重架構的**個人時間管理與決策護欄系統**。本專案完美整合了「番茄鐘微卡片（Discord 播報）」與「整點工作脈搏（本機紀錄儀表板）」，為開發者與工程師提供 100% 離線、極致隱私、無 API 成本的深度自我管理體驗。
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org)
+
+一個 **100% 離線、零 Token 消耗、極致隱私** 的個人時間管理與決策護欄系統。
+整合「番茄鐘微卡片（Discord）」與「整點工作脈搏（本機紀錄）」，協助開發者建立高效的專專注與回顧循環。
 
 ---
 
-## 🌟 系統定位：您的時間雙中樞
+## 🌟 系統架構
 
-本系統由兩個高度互補的模組構成，協同運作：
-
-1. **📢 播報中樞 (`unified_broadcaster.py`)**：定時發送「行 / 字 / 時 / 勢」四維 Discord Embed 或純文字微卡片，提供即時字根單字學習、農民曆沖煞、易經卦象決策護欄與 90 分鐘專注節奏計數。
-2. **💓 紀錄中樞 (`index.html`)**：透過播報卡片底部的網址連結，開啟本機單檔 Web App，在 10 秒內快速登記當前感受（−2 ~ +2）、精力（1 ~ 5）與主要活動，累積職涯樣本，提供 AI 回顧 Prompt 範本。
-
----
-
-## 🛠️ 專案架構與檔案清單
-
-> **最近更新 (2026-07-28):** 專案已整合「三技能 Lite 架構」，優化字根動態載入，全面完成跨平台路徑適應與 100% 綠燈驗證。
-
+系統由兩個高度互補的模組構成：
+1. **📢 播報中樞 (`unified_broadcaster.py`)**：整點發送「行、字、時、勢」四維 Discord 卡片，整合字根學習、農民曆與易經決策。
+2. **💓 紀錄中樞 (`index.html`)**：單檔 Web App，10 秒內快速登記整點狀態，累積精力數據，內建一鍵複製 AI 回顧 Prompt。
 
 ```text
 merged-pomodoro-pulse/
-├── unified_broadcaster.py      # 🚀 播報主程式：產出豐富的 Discord 卡片訊息
-├── pomodoro_chat_original.py   # 🧠 核心計算引擎：處理單字循環、易經擲卦、農民曆抓取
-├── lunar_almanac.py            # 🏮 備用離線農民曆：基於干支基準點推算宜忌與沖煞
-├── pomodoro_iching_data.py     # ☯ 易經資料庫：曾仕強教授 64 卦、384 爻辭、變爻規則
-├── index.html                  # 📊 脈搏紀錄儀表板：單檔網頁，使用 LocalStorage 儲存
-├── pomodoro_focus.py           # 🔧 專注 90 分鐘番茄鐘與休息提示變體邏輯
-├── vocab_decomp_extract.py     # 📖 離線字根拆解提取核心工具
-├── requirements.txt            # 📦 相依性清單（純 Python 標準函式庫，無需安裝外部依賴）
-├── LICENSE                     # MIT 授權條款
+├── unified_broadcaster.py      # 🚀 播報主程式 (Discord 卡片生成)
+├── pomodoro_chat_original.py   # 🧠 核心計算引擎 (單字、易經、農民曆)
+├── lunar_almanac.py            # 🏮 備用離線農民曆 (干支推算)
+├── pomodoro_iching_data.py     # ☯ 易經資料庫 (曾仕強教授 64 卦、384 爻辭與變爻)
+├── pomodoro_focus.py           # 🔧 專注 90 分鐘番茄鐘邏輯
+├── vocab_decomp_extract.py     # 📖 離線字根拆解核心工具
+├── index.html                  # 📊 脈搏紀錄儀表板 (LocalStorage 單檔)
+├── requirements.txt            # 📦 相依性清單 (僅 Python 標準函式庫)
 ├── data/
-│   ├── vocab_decomposition_v5.json # 📖 V5 7000單大字庫與字根資料庫核心
-│   └── vocab_decomposition.json # 📖 V4 離線字根拆解資料庫
-└── tests/
-    ├── verify_pomodoro_final.py # 🚦 權威生產路徑驗證（覆蓋 130 種時段與併發卡片生成）
-    ├── verify_pomodoro_enhancements.py # 🧬 增強版合約與單字庫完整性校驗
-    ├── verify_vocab_decomposition.py # 🔍 字根重複性與排除校驗
-    ├── verify_iching.py        # ☯ 曾仕強易經卦爻辭結構校驗
-    ├── verify_casting.py       # 🎲 三錢法占卦機率與 0~6 變爻規則校驗
-    └── verify_crossref.py      # 🔗 跨模組資料一致性交叉驗證
+│   ├── vocab_decomposition_v5.json # V5 7000 單大字庫 (核心)
+│   └── vocab_decomposition.json    # V4 離線字根資料庫
+└── tests/                      # 🚦 自動化測試套件 (100% 綠燈驗證)
+    ├── verify_pomodoro_final.py         # 生產路徑與時段覆蓋
+    ├── verify_pomodoro_enhancements.py  # 增強版合約與單字庫
+    ├── verify_vocab_decomposition.py    # 字根重複性校驗
+    ├── verify_iching.py                 # 易經結構與變爻校驗
+    └── ... (共 6 項測試校驗檔案)
 ```
 
 ---
 
-## 🚀 核心特色功能
+## 🚀 核心特色
 
-### 1. ⚡ 零 Token 消耗、零外部 API 成本
-全系統採用純 Python 標準函式庫與離線索引，完全不呼叫大型語言模型（LLM），不產生任何 API 帳單。
+### 🎴 四維整點微卡片 (Discord)
+每小時播報一次，完美對齊 90 分鐘專專注節奏（06:00 ~ 18:00 共 8 區段）：
+- **｜ 行 ｜**：當前時段具體、可驗證的工作指引，防止迷失焦點。
+- **｜ 字 ｜**：精選 **5,542** 個核心高頻單字，無痛累積 CEFR 7000 字彙。
+- **｜ 時 ｜**：網路優先抓取 Gooday 官網宜忌；斷線自動切換本機干支推算。
+- **｜ 勢 ｜**：模擬「三錢法」起卦，支援完整變爻規則，提供專屬決策建議。
 
-### 2. 🎴 四維微卡片（Discord Rich Embed / Markdown）
-每小時或定時播報一次，微卡片欄位包含：
-- **｜ 行 ｜ 專注行動**：對齊 90 分鐘（1.5 小時）工作節奏（06:00 ~ 18:00 共 8 個 S 區段），提供具體、可驗證的工作提示，防止在繁雜的日常中迷失焦點。
-- **｜ 字 ｜ 英文字根**：直接顯示「單字、音標、詞性、字義」，本機搭載並驗證通過 **5,542** 個核心高頻單字、**906** 個隔離防錯條目（完全覆蓋 CEFR 7000 高中核心詞彙且排除 CJK/IPA/OCR 雜訊），無痛累積字彙量。
-- **｜ 時 ｜ 農民曆宜忌**：優先抓取 Gooday 官網當日/當值時辰之宜忌與生肖沖煞；若網路斷線，則自動切換至本機干支基準算法，確保播報不中斷。
-- **｜ 勢 ｜ 易經決策護欄**：採用系統時間亂數種子模擬「三錢法」起卦。支援完整 64 卦、384 爻辭，並嚴格實作變爻規則，自動對應決策護欄與決策建議。
-
-### 3. 💓 單檔輕量本機工作脈搏紀錄器 (`index.html`)
-- **極速登記**：每小時只需花 10 秒鐘即可點選完成主要活動、感受、精力與文字/語音備註。
-- **隱私至上**：所有紀錄存在瀏覽器的 `localStorage` 中，不會上傳任何雲端，絕對安全。
-- **資料搬移**：支援完整的 JSON 檔案匯入、匯出與合併功能，靈活交換數據。
-- **AI 整合**：內建「一鍵複製 30 天 AI 回顧 Prompt」，將累積的脈搏數據直接貼給 AI 進行深度的週/月/年軌跡與精力回顧。
+### 📊 輕量脈搏紀錄器 (`index.html`)
+- **極速登記**：10 秒快速記錄感受（−2 ~ +2）、精力（1 ~ 5）與活動。
+- **絕對隱私**：100% 儲存於瀏覽器 `localStorage`，數據不落雲端。
+- **AI 賦能**：內建「30 天回顧 Prompt」，一鍵生成深度精力與軌跡分析。
 
 ---
 
-## ⚙️ 快速開始指南
+## ⚙️ 快速開始
 
-### 1. 下載與準備
-確保本機或環境中已安裝 Python 3.8+ 且可正常執行。
+### 1. 安裝與設定
 ```bash
 git clone https://github.com/sink6985757-web/merged-pomodoro-pulse.git
 cd merged-pomodoro-pulse
 ```
+建立 `.env` 檔案並填入 Discord Webhook：
+```env
+DISCORD_WEBHOOK_URL=your_discord_webhook_url_here
+```
 
-### 2. 設定 Discord Webhook 網址
-本專案支援多種 Discord Webhook URL 設定方式，優先順序如下：
-1. **指令引數**：`--webhook "https://discord.com/api/webhooks/..."`
-2. **環境變數**：`DISCORD_WEBHOOK_URL`
-3. **本機環境檔案**：在專案根目錄下建立一個 `.env` 檔案，內容如下：
-   ```env
-   DISCORD_WEBHOOK_URL=your_discord_webhook_url_here
-   ```
-4. **程式碼內嵌**：在 `unified_broadcaster.py` 中的 `DEFAULT_WEBHOOK` 變數填入網址。
-
-### 3. 手動測試播報
-您可以利用 `--at` 指令引數模擬在特定時間點的播報（不消耗單字庫）：
+### 2. 測試播報
 ```bash
-# 預覽 Embed JSON Payload 或 Markdown（不發送，適合除錯）
+# 模擬 09:00 播報（不發送且不消耗單字庫）
 python unified_broadcaster.py --at 09:00 --dry-run
 
-# 測試當前時間播報並真正消耗一個單字（會將進度記入狀態檔）
+# 真正消耗一個單字並發送至 Discord
 python unified_broadcaster.py --consume
 ```
 
-### 4. 設定自動化排程（Cron）
-建議在工作日（06:00 ~ 18:00）的每個整點設定排程執行。
-
-#### 一般伺服器 Cron 排程：
+### 3. 設定自動化排程 (Cron)
+建議在工作日 06:00 ~ 18:00 的整點執行：
 ```cron
 0 6-18 * * * cd /path/to/merged-pomodoro-pulse && python unified_broadcaster.py --consume
 ```
 
 ---
 
-## 🤖 AI Agent 快速部署與安裝指南 (For Hermes Agent)
+## 🤖 Hermes Agent 快速部署
 
-如果您是協作 AI Agent（如 Hermes Agent），請依照以下步驟直接進行全套安裝與配置：
+如果您使用 **Hermes Agent**，可透過以下指令一鍵裝載：
 
-### 1. 安裝 Skill
-在終端機中執行以下命令，直接將本專案的 `SKILL.md` 安裝為本機的技能，裝載所有開發、維護與踩坑稽核指引：
-```bash
-hermes skills install https://raw.githubusercontent.com/sink6985757-web/merged-pomodoro-pulse/master/SKILL.md --name pomodoro-micro-card
-```
-
-### 2. 建立播報排程 (Cron Job)
-在 Hermes 環境中建立定時播報任務（自動調用終端機執行並抓取 stdout 輸出，**不依賴獨立背景進程，因此需設為 no_agent: false**）：
-```bash
-hermes cron create "0 6-18 * * *" \
-  --name "merged-pomodoro-pulse" \
-  --prompt "Run the Python script at <您的腳本絕對路徑>/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is — raw text, no markdown wrapping, no commentary." \
-  --deliver "discord:<你的目標頻道ID>"
-```
-
-### 3. 一鍵自動化驗證
-執行自動化測試，確保 100% 綠燈通過：
-```bash
-python tests/verify_pomodoro_final.py
-```
+1. **安裝 Skill 指引**：
+   ```bash
+   hermes skills install https://raw.githubusercontent.com/sink6985757-web/merged-pomodoro-pulse/master/SKILL.md --name pomodoro-micro-card
+   ```
+2. **建立排程 (Cron)**：
+   ```bash
+   hermes cron create "0 6-18 * * *" \
+     --name "merged-pomodoro-pulse" \
+     --prompt "Run the Python script at <絕對路徑>/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is." \
+     --deliver "discord:<頻道ID>"
+   ```
+3. **自動化驗證**：
+   ```bash
+   python tests/verify_pomodoro_final.py
+   ```
 
 ---
 
-## 🔒 數據庫維護與冪等安全
+## 🔒 系統安全與免責聲明
 
-- **單字循環防重複機制**：播報單字保存在 `pomodoro_vocab_state.json` 中，同一 Cycle 內已被消耗的單字絕不重複播報。當精選單字消耗完畢後，自動開展下個 Cycle。
-- **跨行程安全鎖**：本程式具備檔案鎖（File Lock）機制。在多行程或定時排程衝突時，能保證「讀取 ➔ 消耗單字 ➔ 儲存狀態」的交易性（Transactional），防止重複發送與競態條件。
-
----
-
-## ⚖️ 免責聲明與版權
-
-1. **易經占卜**：內容源於曾仕強教授之著述與數位化整理，純屬符號學引導與決策護欄提示，不構成任何形式之未來預測或實質投資/職涯建議。
-2. **字根字典**：英文字根字典語料庫來自公開學習資料，本專案僅提供提取、索引與拆解學習工具模組。
-3. **農民曆**：日/時宜忌與沖煞資訊來自網路公開農民曆演算法與 [Gooday 官網](https://www.goodaytw.com/)，請在使用時遵守其相關使用條款。
+- **單字冪等性**：消耗狀態紀錄於 `pomodoro_vocab_state.json`，同一個 Cycle 內單字絕不重複，自動循環。
+- **併發防護**：內建**檔案鎖 (File Lock)** 避免多行程衝突與重複發送。
+- **免責聲明**：易經占卜僅作決策符號學引導，不構成投資/職涯建議。農民曆與字根語料皆取自公開來源。
 
 ---
 
