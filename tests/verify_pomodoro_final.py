@@ -14,7 +14,9 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-SCRIPT = Path(__file__).with_name("pomodoro_chat_original.py")
+SCRIPT = Path(__file__).parent.parent / "pomodoro_chat_original.py"
+if not SCRIPT.exists():
+    SCRIPT = Path(__file__).with_name("pomodoro_chat_original.py")
 TZ = timezone(timedelta(hours=8))
 
 spec = importlib.util.spec_from_file_location("pomodoro_final", SCRIPT)
