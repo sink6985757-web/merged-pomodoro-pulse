@@ -244,6 +244,14 @@ def main():
     
     # Setup correct local timezone datetime
     now = datetime.now(TZ_TAIPEI)
+    test_label = None
+    
+    # 0. Check for forced time backdoor
+    forced_hhmm, loaded_label = pomodoro_chat_original.load_forced_time()
+    if forced_hhmm:
+        now = now.replace(hour=forced_hhmm[0], minute=forced_hhmm[1], second=0, microsecond=0)
+        test_label = loaded_label
+
     if args.at:
         try:
             hh, mm = pomodoro_chat_original.parse_hhmm(args.at)
@@ -253,7 +261,7 @@ def main():
             sys.exit(1)
 
     # 1. Build the raw message text from the core engine
-    raw_message = pomodoro_chat_original.build_message(now, consume_vocab=args.consume)
+    raw_message = pomodoro_chat_original.build_message(now, test_label=test_label, consume_vocab=args.consume)
     if not raw_message:
         sys.exit(0)
 
