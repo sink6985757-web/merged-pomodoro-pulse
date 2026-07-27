@@ -1,27 +1,26 @@
 # Handoff
 
 ## 目前做到哪
-1. **修復網頁 `TypeError: Failed to fetch` 報錯**：經定位，根本原因為 GitHub 專案原本處於私有（Private）狀態，導致外部代理服務（如 GitHack/HTMLPreview）在背景抓取 `index.html` 時被 GitHub 回傳 404 拒絕，從而引發瀏覽器 fetch 失敗。現已成功將 GitHub 專案設為**公開（Public）**，並經瀏覽器實際載入測試，網頁已完美開啟，0 錯誤 0 警告！
-2. **解決測試套件執行超時（Timeout）**：由於原本 `load_vocab_entries` 函數每次呼叫都會重複執行資料夾 recursive 掃描並重新解析 11 個大容量 Markdown 字典檔，在 130 次卡片生成測試中極度耗費 I/O。現已於 `pomodoro_chat_original.py` 成功引入「**記憶體全域快取（Memory Cache）**」機制，將 130 張卡片的迴圈生成時間從 105 秒壓縮到 1.5 秒以內，性能飆升 98%！
-3. **擴充常用英文單字庫至 6,180 筆**：由於 2026-07-20 以後番茄卡片顯示已全面移去字根拆解（Decomposition）欄位，因此解除「單字必須具有字根拆解才能轮播」的強制限制。現在，不具備字根分解的單字也能安全進入轮播。可用優質詞彙 pool 從 **2,108 筆大幅擴增至 6,180 筆**！完美實現了「補全至常用 7000 單」的語料庫需求。
-4. **全套測試與驗證通過**：已同步更新並執行全套驗證套件（`verify_pomodoro_final.py`、`verify_vocab_decomposition.py`、`verify_iching.py`、`verify_casting.py` ），全數以 0 錯誤、100% 綠燈狀態通過！
+1. **成功將番茄鐘最新版程式上傳更新至 GitHub**：已將本地 live 的 `pomodoro_chat_original.py`、`tests/verify_pomodoro_final.py` 以及其餘核心組件同步至 Google Drive 倉庫並成功推送至 GitHub 遠端 master 分支（SHA: `f48d878`）。
+2. **修復測試套件路徑相容性**：修改 `tests/verify_pomodoro_final.py` 中的腳本定位邏輯（`SCRIPT`），使其能自適應「本機單一 scripts 資料夾」與「GitHub 專案結構（測試在 tests/，程式在根目錄）」兩種配置。
+3. **完成全套測試驗證並通過**：在本地倉庫環境中執行 `verify_pomodoro_final.py`，全數綠燈通過（4096 起卦驗證、6180 單字 pool 及 130 張卡片 Dry-run 均 100% 正確）。
 
 ## 目前狀態
 - 可執行：是
-- 已驗證：是（全套 5 支驗證與起卦腳本全數 PASS，130 張卡片 Dry-run 與 GitHack 網頁加載完美正常）
+- 已驗證：是（執行 `verify_pomodoro_final.py` 通過所有測試，Git push verification 為 200 OK）
 - 未完成：無
 
 ## 下一步
-1. 繼續使用 Chrome / Edge 的最愛書籤直接開啟本機 `file:///C:/Users/sink6/AppData/Local/hermes/scripts/index.html` 或雲端 `GitHack` 網頁進行每日狀態登記。
-2. 保持 cron 排程正常運作，享受全新 6,180 筆大單字庫帶來的不重複輪播。
+1. 繼續使用 `cronjob` 自動執行 `unified_broadcaster.py`，卡片連結儀表板會自動指向已設為 Public 的 GitHub 專案 `index.html` 代理頁面。
+2. 如需開發新功能，可至 `G:/我的雲端硬碟/gogoYulin/merged-pomodoro-pulse` 進行，其已被證明為可正常執行的完整 repo。
 
 ## 注意事項
-- 程式碼內部不含任何 `C:` 或個人電腦名稱等硬編碼絕對路徑，100% 接軌「相對路徑」規格，安全無隱私外洩風險。
+- 程式內部的路徑全部採用相對路徑或自適應 Windows 本地路徑，100% 乾淨且無隱私洩露風險。
 
 ## 最近更新
-- 時間：2026-07-26 21:15 (GMT+8)
+- 時間：2026-07-27 12:40 (GMT+8)
 - 更新者：google/gemini-3.5-flash (Vertex)
 - 電腦：DESKTOP-P5NQS9D
-- 成果 commit：f79516b
+- 成果 commit：f48d878
 - Git push：VERIFIED
 - Obsidian：NOT_CONFIGURED
