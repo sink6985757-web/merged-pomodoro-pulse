@@ -111,7 +111,7 @@ hermes skills install https://raw.githubusercontent.com/sink6985757-web/merged-p
 在 Hermes 環境中建立定時播報任務（自動調用終端機執行並抓取 stdout 輸出，**不依賴獨立背景進程，因此需設為 no_agent: false**）：
 ```bash
 hermes cron create "0 6-18 * * *" \
-  --name "每日無為天機｜life-pomodoro micro-card" \
+  --name "merged-pomodoro-pulse" \
   --prompt "Run the Python script at <您的腳本絕對路徑>/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is — raw text, no markdown wrapping, no commentary." \
   --deliver "discord:<你的目標頻道ID>"
 ```
