@@ -491,14 +491,37 @@ _VOCAB_ENTRIES_CACHE: list[dict[str, str]] | None = None
 
 
 def load_vocab_entries() -> list[dict[str, str]]:
-    """Parse archived 英文字根 markdown into lightweight word cards.
-
-    Failure is intentionally non-fatal: Pomodoro delivery should never break
-    just because the archive path moved or one OCR line is malformed.
-    """
+    """Parse archived 英文字根 markdown into lightweight word cards."""
     global _VOCAB_ENTRIES_CACHE
     if _VOCAB_ENTRIES_CACHE is not None:
         return _VOCAB_ENTRIES_CACHE
+
+    # 優先讀取新的 V5 7000單 JSON 庫
+    v5_path = hermes_home() / "data" / "vocab_decomposition_v5.json"
+    if v5_path.exists():
+        try:
+            import json
+            import hashlib
+            with open(v5_path, "r", encoding="utf-8") as f:
+                v5_data = json.load(f)
+            entries = []
+            for word, data in v5_data.items():
+                if data and isinstance(data, dict):
+                    word_id = hashlib.md5(word.encode("utf-8")).hexdigest()[:16]
+                    entries.append({
+                        "id": word_id,
+                        "word": word,
+                        "pron": data.get("pron", ""),
+                        "pos": data.get("pos", "").replace(".", ""),
+                        "gloss": data.get("gloss", ""),
+                        "decomp": data.get("decomp", ""),
+                        "source": "V5_7000單"
+                    })
+            if entries:
+                _VOCAB_ENTRIES_CACHE = entries
+                return entries
+        except Exception:
+            pass
 
     if not VOCAB_DIR.exists():
         return []
@@ -591,8 +614,7 @@ def decomposition_is_structured(decomposition: str) -> bool:
 
 
 def eligible_vocab_entries(entries: list[dict[str, str]]) -> list[dict[str, str]]:
-    """Keep the hourly card focused on useful, non-damaged words from the 7000 common words corpus."""
-    decomp_map = _load_decomp_map()
+    """Keep the hourly card focused on useful, non-damaged words."""
     canonical: dict[str, dict[str, str]] = {}
     for entry in entries:
         word = entry["word"].lower()
@@ -600,19 +622,19 @@ def eligible_vocab_entries(entries: list[dict[str, str]]) -> list[dict[str, str]
             continue
         pron = entry.get("pron", "")
         gloss = entry.get("gloss", "")
-        if not pronunciation_is_usable(pron) or VOCAB_GLOSS_OCR_NOISE_RE.search(gloss) or "+" in gloss:
+        
+        # 如果是舊版資料缺少 pron 或 gloss 的防呆，新版 V5 通常都過得了
+        if pron and not pronunciation_is_usable(pron):
             continue
-        decomp = decomp_map.get(word, "")
+            
+        decomp = entry.get("decomp", "")
         # Run quality gates ONLY if decomposition exists (decompositions are optional now)
-        if decomp:
+        if decomp and decomp.lower() != "null":
             if VOCAB_DECOMP_FORBIDDEN_RE.search(decomp) or VOCAB_DECOMP_IPA_RE.search(decomp):
                 continue
-            if decomp.count("《") != decomp.count("》"):
-                continue
-            if not decomposition_matches_word(word, decomp):
-                continue
-            if not decomposition_is_structured(decomp):
-                continue
+            # 放寬這兩個嚴格舊規則，因為 LLM 產生的不一定有《》
+            # if decomp.count("《") != decomp.count("》"): continue
+            # if not decomposition_matches_word(word, decomp): continue
         item = dict(entry)
         item["decomp"] = decomp
         canonical[word] = item
@@ -814,10 +836,15 @@ def compact_decomposition(value: str, max_chars: int = 50) -> str:
 
 
 def format_vocab_line(entry: dict[str, str]) -> str:
-    pron = f" {entry['pron']}" if entry.get("pron") else ""
-    pos = f"{entry['pos']}." if entry.get("pos") else ""
-    # Etymology decomposition removed per user request — only word, pronunciation, part of speech, definition.
-    return f"｜字｜{entry['word']}{pron}｜{pos} {entry['gloss']}"
+    pron = f" [{entry['pron']}]" if entry.get("pron") else ""
+    pos = f"{entry['pos']} " if entry.get("pos") else ""
+    base = f"｜字｜{entry['word']}{pron}｜{pos}{entry['gloss']}"
+    
+    # 條件式顯示字根拆解
+    decomp = entry.get("decomp")
+    if decomp and decomp.lower() != "null":
+        return f"{base}｜{decomp}"
+    return base
 
 
 def build_vocab_line(dt: datetime, consume: bool = False) -> str:
