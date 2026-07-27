@@ -106,6 +106,49 @@ schedule: "0 6-18 * * *"
 no_agent: true
 ```
 
+---
+
+## 🤖 AI Agent 快速部署與安裝指南 (AI Agent Direct Installation)
+
+如果您是協作 AI Agent（如 Hermes Agent / Claude Code 等），請依照以下步驟直接進行全套安裝與配置，確保與宿主（Host）環境完美接軌：
+
+### 1. 安裝 Skill
+在終端機中執行以下命令，直接將本專案的 `SKILL.md` 安裝為您本機的技能，裝載所有開發、維護與踩坑稽核指引：
+```bash
+hermes skills install https://raw.githubusercontent.com/sink6985757-web/merged-pomodoro-pulse/master/SKILL.md --name pomodoro-micro-card
+```
+
+### 2. 克隆專案倉庫
+在您宿主合適的工作目錄下執行：
+```bash
+git clone https://github.com/sink6985757-web/merged-pomodoro-pulse.git
+cd merged-pomodoro-pulse
+```
+
+### 3. 設定 Webhook
+在 `merged-pomodoro-pulse` 根目錄下建立 `.env` 檔案配置您的 Discord 播報通道：
+```env
+DISCORD_WEBHOOK_URL=your_discord_webhook_url_here
+```
+
+### 4. 建立播報排程 (Cron Job)
+在 Hermes 環境中建立定時播報任務（請用絕對路徑取代下方 `unified_broadcaster.py` 路徑）：
+```bash
+hermes cron create "0 6-18 * * *" \
+  --name "每日無為天機｜life-pomodoro micro-card" \
+  --prompt "Run the Python script at C:/Users/sink6/AppData/Local/hermes/scripts/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is — raw text, no markdown wrapping, no code fences, no extra formatting, no commentary. Never use triple backticks or any other wrapper. The raw text IS the final message." \
+  --deliver "discord:1521867388440543316"
+```
+
+### 5. 一鍵自動化驗證
+執行自動化測試，確保 100% 綠燈通過：
+```bash
+python tests/verify_pomodoro_final.py
+```
+若輸出 `PASS` 則代表部署無誤。
+
+---
+
 ### 5. 啟用紀錄網頁儀表板
 直接在您的 Windows 桌面上或任何瀏覽器中開啟 `index.html` 即可開始登記。
 建議將 `index.html` 的瀏覽器網址加入書籤。每次收到 Discord 播報通知時，點擊卡片底部的「開啟本機工作脈搏紀錄儀表板」連結，即可一鍵跳轉至該登記網頁。
