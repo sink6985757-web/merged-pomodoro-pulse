@@ -15,6 +15,9 @@
 
 ## 🛠️ 專案架構與檔案清單
 
+> **最近更新 (2026-07-28):** 專案已整合「三技能 Lite 架構」，並將晚上六點後產生的測試腳本 (`tests/`)、未核准的資料提取腳本、以及舊版的狀態紀錄全數封存至 `.archive/` 目錄。
+
+
 ```text
 merged-pomodoro-pulse/
 ├── unified_broadcaster.py      # 🚀 播報主程式：產出豐富的 Discord 卡片訊息
