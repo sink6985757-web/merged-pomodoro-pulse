@@ -22,18 +22,12 @@ merged-pomodoro-pulse/
 ├── lunar_almanac.py            # 🏮 備用離線農民曆：基於干支基準點推算宜忌與沖煞
 ├── pomodoro_iching_data.py     # ☯ 易經資料庫：曾仕強教授 64 卦、384 爻辭、變爻規則
 ├── index.html                  # 📊 脈搏紀錄儀表板：單檔網頁，使用 LocalStorage 儲存
-├── vocab_decomp_extract.py     # 📖 字根索引提取工具：從 markdown 語料庫提取並重建
 ├── pomodoro_focus.py           # 🔧 專注 90 分鐘番茄鐘與休息提示變體邏輯
 ├── requirements.txt            # 📦 相依性清單（純 Python 標準函式庫，無需安裝外部依賴）
 ├── LICENSE                     # MIT 授權條款
 ├── data/
 │   ├── vocab_decomposition.json # 📖 離線字根拆解資料庫核心索引
 │   └── vocab_corpus/            # 📚 劉毅/學習出版社風格字根 md 原始語料庫目錄
-└── tests/                       # 🧪 完整自動化測試與稽核套件
-    ├── verify_casting.py        # 易經起卦與 coin-tossing 隨機性驗證
-    ├── verify_crossref.py       # 易經規則交叉比對
-    ├── verify_iching.py         # 易經變爻核心演算法測試
-    └── verify_pomodoro_final.py # 模擬起卦、時辰邊界與生成卡片之迴歸測試
 ```
 
 ---
