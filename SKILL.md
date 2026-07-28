@@ -37,7 +37,7 @@ DISCORD_WEBHOOK_URL=your_discord_webhook_url_here
 ```bash
 hermes cron create "0 6-18 * * *" \
   --name "每日無為天機｜life-pomodoro micro-card" \
-  --prompt "Run the Python script at C:/Users/sink6/AppData/Local/hermes/scripts/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is — raw text, no markdown wrapping, no code fences, no extra formatting, no commentary. Never use triple backticks or any other wrapper. The raw text IS the final message." \
+  --prompt "Run the Python script at ~/AppData/Local/hermes/scripts/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is — raw text, no markdown wrapping, no code fences, no extra formatting, no commentary. Never use triple backticks or any other wrapper. The raw text IS the final message." \
   --deliver "discord:1521867388440543316"
 ```
 *(注意：路徑請根據宿主實際克隆或安裝的 `unified_broadcaster.py` 絕對路徑進行替換)*
