@@ -24,9 +24,11 @@ merged-pomodoro-pulse/
 ├── vocab_decomp_extract.py     # 📖 離線字根拆解核心工具
 ├── index.html                  # 📊 脈搏紀錄儀表板 (LocalStorage 單檔)
 ├── requirements.txt            # 📦 相依性清單 (僅 Python 標準函式庫)
-├── data/
-│   ├── vocab_decomposition_v5.json # V5 7000 單大字庫 (核心)
-│   └── vocab_decomposition.json    # V4 離線字根資料庫
+├── AGENTS.md                   # 🤖 專案 Agent 協作共用設定
+├── handoff.md                  # 📝 專案開發交接紀錄
+├── data/                       # 🔒 本機資料夾 (已列入 .gitignore，存於 LOCALAPPDATA\hermes\data)
+│   ├── vocab_decomposition_v5.json # V5 7000 單大字庫 (本機核心)
+│   └── vocab_decomposition.json    # V4 離線字根資料庫 (本機備用)
 └── tests/                      # 🚦 自動化測試套件 (100% 綠燈驗證)
     ├── verify_pomodoro_final.py         # 生產路徑與時段覆蓋
     ├── verify_pomodoro_enhancements.py  # 增強版合約與單字庫
