@@ -283,10 +283,13 @@ def main():
     final_lines.append(f"｜記｜[點此開啟紀錄儀表板]({public_index_url})")
     
     final_output = "\n".join(final_lines)
+    payload = build_discord_embed(final_lines, now)
 
     if args.dry_run:
-        print("🔍 [Dry Run] 產生的本機 Markdown 卡片預覽如下:")
+        print("🔍 [Dry Run] 產生的 Markdown 卡片預覽:")
         print(final_output)
+        print("\n🎨 [Dry Run] 產生的 Discord Rich Embed JSON (iPhone 12 專屬一頁式卡片):")
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
         sys.exit(0)
 
     # 4. Resolve webhook and send
@@ -295,13 +298,73 @@ def main():
         print(final_output)
         sys.exit(0)
 
-    print(f"🚀 正在傳送番茄工作脈搏 ({now.strftime('%H:%M')}) 至 Discord...")
+    print(f"🚀 正在傳送番茄工作脈搏 Rich Embed 卡片 ({now.strftime('%H:%M')}) 至 Discord...")
     status = send_to_discord(webhook_url, payload)
     if status == 204 or status == 200:
         print("✅ 播報傳送成功！")
     else:
         print(f"❌ 傳送失敗，HTTP 狀態碼: {status}", file=sys.stderr)
         sys.exit(1)
+
+
+def build_discord_embed(final_lines: list, now: datetime) -> dict:
+    time_str = now.strftime("%H:%M")
+    hour = now.hour
+    
+    # Theme color based on time of day
+    if 6 <= hour < 9:
+        color = 0x2ecc71  # Emerald Green
+    elif 9 <= hour < 15:
+        color = 0x3498db  # Bright Blue
+    elif 15 <= hour < 18:
+        color = 0xe67e22  # Amber Gold
+    else:
+        color = 0x9b59b6  # Royal Purple
+
+    line_map = {}
+    for l in final_lines:
+        if l.startswith("｜行｜"): line_map["行"] = l.replace("｜行｜", "").strip()
+        elif l.startswith("｜字｜"): line_map["字"] = l.replace("｜字｜", "").strip()
+        elif l.startswith("｜時｜"): line_map["時"] = l.replace("｜時｜", "").strip()
+        elif l.startswith("｜勢｜"): line_map["勢"] = l.replace("｜勢｜", "").strip()
+
+    public_index_url = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
+
+    embed = {
+        "title": f"🍅 番茄工作脈搏 · {time_str}",
+        "color": color,
+        "fields": [
+            {
+                "name": "🎯 ｜ 行 ｜ 專注行動與斯多噶",
+                "value": line_map.get("行", "無"),
+                "inline": False
+            },
+            {
+                "name": "📖 ｜ 字 ｜ 權威字根單字",
+                "value": line_map.get("字", "無"),
+                "inline": False
+            },
+            {
+                "name": "🗓️ ｜ 時 ｜ 時辰農曆宜忌",
+                "value": line_map.get("時", "無"),
+                "inline": False
+            },
+            {
+                "name": "☯️ ｜ 勢 ｜ 易經決策護欄",
+                "value": line_map.get("勢", "無"),
+                "inline": False
+            },
+            {
+                "name": "📊 ｜ 記 ｜ 本機狀態紀錄",
+                "value": f"[點此開啟紀錄儀表板 (LocalStorage 隱私極速登記)]({public_index_url})",
+                "inline": False
+            }
+        ],
+        "footer": {
+            "text": "100% 離線計算 · 零 Token 消耗 · Merged Pomodoro Pulse"
+        }
+    }
+    return {"embeds": [embed]}
 
 
 if __name__ == "__main__":

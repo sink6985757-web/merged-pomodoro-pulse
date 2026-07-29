@@ -1045,8 +1045,7 @@ def build_almanac_chat_line(dt: datetime, prefix: str = "") -> str:
     chong = almanac.get("day_chong") or "資料不足"
     sha = almanac.get("day_sha") or "資料不足"
     return (
-        f"{prefix}｜時｜日宜「{day_yi}」／忌「{day_ji}」｜"
-        f"{branch}宜「{hour_yi}」／忌「{hour_ji}」｜沖{chong}·煞{sha}｜現實優先"
+        f"{prefix}｜時｜{branch}時 宜{hour_yi}/忌{hour_ji} ｜ 日宜{day_yi}/忌{day_ji} ｜ 沖{chong}煞{sha}"
     )
 
 
