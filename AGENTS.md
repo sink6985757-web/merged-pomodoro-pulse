@@ -7,12 +7,17 @@
 - [x] 核心邏輯整合 (Pomodoro, Micro Card, Hour Pulse)
 - [x] 離線單字與農曆資料庫建立
 - [x] Discord Webhook 播報腳本撰寫
+- [x] V5 7000 單字庫校正驗證與 V5 專屬測試建置
 - [ ] 設定第二台 Hermes 自動化排程
 
 ## 專案結構
 - `unified_broadcaster.py`：Discord 播報主腳本
 - `lunar_almanac.py`：本機農曆與宜忌邏輯
-- `data/vocab_decomposition.json`：離線單字拆解庫
+- `build_vocab_db.py`：V5 單字庫建置／修補腳本 (Vertex AI Gemini-2.5-flash)
+- `data/vocab_decomposition_v5.json`：V5 7000 單字庫 (本機核心，5805 筆)
+- `data/vocab_decomposition.json`：V4 離線字根資料庫 (本機備用)
+- `tests/verify_vocab_decomposition.py`：V5 JSON 結構與欄位完整性驗證
+- `tests/verify_pomodoro_final.py`：全面回歸測試 (易經／單字池／卡片／並發)
 - `index.html`：本機脈搏紀錄儀表板
 
 ## 共用規則

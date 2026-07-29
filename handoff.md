@@ -1,27 +1,30 @@
 # Handoff
 
 ## 目前做到哪
-1. **成功擴充 7000 單字庫並加入字根拆解**：撰寫並執行 LLM 批次處理腳本 `build_vocab_db.py` (使用 Vertex AI 的 `gemini-2.5-flash`)，從開源 CEFR 7000 單字表成功分析並建立包含 5,786 筆資料的 `vocab_decomposition_v5.json` 語源資料庫。
-2. **修改卡片顯示邏輯**：更新 `pomodoro_chat_original.py`，加入條件式顯示字根功能（有字根且非 null 才在單字後方顯示），並將主要字庫讀取來源優先指向 `vocab_decomposition_v5.json`，並為每筆單字即時產生 md5 id 確保不重複邏輯正常運作。
-3. **完成 Watchdog 背景執行與驗證**：已確認背景程序成功將 5,786 個單字全數處理完畢並寫入資料庫，同時在 `#merged-pomodoro-pulse` Discord 頻道發送測試推播，版面確認無誤。
+1. **V5 7000 單字庫校正與修補完成**：修復 `build_vocab_db.py` 的複合字展開與大小寫匹配邏輯，經 Vertex AI Gemini-2.5-flash 重新補件 76 筆缺失單字（含 side），`vocab_decomposition_v5.json` 從 5,786→5,805 筆，全庫 zero flat string/None/empty gloss。
+2. **V5 驗證測試建置**：重寫 `tests/verify_vocab_decomposition.py` 為 V5 專用驗證（字典結構、非空欄位、品質閘門、regression case），與 `tests/verify_pomodoro_final.py` 雙測 100% PASS。
+3. **雙路徑同步完成**：project 與 AppData 雙檔 md5 一致，播報核心 `pomodoro_chat_original.py` 讀取無誤。
 
 ## 目前狀態
 - 可執行：是
-- 已驗證：是 (Discord 推送排版正確，背景任務正常結束並寫入所有單字)
+- 已驗證：是 (verify_vocab_decomposition.py + verify_pomodoro_final.py 雙 PASS)
 - 未完成：無
 
 ## 下一步
-1. 接下來每個小時的番茄鐘都會自動從最新的 7000 單字庫抽取。
-2. 若需重新建庫或修改，可調整並執行 `build_vocab_db.py` 腳本。
+1. 每小時番茄鐘自動從 V5 5805 筆單字庫抽取播報。
+2. 若需新增單字或修補，執行 `python build_vocab_db.py`（支援複合格式 + case-insensitive）。
+3. CI 或開工時執行 `python tests/verify_vocab_decomposition.py` 驗證單字庫完整性。
 
 ## 注意事項
-- `vocab_decomposition_v5.json` 已加入本地 `data/` 目錄中。依照 `.gitignore` 規則，包含此 JSON 檔案的 `data/` 目錄不會被推送到 GitHub，以確保倉庫整潔。
-- 若背景腳本遇到 Rate Limit (429 錯誤)，已內建 exponential backoff (退避重試) 機制，會自動等待並重試，無需人工干預。
+- `build_vocab_db.py` 已放回專案根目錄（從 .archive/ 移出並更新邏輯）。
+- `README.md.bak` 為本次清理的備份，下次開工可視情況移入 .archive/ 或刪除。
+- `data/` 目錄仍受 .gitignore 保護，不推送 GitHub。
+- backup 檔：`data/vocab_decomposition_v5.json.bak` + `AppData/.../vocab_decomposition_v5.json.bak`。
 
 ## 最近更新
-- 時間：2026-07-27 22:30 (GMT+8)
-- 更新者：google/gemini-3.1-pro-preview (Vertex)
+- 時間：2026-07-29 08:30 (GMT+8)
+- 更新者：deepseek/deepseek-v4-pro (Nous)
 - 電腦：DESKTOP-P5NQS9D
-- 成果 commit：25b5cc3
-- Git push：VERIFIED
+- 成果 commit：待提交
+- Git push：待推送
 - Obsidian：NOT_CONFIGURED
