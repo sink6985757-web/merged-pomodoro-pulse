@@ -1,30 +1,30 @@
 # Handoff
 
 ## 目前做到哪
-1. **V5 7000 單字庫校正與修補完成**：修復 `build_vocab_db.py` 的複合字展開與大小寫匹配邏輯，經 Vertex AI Gemini-2.5-flash 重新補件 76 筆缺失單字（含 side），`vocab_decomposition_v5.json` 從 5,786→5,805 筆，全庫 zero flat string/None/empty gloss。
-2. **V5 驗證測試建置**：重寫 `tests/verify_vocab_decomposition.py` 為 V5 專用驗證（字典結構、非空欄位、品質閘門、regression case），與 `tests/verify_pomodoro_final.py` 雙測 100% PASS。
-3. **雙路徑同步完成**：project 與 AppData 雙檔 md5 一致，播報核心 `pomodoro_chat_original.py` 讀取無誤。
+1. **三路合併與 11,496 單字庫超大升級**：我們在 `build_vocab_db.py` 中實現了三路合併，結合專案最新 V5 單字、SQLite 字根庫（MD 無損定位提取）以及學測/指考 7000 單的全部基礎單字（包括 ability, side 等），擴充並升級單字庫容量至 **11,496 筆單字**。
+2. **多重品質門檻與 LLM 修補完成**：
+   - 解決了字首字尾太短被誤判為 Unstructured 的 bug（將 `{4,}` 判定放寬為 `{2,}`，支援 `to` 等短解釋）。
+   - 加入了對 `10` -> `to` 的 OCR 自動糾錯，以及數字損壞、`\ufffd` 亂碼、非結構化 decomp 的自動篩選，並在編譯時將其送往 Vertex AI Gemini 2.5-flash 完成字典級重建。
+3. **動態路徑同步**：自動辨識並動態同步專案 V4、V5 資料庫至當前 Windows 使用者的 `%LOCALAPPDATA%\hermes\data` 目錄，不再寫死固定使用者。
+4. **回歸測試 100% PASS**：修復了 `tests/verify_vocab_decomposition.py` 與 `tests/verify_pomodoro_final.py`，雙驗證皆 100% 透過。
 
 ## 目前狀態
 - 可執行：是
-- 已驗證：是 (verify_vocab_decomposition.py + verify_pomodoro_final.py 雙 PASS)
+- 已驗證：是 (verify_vocab_decomposition.py + verify_pomodoro_final.py 雙 100% PASS)
 - 未完成：無
 
 ## 下一步
-1. 每小時番茄鐘自動從 V5 5805 筆單字庫抽取播報。
-2. 若需新增單字或修補，執行 `python build_vocab_db.py`（支援複合格式 + case-insensitive）。
-3. CI 或開工時執行 `python tests/verify_vocab_decomposition.py` 驗證單字庫完整性。
+1. 播報核心 `pomodoro_chat_original.py` 將自動加載擴充後的 11,496 筆單字並提供最高品質的番茄鐘字根解析。
+2. 若需重新編譯或校正，可直接執行 `py -3.11 build_vocab_db.py`。
+3. 可隨時執行 `py -3.11 tests/verify_vocab_decomposition.py` 驗證單字庫結構正確性。
 
 ## 注意事項
-- `build_vocab_db.py` 已放回專案根目錄（從 .archive/ 移出並更新邏輯）。
-- `README.md.bak` 為本次清理的備份，下次開工可視情況移入 .archive/ 或刪除。
-- `data/` 目錄仍受 .gitignore 保護，不推送 GitHub。
-- backup 檔：`data/vocab_decomposition_v5.json.bak` + `AppData/.../vocab_decomposition_v5.json.bak`。
+- 請務必使用 **`py -3.11`** 執行 Python 腳本，避免系統預設 Python 3.14 缺少套件。
+- 專案的 `data/` 目錄與 AppData 中皆已同步備妥 V4 與 V5 離線資料庫。
 
 ## 最近更新
-- 時間：2026-07-29 08:30 (GMT+8)
-- 更新者：deepseek/deepseek-v4-pro (Nous)
-- 電腦：DESKTOP-P5NQS9D
-- 成果 commit：ea82a5d
-- Git push：VERIFIED
-- Obsidian：NOT_CONFIGURED
+- 時間：2026-07-29 (GMT+8)
+- 更新者：Antigravity (Google DeepMind)
+- 成果 commit：DB Rebuilt & Merged (11,496 entries)
+- Git push：PENDING
+- Obsidian：SYNCED

@@ -28,6 +28,10 @@ def load_module(name: str, path: Path):
     return module
 
 
+import os
+if "POMODORO_DATA_DIR" not in os.environ:
+    os.environ["POMODORO_DATA_DIR"] = str(SCRIPTS)
+
 card = load_module("vocab_index_card", SCRIPTS / "pomodoro_chat_original.py")
 
 # ── Load V5 database ────────────────────────────────────────────

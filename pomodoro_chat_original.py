@@ -609,7 +609,7 @@ def decomposition_is_structured(decomposition: str) -> bool:
         right = decomposition.rsplit("=", 1)[-1].strip()
         if has_cjk(right):
             return True
-        return bool(re.findall(r"[A-Za-z]{4,}", right))
+        return bool(re.findall(r"[A-Za-z]{2,}", right))
     return "-" in decomposition
 
 
