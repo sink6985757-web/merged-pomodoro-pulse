@@ -375,21 +375,43 @@ def rhythm_mode_and_action(dt: datetime, phase: str) -> tuple[str, str]:
     return mode, action
 
 
-def build_rhythm_line(dt: datetime) -> str:
-    """Annotate the hourly cron message with unified segment-based counters.
+STOIC_QUOTES_CACHE = None
 
-    The day is divided into 8 × 90-minute segments between 9 anchors
-    (06:00, 07:30, 09:00, 10:30, 12:00, 13:30, 15:00, 16:30, 18:00).
-    Cron fires on the hour, so most segments get 1-2 cards:
-      - Segment-start card → "{mode} S{seg}/8"
-      - Wrapping card → "{mode} S{seg}/8 收尾"
-    This eliminates the N/9 vs N/90m vs 收尾 Nm inconsistency.
+def load_stoic_quotes():
+    global STOIC_QUOTES_CACHE
+    if STOIC_QUOTES_CACHE is None:
+        p = vocab_data_dir() / "stoic_daily_quotes.json"
+        if p.exists():
+            try:
+                STOIC_QUOTES_CACHE = json.loads(p.read_text(encoding="utf-8"))
+            except Exception:
+                STOIC_QUOTES_CACHE = {}
+        else:
+            STOIC_QUOTES_CACHE = {}
+    return STOIC_QUOTES_CACHE
+
+def get_stoic_quote_summary(dt) -> str:
+    quotes = load_stoic_quotes()
+    key = dt.strftime("%m-%d")
+    entry = quotes.get(key)
+    if entry:
+        title = entry.get("title", "")
+        if title:
+            return f" 💡 斯多噶：{title}"
+    return ""
+
+def build_rhythm_line(dt: datetime) -> str:
+    """
+    Generate rhythm-anchored action line for the card.
+    The day is divided into 8 segments between 9 anchors.
     """
     current = dt.hour * 60 + dt.minute
     anchors = pomodoro_anchor_minutes()
     first, last = anchors[0], anchors[-1]
     if current < first or current > last:
         return ""
+
+    stoic_summary = get_stoic_quote_summary(dt)
 
     # 8 segments between 9 anchors (indices 0-7)
     for i in range(len(anchors) - 1):
@@ -399,7 +421,7 @@ def build_rhythm_line(dt: datetime) -> str:
     else:
         # current == last (18:00)
         mode, action = rhythm_mode_and_action(dt, "final")
-        return f"｜行｜{format_clock(current)}｜完成｜{action}"
+        return f"｜行｜{format_clock(current)}｜完成｜{action}{stoic_summary}"
 
     prev_anchor = anchors[seg]
     next_anchor = anchors[seg + 1]
@@ -411,25 +433,19 @@ def build_rhythm_line(dt: datetime) -> str:
     seg_display = f"S{seg + 1}/8"
 
     if current == prev_anchor:
-        # Segment-start anchor (e.g. 06:00, 09:00, 12:00, 15:00)
         phase = "start"
         closing = ""
     elif remaining <= 30:
-        # Last 30 min of segment → wrap-up
         phase = "close"
         closing = " 收尾"
     else:
-        # Middle of segment
         phase = "mid"
         closing = ""
 
-    # Use segment midpoint for mode determination, so opener and closer
-    # of same segment share the same mode label. This corrects S5 (午休)
-    # wrapping into 工作 and S8 (收工) starting as 工作.
     mid_pt = (prev_anchor + next_anchor) // 2
     mid_dt = dt.replace(hour=mid_pt // 60, minute=mid_pt % 60)
     mode, action = rhythm_mode_and_action(mid_dt, phase)
-    return f"｜行｜{prev_label}→{next_label}｜{mode} {seg_display}{closing}｜{action}"
+    return f"｜行｜{prev_label}→{next_label}｜{mode} {seg_display}{closing}｜{action}{stoic_summary}"
 
 
 def choose(pool: list[str], seed: str) -> str:
