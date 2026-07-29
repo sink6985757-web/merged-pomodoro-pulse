@@ -34,7 +34,7 @@ except ImportError as e:
     sys.exit(1)
 
 TZ_TAIPEI = timezone(timedelta(hours=8))
-DEFAULT_WEBHOOK = "YOUR_DISCORD_WEBHOOK_URL_HERE"
+DEFAULT_WEBHOOK = "https://discord.com/api/webhooks/1532019963735314555/ZBIrVwPz_zd7aUkuLjBECMZyorjyB9YQ-e9kYvq0i0ITUmKzA1grXsKEnc43Hsc4r8k_"
 
 
 def parse_arguments():
@@ -75,72 +75,89 @@ def load_webhook_url(args_webhook=None) -> str:
     return DEFAULT_WEBHOOK
 
 
-def parse_card_lines(msg_text: str, now: datetime) -> dict:
-    """Parse the raw four-line text output from build_message into structured dict."""
-    lines = msg_text.splitlines()
+def parse_card_lines(final_lines: list) -> dict:
+    """Parse the raw pipe-delimited card lines into a structured dict.
+    
+    Expected format from build_message:
+    ｜行｜HH:MM→HH:MM｜segment｜action
+    ｜字｜word [pron]｜pos gloss ｜decomp
+    ｜時｜hour_yi_ji ｜ day_yi_ji ｜ chong_sha ｜ priority
+    ｜勢｜hexagrams｜moving_lines｜hint
+    """
     data = {
-        "time_range": "無",
-        "segment": "無",
-        "action": "無",
-        "word": "無",
-        "pron": "",
-        "pos": "",
-        "gloss": "無",
-        "decomp": "",
-        "day_yi_ji": "無",
-        "hour_yi_ji": "無",
-        "chong_sha": "無",
+        "time_range": "無", "segment": "無", "action": "無", "stoic_quote": "",
+        "word": "無", "pron": "", "pos": "", "gloss": "無", "decomp": "",
+        "day_yi_ji": "無", "hour_yi_ji": "無", "chong_sha": "無",
         "priority": "現實優先",
-        "hexagrams": "無",
-        "moving_lines": "靜",
-        "hint": "無"
+        "hexagrams": "無", "moving_lines": "靜", "hint": "無"
     }
 
-    # Fetch vocabulary details directly from the dictionary to get root-decomposition
-    vocab_entry = pomodoro_chat_original.choose_vocab_entry(now, consume=False)
-    if vocab_entry:
-        data["word"] = vocab_entry.get("word", "")
-        data["pron"] = vocab_entry.get("pron", "")
-        data["pos"] = vocab_entry.get("pos", "")
-        data["gloss"] = vocab_entry.get("gloss", "")
-        data["decomp"] = vocab_entry.get("decomp", "")
-
-    for line in lines:
+    for line in final_lines:
         line = line.strip()
         if not line:
             continue
 
         if line.startswith("｜行｜"):
-            # Format: ｜行｜09:00→10:30｜先修 S3/8｜只讀一頁...
+            # ｜行｜09:00→10:30｜工作 S3/8｜行動描述 💡 斯多噶：xxx
             parts = [p.strip() for p in line.split("｜") if p.strip()]
             if len(parts) >= 4:
                 data["time_range"] = parts[1]
                 data["segment"] = parts[2]
-                data["action"] = parts[3]
+                raw_action = parts[3]
+                # Strip Stoic quote suffix from action, save separately
+                import re as _re
+                m = _re.search(r'(.+?)\s*💡\s*斯多噶[：:]\s*(.+)$', raw_action)
+                if m:
+                    data["action"] = m.group(1).strip()
+                    data["stoic_quote"] = m.group(2).strip()
+                else:
+                    data["action"] = raw_action
 
-        elif line.startswith("｜字｜") and not vocab_entry:
-            # Fallback parsing if dict was not retrieved
+        elif line.startswith("｜字｜"):
+            # ｜字｜word [pron]｜pos gloss ｜decomp
             parts = [p.strip() for p in line.split("｜") if p.strip()]
-            if len(parts) >= 3:
+            if len(parts) >= 4:
+                # parts[1] = "word [pron]" or just "word"
+                wp = parts[1]
+                if "[" in wp:
+                    data["word"] = wp.split("[")[0].strip()
+                    data["pron"] = "[" + wp.split("[", 1)[1]
+                else:
+                    data["word"] = wp
+                # parts[2] = "pos gloss"  (e.g. "v 調查", "adv 快樂地")
+                pg = parts[2]
+                m = __import__("re").match(r'^([^0-9]\S+(?:,\s*\S+)*)\s+(.+)$', pg)
+                if m:
+                    data["pos"] = m.group(1)
+                    data["gloss"] = m.group(2)
+                else:
+                    data["gloss"] = pg
+                # parts[3] = decomp
+                data["decomp"] = parts[3]
+            elif len(parts) >= 3:
                 data["word"] = parts[1]
                 data["gloss"] = parts[2]
 
         elif line.startswith("｜時｜"):
-            # Format: ｜時｜日宜...｜巳宜...｜沖...｜現實優先
+            # ｜時｜巳時 宜.../忌... ｜ 日宜.../忌... ｜ 沖(戊戌)狗煞南方 ｜ 現實優先
             parts = [p.strip() for p in line.split("｜") if p.strip()]
+            if len(parts) >= 4:
+                data["hour_yi_ji"] = parts[1]   # 巳時 宜出行...
+                data["day_yi_ji"] = parts[2]     # 日宜納採...
+                data["chong_sha"] = parts[3]      # 沖(戊戌)...
             if len(parts) >= 5:
-                data["day_yi_ji"] = parts[1]
-                data["hour_yi_ji"] = parts[2]
-                data["chong_sha"] = parts[3]
                 data["priority"] = parts[4]
 
         elif line.startswith("｜勢｜"):
-            # Format: ｜勢｜第25卦 ䷘...｜初、四｜守正可保無災
+            # ｜勢｜第10卦 ䷉ 天澤履｜靜｜護欄提示
             parts = [p.strip() for p in line.split("｜") if p.strip()]
             if len(parts) >= 4:
                 data["hexagrams"] = parts[1]
                 data["moving_lines"] = parts[2]
                 data["hint"] = parts[3]
+            elif len(parts) >= 3:
+                data["hexagrams"] = parts[1]
+                data["hint"] = parts[2]
 
     return data
 
@@ -265,18 +282,8 @@ def main():
     if not raw_message:
         sys.exit(0)
 
-    # 2. Parse out the vocab entry so we can restore the decomp to the string
-    vocab_entry = pomodoro_chat_original.choose_vocab_entry(now, consume=False)
-    
-    # Reconstruct the strict 5-line format
-    lines = raw_message.splitlines()
-    final_lines = []
-    for line in lines:
-        if line.startswith("｜字｜") and vocab_entry and vocab_entry.get("decomp"):
-            # Restore the decomp (etymology) data only if not already present in line
-            if vocab_entry['decomp'] not in line:
-                line = f"{line}｜{vocab_entry['decomp']}"
-        final_lines.append(line)
+    # 2. Split into lines (build_message already includes full decomp from consumed entry)
+    final_lines = raw_message.splitlines()
     
     # 3. Append the working URL
     public_index_url = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
@@ -294,7 +301,7 @@ def main():
 
     # 4. Resolve webhook and send
     webhook_url = load_webhook_url(args.webhook)
-    if webhook_url == DEFAULT_WEBHOOK:
+    if not webhook_url.startswith("https://discord.com/api/webhooks/"):
         print(final_output)
         sys.exit(0)
 
@@ -308,6 +315,7 @@ def main():
 
 
 def build_discord_embed(final_lines: list, now: datetime) -> dict:
+    """Build a concise, structured Discord Embed from parsed card lines."""
     time_str = now.strftime("%H:%M")
     hour = now.hour
     
@@ -321,49 +329,77 @@ def build_discord_embed(final_lines: list, now: datetime) -> dict:
     else:
         color = 0x9b59b6  # Royal Purple
 
-    line_map = {}
-    for l in final_lines:
-        if l.startswith("｜行｜"): line_map["行"] = l.replace("｜行｜", "").strip()
-        elif l.startswith("｜字｜"): line_map["字"] = l.replace("｜字｜", "").strip()
-        elif l.startswith("｜時｜"): line_map["時"] = l.replace("｜時｜", "").strip()
-        elif l.startswith("｜勢｜"): line_map["勢"] = l.replace("｜勢｜", "").strip()
-
+    data = parse_card_lines(final_lines)
     public_index_url = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
+    
+    # 行: compact time + action
+    time_seg = f"{data['time_range']}　{data['segment']}" if data['segment'] != "無" else data['time_range']
+    
+    # 字: single compact line
+    word_line = f"**{data['word']}**"
+    if data['pron']:
+        word_line += f" `{data['pron']}`"
+    if data['pos'] or data['gloss'] != "無":
+        word_line += f"　*{data['pos']}.* {data['gloss']}" if data['pos'] else f"　{data['gloss']}"
+    if data['decomp']:
+        word_line += f"\n`{data['decomp']}`"
+    
+    # 時: trim labels, use slash compact
+    time_line = f"⏰ {data['hour_yi_ji']}"
+    if data['day_yi_ji'] != "無":
+        time_line += f"\n📅 {data['day_yi_ji']}"
+    time_line += f"\n⚠️ {data['chong_sha']}"
+    if data['priority'] != "現實優先":
+        time_line += f"\n🎯 {data['priority']}"
+    
+    # 勢: compact
+    hex_line = f"☯ {data['hexagrams']}"
+    if data['moving_lines'] != "靜":
+        hex_line += f"　🎴 {data['moving_lines']}"
+    hex_line += f"\n🛡️ {data['hint']}"
 
     embed = {
         "title": f"🍅 番茄工作脈搏 · {time_str}",
         "color": color,
         "fields": [
             {
-                "name": "🎯 ｜ 行 ｜ 專注行動與斯多噶",
-                "value": line_map.get("行", "無"),
+                "name": "🎯 行·專注",
+                "value": f"🕐 {time_seg}\n🚀 {data['action']}",
                 "inline": False
             },
             {
-                "name": "📖 ｜ 字 ｜ 權威字根單字",
-                "value": line_map.get("字", "無"),
+                "name": "📖 單字",
+                "value": word_line,
                 "inline": False
             },
             {
-                "name": "🗓️ ｜ 時 ｜ 時辰農曆宜忌",
-                "value": line_map.get("時", "無"),
+                "name": "🗓️ 宜忌",
+                "value": time_line,
                 "inline": False
             },
             {
-                "name": "☯️ ｜ 勢 ｜ 易經決策護欄",
-                "value": line_map.get("勢", "無"),
+                "name": "☯️ 卦勢",
+                "value": hex_line,
                 "inline": False
             },
             {
-                "name": "📊 ｜ 記 ｜ 本機狀態紀錄",
-                "value": f"[點此開啟紀錄儀表板 (LocalStorage 隱私極速登記)]({public_index_url})",
+                "name": "📊 紀錄",
+                "value": f"[📈 開啟]({public_index_url})",
                 "inline": False
             }
         ],
         "footer": {
-            "text": "100% 離線計算 · 零 Token 消耗 · Merged Pomodoro Pulse"
+            "text": "零 Token · Merged Pomodoro Pulse"
         }
     }
+    # Add Stoic quote as bottom field if present
+    stoic_val = data.get("stoic_quote", "").strip()
+    if stoic_val:
+        embed["fields"].append({
+            "name": "💡 斯多噶",
+            "value": f"*{stoic_val}*",
+            "inline": False
+        })
     return {"embeds": [embed]}
 
 
