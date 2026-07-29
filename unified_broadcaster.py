@@ -273,8 +273,9 @@ def main():
     final_lines = []
     for line in lines:
         if line.startswith("｜字｜") and vocab_entry and vocab_entry.get("decomp"):
-            # Restore the decomp (etymology) data to the end of the line
-            line = f"{line}｜{vocab_entry['decomp']}"
+            # Restore the decomp (etymology) data only if not already present in line
+            if vocab_entry['decomp'] not in line:
+                line = f"{line}｜{vocab_entry['decomp']}"
         final_lines.append(line)
     
     # 3. Append the working URL
