@@ -10,4 +10,4 @@
 - 本輪只更新治理文件；既有未知 untracked Markdown 保留且不 stage。
 
 ### Delivery
-- GitHub：`LOCAL_ONLY`
+- GitHub：`VERIFIED`，治理 commit `4a266be1ab4ceb7a9ddd7e4c598809e48c730ad9` 已推送 `master` 並回讀一致。

@@ -40,5 +40,6 @@
 
 - 上述執行與同步紀錄保留；Obsidian 行只作歷史證據，不再是收工要求。
 - 新增 CHANGELOG，更新 AGENTS／README；既有未知 untracked Markdown 保留且不 stage。
-- 程式、排程與 Discord 未執行；GitHub 為 `LOCAL_ONLY`。
-- 唯一續跑點：驗證治理 diff 後進入 Delivery Gate。
+- 程式、排程與 Discord 未執行；GitHub 治理 commit `4a266be1ab4ceb7a9ddd7e4c598809e48c730ad9` 已推送 `master` 並回讀一致。
+- Reachable object connectivity 通過；自動 geometric repack 仍會命中舊的不可達壞 tree，後續 Git 命令暫以單次 `maintenance.auto=false` 執行。
+- 唯一續跑點：另案修復不可達 object／repack，不影響目前 branch 交付。
