@@ -115,3 +115,10 @@ python unified_broadcaster.py --consume
 ---
 
 MIT License © 2026 sink6
+
+## Agent workflow 與版本紀錄
+
+- GitHub canonical：`sink6985757-web/merged-pomodoro-pulse`；`data/vocab_corpus/` 是已登記專案資料來源。
+- 本 README 是人類與 Agent／Tool 的安裝、使用、版本與公開文案；近期變更見 [`CHANGELOG.md`](CHANGELOG.md)。
+- 每次收工更新 CHANGELOG 與 handoff；GitHub delivery 前更新本 README。
+- 外部知識庫為 `ON_DEMAND_ONLY`，不屬於 initial／startup／shutdown。

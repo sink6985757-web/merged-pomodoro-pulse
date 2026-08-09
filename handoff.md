@@ -35,3 +35,10 @@
 - 成果 commit：b2c0f71
 - Git push：VERIFIED (SUCCESS)
 - Obsidian：SYNCED
+
+## 2026-08-09 生命週期權威更新
+
+- 上述執行與同步紀錄保留；Obsidian 行只作歷史證據，不再是收工要求。
+- 新增 CHANGELOG，更新 AGENTS／README；既有未知 untracked Markdown 保留且不 stage。
+- 程式、排程與 Discord 未執行；GitHub 為 `LOCAL_ONLY`。
+- 唯一續跑點：驗證治理 diff 後進入 Delivery Gate。
