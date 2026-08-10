@@ -3,8 +3,8 @@
 
 The source tree is expected to contain the three ``字根字首魔法學院``
 folders exported from Google Drive.  Only lightweight teaching text is copied:
-root definitions, one representative word, its morpheme notes, and one
-answerable recall prompt.  Audio and video binaries are never copied.
+root definitions, three source-backed core words per unit, morpheme notes, and
+answerable source examples.  Audio, video, and full ASR binaries are never copied.
 """
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 DEFAULT_OUTPUT = PROJECT_ROOT / "data" / "english_hourly_cards.json"
+DEFAULT_TRANSCRIPT_MANIFEST = PROJECT_ROOT / "data" / "english_transcript_crosscheck.json"
 
 # Source cards remain untouched. These narrowly scoped edits correct clear
 # grammar, usage, or factual phrasing in the portable derivative.
@@ -297,6 +298,31 @@ def parse_raw_transcript(
     return sections, {"raw_transcript_sections": total_sections, "raw_transcript_lesson_matches": 0}
 
 
+def load_transcript_manifest(
+    path: Path = DEFAULT_TRANSCRIPT_MANIFEST,
+) -> tuple[dict[tuple[str, str], dict[str, str]], dict[str, int]]:
+    """Load the compact offline record of the previously parsed Drive transcript."""
+    if not path.is_file():
+        return {}, {"raw_transcript_sections": 0, "raw_transcript_lesson_matches": 0}
+    data = load_json(path)
+    if data.get("version") != 1 or data.get("authority") != TRANSCRIPT_AUTHORITY:
+        raise ValueError(f"逐字稿交叉驗證清單格式不符：{path}")
+    sections: dict[tuple[str, str], dict[str, str]] = {}
+    for item in data.get("sections") or []:
+        if not isinstance(item, dict):
+            continue
+        course = clean_text(item.get("course"))
+        lesson_key = clean_text(item.get("lesson_key"))
+        file_name = clean_text(item.get("file"))
+        section = clean_text(item.get("section"))
+        if course and lesson_key and file_name and section:
+            sections[(course, lesson_key)] = {"file": file_name, "section": section, "body": ""}
+    return sections, {
+        "raw_transcript_sections": int(data.get("raw_transcript_sections") or len(sections)),
+        "raw_transcript_lesson_matches": 0,
+    }
+
+
 def choose_representative(cards: list[dict[str, Any]], roots: list[str]) -> dict[str, Any]:
     def score(card: dict[str, Any]) -> tuple[int, int, int, int, str]:
         word = clean_text(card.get("word")).lower()
@@ -317,6 +343,77 @@ def choose_representative(cards: list[dict[str, Any]], roots: list[str]) -> dict
     if not valid:
         raise ValueError("cards.json 沒有可用單字")
     return sorted(valid, key=score)[0]
+
+
+def leading_family_signature(card: dict[str, Any], roots: list[str]) -> str:
+    """Return a compact prefix signature used only to diversify core words."""
+    normalized_roots = {root.strip("-").casefold() for root in roots}
+    prefix_parts: list[str] = []
+    for item in card.get("word_roots") or []:
+        if not isinstance(item, dict):
+            continue
+        part = clean_text(item.get("part")).strip("-").casefold()
+        if not part:
+            continue
+        if part in normalized_roots:
+            break
+        prefix_parts.append(part)
+    return "+".join(prefix_parts)
+
+
+def choose_core_words(
+    cards: list[dict[str, Any]], roots: list[str], limit: int = 3
+) -> list[dict[str, Any]]:
+    """Choose three source-backed words with examples and varied word families."""
+    representative = choose_representative(cards, roots)
+    chosen = [representative]
+    used_words = {clean_text(representative.get("word")).casefold()}
+    used_signatures = {leading_family_signature(representative, roots)}
+
+    def score(card: dict[str, Any]) -> tuple[int, int, int, int, int, str]:
+        word = clean_text(card.get("word")).casefold()
+        signature = leading_family_signature(card, roots)
+        sentence = card_sentence(card)[0]
+        return (
+            -int(representative_root_match(card, roots)),
+            -int(bool(sentence)),
+            -int(bool(signature) and signature not in used_signatures),
+            len(word),
+            int(card.get("position") or 9999),
+            word,
+        )
+
+    candidates = [
+        card
+        for card in cards
+        if isinstance(card, dict)
+        and clean_text(card.get("word")).casefold() not in used_words
+        and representative_root_match(card, roots)
+        and card_sentence(card)[0]
+    ]
+    while candidates and len(chosen) < limit:
+        selected = sorted(candidates, key=score)[0]
+        chosen.append(selected)
+        word = clean_text(selected.get("word")).casefold()
+        used_words.add(word)
+        used_signatures.add(leading_family_signature(selected, roots))
+        candidates = [
+            card for card in candidates if clean_text(card.get("word")).casefold() not in used_words
+        ]
+
+    if len(chosen) < limit:
+        fallback = [
+            card
+            for card in cards
+            if isinstance(card, dict)
+            and clean_text(card.get("word")).casefold() not in used_words
+        ]
+        for card in sorted(fallback, key=score):
+            chosen.append(card)
+            used_words.add(clean_text(card.get("word")).casefold())
+            if len(chosen) >= limit:
+                break
+    return chosen
 
 
 def extract_gloss_and_pos(card: dict[str, Any]) -> tuple[str, str]:
@@ -484,7 +581,8 @@ def build_card(
     if not isinstance(cards, list):
         raise ValueError(f"cards.json 不是陣列：{cards_path}")
     roots = root_forms(root_label)
-    representative = choose_representative(cards, roots)
+    core_source_cards = choose_core_words(cards, roots)
+    representative = core_source_cards[0]
     word = clean_text(representative.get("word")).lower()
     gloss, pos = extract_gloss_and_pos(representative)
     sentence_en, sentence_zh = card_sentence(representative)
@@ -510,6 +608,30 @@ def build_card(
     ) = extract_source_question(lesson_dir)
     prompt, answer = build_prompt(word, gloss, sentence_en)
 
+    core_words: list[dict[str, Any]] = []
+    for source_card in core_source_cards:
+        core_word = clean_text(source_card.get("word")).lower()
+        core_gloss, core_pos = extract_gloss_and_pos(source_card)
+        core_sentence_en, core_sentence_zh = card_sentence(source_card)
+        core_sentence_en, core_sentence_zh, core_editorial_note = editorially_correct_example(
+            core_word, core_sentence_en, core_sentence_zh
+        )
+        core_breakdown, core_formation_note = extract_breakdown(source_card, root_label)
+        core_prompt, core_answer = build_prompt(core_word, core_gloss, core_sentence_en)
+        core_words.append({
+            "word": core_word,
+            "pron": extract_phonetic(source_card),
+            "pos": core_pos,
+            "gloss": core_gloss,
+            "decomp": core_breakdown,
+            "formation_note": core_formation_note,
+            "prompt": core_prompt,
+            "answer": core_answer,
+            "example_en": clean_text(core_sentence_en, 180),
+            "example_zh": clean_text(core_sentence_zh, 180),
+            "example_editorial_note": core_editorial_note,
+        })
+
     source_refs = [relative_ref(cards_path, source_root)]
     if transcript_name:
         provided = sorted(lesson_dir.rglob(transcript_name))
@@ -525,6 +647,8 @@ def build_card(
         "course": course_dir.name,
         "chapter": NUMBER_PREFIX_RE.sub("", chapter_dir.name),
         "lesson": NUMBER_PREFIX_RE.sub("", lesson_dir.name),
+        "source_word_count": len(cards),
+        "core_words": core_words,
         "root": root_label,
         "root_meaning_en": meaning_en,
         "root_meaning_zh": meaning_zh,
@@ -563,7 +687,10 @@ def build_dataset(source_root: Path, transcript_file: Path | None = None) -> dic
     course_dirs = sorted(
         child for child in source_root.iterdir() if child.is_dir() and child.name.startswith(COURSE_PREFIX)
     )
-    raw_transcripts, raw_stats = parse_raw_transcript(transcript_file, course_dirs)
+    if transcript_file:
+        raw_transcripts, raw_stats = parse_raw_transcript(transcript_file, course_dirs)
+    else:
+        raw_transcripts, raw_stats = load_transcript_manifest()
     cards: list[dict[str, Any]] = []
     for course_dir in course_dirs:
         for cards_path in sorted(course_dir.rglob("cards.json")):
@@ -583,13 +710,15 @@ def build_dataset(source_root: Path, transcript_file: Path | None = None) -> dic
     )
     editorial_example_corrections = sum(bool(card["example_editorial_note"]) for card in cards)
     return {
-        "version": 1,
+        "version": 2,
         "authority": COURSE_AUTHORITY,
-        "transcript_authority": TRANSCRIPT_AUTHORITY if transcript_file else None,
+        "transcript_authority": TRANSCRIPT_AUTHORITY if raw_transcripts else None,
         "description": "Hourly course-defined root-family mnemonic cards extracted from the synced Google Drive courses; not a claim that every displayed variant shares one strict historical etymology.",
         "stats": {
             "courses": len({card["course"] for card in cards}),
             "cards": len(cards),
+            "source_word_cards": sum(int(card["source_word_count"]) for card in cards),
+            "core_words": sum(len(card["core_words"]) for card in cards),
             "provided_transcripts": transcript_count,
             "raw_asr_crosschecked": raw_crosschecked_count,
             "word_card_structure_fallbacks": len(cards) - transcript_count - raw_crosschecked_count,

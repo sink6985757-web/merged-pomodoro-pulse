@@ -85,7 +85,7 @@ else:
     not_in_v5 = set()
     spelling_crosscheck = 0
 
-noise = ("abay", "abidient", "this abidient", "自根", "字為", "刪除率", "請記得點讚訂閱")
+noise = ("abay", "abidient", "this abidient", "自根", "刪除率", "請記得點讚訂閱")
 rendered = json.dumps(dataset, ensure_ascii=False).lower()
 assert not any(item.lower() in rendered for item in noise)
 

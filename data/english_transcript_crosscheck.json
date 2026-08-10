@@ -1,0 +1,589 @@
+{
+    "version":  1,
+    "authority":  "google-drive-folder:13_lazdStDY0dyj8iOras0s1UcaWQbfUe",
+    "source_file":  {
+                        "id":  "1Gg-H5a9aHTPraXuEX39SstOtZjbt00D3",
+                        "name":  "字根字首魔法學院_20260406.txt",
+                        "size_bytes":  848702,
+                        "modified_time":  "2026-04-06T14:30:04.684Z"
+                    },
+    "raw_transcript_sections":  134,
+    "sections":  [
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "ment",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b1_心理感知_ment = mind, think 心（智），思考.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "gngnosgnorno",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b1_心理感知_gn, gnos, gnor, no = know 知道.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "fidfed",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b1_心理感知_fid, fed = faith 信任，信心.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "path",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b1_心理感知_path = feeling 感情.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "senssent",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b1_心理感知_sens, sent = feel 感覺.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "creascreatcretcre",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b2_成長照顧_creas, creat, cret, cre = grow 成長，增加.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "fer",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b2_成長照顧_fer = bear 攜帶，生育，承受.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "nat",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b2_成長照顧_nat = birth, born 誕生.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "serv",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b2_成長照顧_serv = protect, keep, watch 保護，保持，觀看.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "anim",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b2_成長照顧_anim = breath, spirit, life 呼吸，靈魂，生命.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "solvsolu",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b3_鬆與緊_solv, solu = loosen 鬆開，使鬆開.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "pressprint",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b3_鬆與緊_press, print = press 壓.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "scribscript",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b4_寫作_scrib, script = write 寫.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "graphgram",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b4_寫作_graph, gram = write 寫.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "sign",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b4_寫作_sign = mark （做）記號.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "populpubl",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b5_人類身分_popul, publ = people 人們.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "paterpatr",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b5_人類身分_pater, patr = father 父親.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "mater",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b5_人類身分_mater = mother 母親.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "flu",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b6_移動_flu = flow, swell 流動，膨脹.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "pet",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b6_移動_pet = fly, rush, go, seek 飛，衝，去，尋求.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "volvvolu",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b6_移動_volv, volu = roll, turn 旋轉，滾動.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "iit",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b6_移動_i, it = go 走.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "cascadcid",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b6_移動_cas, cad, cid = fall 落下.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "manmanimanumain",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b7_手與手部動作_man, mani, manu, main = hand 手.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "cidcis",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b7_手與手部動作_cid, cis = cut, kill 切割，殺死.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "ject",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b7_手與手部動作_ject = throw 丟，投擲，射出.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "pelpealpuls",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b7_手與手部動作_pel, peal, puls = push, drive 推動，驅使.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "pointpunct",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b7_手與手部動作_point, punct = prick, point 刺，戳，點.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "son",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b8_發聲詢問_son = sound 聲音.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "vocvok",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b8_發聲詢問_voc, vok = voice, call 聲音，呼叫.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "questquerquirquis",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b8_發聲詢問_quest, quer, quir, quis = ask, seek 問，要求，尋求.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "strustruct",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b9_破與立_stru, struct = build 展開、建設.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "rupt",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b9_破與立_rupt = break 打斷，打破，破裂.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "form",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b9_破與立_form = form, shape, figure 形狀，形態，形體.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "arch",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b9_破與立_arch 統治.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "pendpens",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b10_衡量與排序_pend, pens = hang, weigh, pay 懸掛，秤重，付錢.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "medmid",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b10_衡量與排序_med, mid = middle 中間.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "ordorn",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b10_衡量與排序_ord, orn = order 順序，次序.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "equ",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b10_衡量與排序_equ = equal相等的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "astroaster",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b11_其他_astro, aster = star 星星.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "nomonym",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b11_其他_nom, onym = name 名字.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 2",
+                         "lesson_key":  "nov",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_b11_其他_nov = new 新的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "jusjurjudjudg",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c1_法律與權力_jus, jur, jud, judg =judge, law, just 法律，公正的，判斷.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "posspot",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c1_法律與權力_poss, pot=power 有權力的，有力量的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "bat",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c2_戰爭_bat = beat打.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "contrcounter",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c2_戰爭_contr, counter = against, opposite 對抗的，相反的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "fendfensfence",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c2_戰爭_fend, fens, fence = strike 打，攻擊.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "turb",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c2_戰爭_turb=confuse 使混亂.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "vicvinc",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c2_戰爭_vic, vinc = defeat, conquer 打敗，征服.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "culcol",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c3_農業_cul, col=cultivate, inhabit 耕種，居住.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "geo",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c3_農業_geo=earth, land, Earth 泥土，地面，地球.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "prec",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c4_商業活動_prec = price 價格.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "trib",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c4_商業活動_trib = group, give, assign, allot, pay 群，給，分配，付.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "fractfragfring",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c5_分開_fract, frag, fring = break 破裂，破碎.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "sectseg",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c5_分開_sect, seg = cut 切割.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "stigstingstinct",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c5_分開_stig, sting, stinct = stick, prick, separate 刺，分開.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "dondosdatdit",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c6_手部動作_don, dos, dat, dit = give 給.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "fusfund",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c6_手部動作_fus, fund = pour倒.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "levliev",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c6_手部動作_lev, (liev) = light, lift, raise 輕的，提起.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "prisprehend",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c6_手部動作_pris, prehend = seize, take 抓.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "lud",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c7_人類活動_lud=play 玩.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "metermetrmens",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c7_人類活動_meter, metr, mens=measure測量.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "rodrosradraz",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c7_人類活動_rod, ros, rad, raz = gnaw, scrape咬，刮.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "sequsecusue",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c7_人類活動_sequ, sec(u), sue=follow跟隨.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "tacttagtang",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c7_人類活動_tact, tag, tang = touch 接觸.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "ut",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c7_人類活動_ut=use使用.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "alol",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c8_成長_al, ol = old, grow, high老的，成長.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "nursenurtnutrinour",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c8_成長_nurse, nurt, nutri, nour = feed, nourish, nurse 餵，養育，培養.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "crecred",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c9_心智活動_cre, cred = believe, belief相信.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "memormember",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c9_心智活動_memor, member = remember記住.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "lingu",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c10_說話_lingu = tongue, language 舌，語言.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "loglogue",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c10_說話_log, logue = speak, speech, word 說，演說，話.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "cycl",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c11_移動和流動_cycl = wheel, cycle輪，循環.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "flaflu",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c11_移動和流動_fla, flu = blow 吹.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "lavluvlu",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c11_移動和流動_lav, luv, lu = wash, pour 洗，倒.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "gerges",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c11_移動和流動_ger, ges=carry運送，搬運，攜帶.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "migrmut",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c11_移動和流動_migr, mut=move, change 移動，改變.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "or",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c11_移動和流動_or = rise 升起.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "ly",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c12_鬆與緊_ly = loose, loosen 鬆的，鬆開.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "strigstringstrainstress",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c12_鬆與緊_strig, string, strain, stress = draw tight 拉緊.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "ambiamphi",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c13_數字_ambi, amphi = around, both 到處，雙.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "mono",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c13_數字_mono = one 一.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "simsimilsemblhomo",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c13_數字_sim, simil, sembl, homo 單一，相同的，相似的，像.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "center",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c14_空間與位置_center 中央，中心.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "fin",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c14_空間與位置_fin = end, limit, boundary 結束，限制，界線.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "loc",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c14_空間與位置_loc = place 地方，放置.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "clar",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_clar = clear清楚的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "malmale",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_mal, male = bad 壞的(地)，不好的(地).mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "min",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_min = small 小的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "neneg",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_ne, neg = no, not, deny 沒有，不，否認.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "platplain",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_plat, plain = flat 平的，平坦的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "privproper",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_priv, proper = own, private 自己的，私人的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "vacvanvoid",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c15_狀態描述_vac, van, void = empty 空的.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "capchiefchiev",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c16_其他_cap, chief, chiev = head 頭.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "dem",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c16_其他_dem = people 人們.mp4"
+                     },
+                     {
+                         "course":  "字根字首魔法學院 3",
+                         "lesson_key":  "log",
+                         "file":  "字根字首魔法學院_20260406.txt",
+                         "section":  "字根字首_c16_其他_log = study of …學.mp4"
+                     }
+                 ]
+}

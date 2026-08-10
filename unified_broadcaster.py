@@ -34,6 +34,7 @@ except ImportError as e:
     sys.exit(1)
 
 TZ_TAIPEI = timezone(timedelta(hours=8))
+PUBLIC_RECORD_URL = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
 
 
 def parse_arguments():
@@ -84,7 +85,7 @@ def parse_card_lines(final_lines: list) -> dict:
     
     Expected format from build_message:
     ｜行｜HH:MM→HH:MM｜segment｜action
-    ｜字｜root＝meaning｜word gloss｜decomp｜提示：takeaway｜問：prompt 答：||answer||
+    ｜字｜root＝meaning｜word gloss｜課：course｜章：chapter｜單元：lesson｜節點：phase｜音：pron｜詞：pos｜拆：decomp｜族：family｜答：answer｜例：example｜譯：translation
     舊版相容：｜字｜word [pron]｜pos gloss｜decomp
     ｜時｜hour_yi_ji ｜ day_yi_ji ｜ chong_sha ｜ priority
     ｜勢｜hexagrams｜moving_lines｜hint
@@ -92,7 +93,11 @@ def parse_card_lines(final_lines: list) -> dict:
     data = {
         "time_range": "無", "segment": "無", "action": "無", "stoic_quote": "",
         "word": "無", "pron": "", "pos": "", "gloss": "無", "decomp": "",
+        "course": "", "chapter": "", "lesson": "", "family": "",
         "root": "", "root_meaning": "", "takeaway": "", "question": "", "answer": "",
+        "example": "", "memory_cue": "",
+        "translation": "",
+        "review_stage": "輪播·輕量複現",
         "day_yi_ji": "無", "hour_yi_ji": "無", "chong_sha": "無",
         "priority": "現實優先",
         "hexagrams": "無", "moving_lines": "靜", "hint": "無"
@@ -130,8 +135,30 @@ def parse_card_lines(final_lines: list) -> dict:
                 data["word"] = word_gloss[0]
                 data["gloss"] = word_gloss[1] if len(word_gloss) > 1 else "無"
                 for part in parts[3:]:
-                    if part.startswith("提示："):
-                        data["takeaway"] = part[len("提示：") :].strip()
+                    if part.startswith(("提示：", "聯想：")):
+                        data["takeaway"] = part.split("：", 1)[1].strip()
+                    elif part.startswith("答："):
+                        data["answer"] = part[len("答：") :].strip().strip("|")
+                    elif part.startswith("例："):
+                        data["example"] = part[len("例：") :].strip()
+                    elif part.startswith("讀："):
+                        data["memory_cue"] = part[len("讀：") :].strip()
+                    elif part.startswith(("階段：", "節點：")):
+                        data["review_stage"] = part.split("：", 1)[1].strip()
+                    elif part.startswith("課："):
+                        data["course"] = part[len("課：") :].strip()
+                    elif part.startswith("章："):
+                        data["chapter"] = part[len("章：") :].strip()
+                    elif part.startswith("單元："):
+                        data["lesson"] = part[len("單元：") :].strip()
+                    elif part.startswith("族："):
+                        data["family"] = part[len("族：") :].strip()
+                    elif part.startswith("音："):
+                        data["pron"] = part[len("音：") :].strip()
+                    elif part.startswith("詞："):
+                        data["pos"] = part[len("詞：") :].strip()
+                    elif part.startswith("譯："):
+                        data["translation"] = part[len("譯：") :].strip()
                     elif part.startswith("問："):
                         qa = part[len("問：") :].strip()
                         match = __import__("re").match(r"(.+?)\s+答：\|\|(.+?)\|\|$", qa)
@@ -140,6 +167,8 @@ def parse_card_lines(final_lines: list) -> dict:
                             data["answer"] = match.group(2).strip()
                         else:
                             data["question"] = qa
+                    elif part.startswith("拆："):
+                        data["decomp"] = part[len("拆：") :].strip()
                     elif not data["decomp"]:
                         data["decomp"] = part
             elif len(parts) >= 4:
@@ -189,92 +218,63 @@ def parse_card_lines(final_lines: list) -> dict:
     return data
 
 
-def build_discord_payload(data: dict, now: datetime) -> dict:
-    """Build a rich, beautiful Discord Embed payload from structured data."""
-    # Build title with time and segment
-    time_str = now.strftime("%H:%M")
-    segment_str = data["segment"] if data["segment"] != "無" else "日常"
-    
-    # Pre-calculate the file URL so backslashes never enter an f-string.
-    local_index_path = str(BASE_DIR / 'index.html').replace('\\', '/')
-
-    # Emojis and CJK format
-    embed = {
-        "title": f"🍅 番茄工作脈搏 | {time_str} ({segment_str})",
-        "color": 15158332,  # Tomato Red (#E74C3C)
-        "timestamp": now.isoformat(),
-        "fields": [
-            {
-                "name": "｜ 行 ｜ 專注行動 (90 分鐘節奏)",
-                "value": f"🕒 **時段**: `{data['time_range']}`\n🚀 **行動**: {data['action']}",
-                "inline": False
-            },
-            {
-                "name": "｜ 字 ｜ 零 Token 英文字根",
-                "value": (
-                    (f"🧠 **{data['root']}＝{data['root_meaning']}**\n" if data['root'] else "")
-                    + f"📝 **單字**: **{data['word']}**  `{data['pron']}`\n"
-                    + f"🏷️ **釋義**: {data['gloss']}"
-                    + (f"\n🧩 **拆解**: `{data['decomp']}`" if data['decomp'] else "")
-                    + (f"\n💡 **影片重點**: {data['takeaway']}" if data['takeaway'] else "")
-                    + (
-                        f"\n❓ **回想**: {data['question']} 答：||{data['answer']}||"
-                        if data['question'] and data['answer']
-                        else ""
-                    )
-                ),
-                "inline": False
-            },
-            {
-                "name": "｜ 時 ｜ 離線農民曆宜忌",
-                "value": f"📅 **今日宜忌**: {data['day_yi_ji']}\n"
-                         f"⏰ **時辰宜忌**: {data['hour_yi_ji']}\n"
-                         f"⚠️ **沖煞提示**: `{data['chong_sha']}`\n"
-                         f"🎯 **決策導向**: {data['priority']}",
-                "inline": False
-            },
-            {
-                "name": "｜ 勢 ｜ 易經決策護欄",
-                "value": f"☯ **卦象**: {data['hexagrams']}\n"
-                         f"🎴 **變爻**: `{data['moving_lines']}`\n"
-                         f"🛡️ **決策護欄**: {data['hint']}",
-                "inline": False
-            },
-            {
-                "name": "📝 本機狀態紀錄",
-                "value": f"[開啟本機工作脈搏紀錄儀表板](file:///{local_index_path})",
-                "inline": False
-            }
-        ],
-        "footer": {
-            "text": "Hermes Offline Micro-Card System v2.0"
-        }
-    }
-    return {"embeds": [embed]}
+def build_english_display(data: dict) -> str:
+    """Render the finalized compact course-unit card with no hidden answer."""
+    lines: list[str] = []
+    course_path = " › ".join(value for value in (data["course"], data["chapter"]) if value)
+    if course_path:
+        lines.append(f"🎓 **{course_path}**")
+    if data["lesson"]:
+        lines.append(f"📍 {data['lesson']}　`{data['review_stage']}`")
+    else:
+        lines.append(f"🔁 `{data['review_stage']}`")
+    if data["root"]:
+        lines.append(f"🧠 **{data['root']}＝{data['root_meaning']}**")
+    word = f"🧩 **{data['word']}**"
+    if data["pron"]:
+        word += f" `{data['pron']}`"
+    if data["pos"]:
+        word += f" *{data['pos']}.*"
+    if data["gloss"] != "無":
+        word += f" {data['gloss']}"
+    lines.append(word)
+    if data["decomp"]:
+        lines.append(f"`{data['decomp']}`")
+    if data["family"]:
+        lines.append(f"🌿 {data['family']}")
+    if data["takeaway"]:
+        lines.append(f"🔗 {data['takeaway']}")
+    if data["answer"]:
+        lines.append(f"✅ **答案：{data['answer']}**")
+    if data["example"]:
+        lines.append(f"🗣️ {data['example']}")
+    if data["translation"]:
+        lines.append(f"🌏 {data['translation']}")
+    return "\n".join(lines)
 
 
 def build_markdown_fallback(data: dict, now: datetime) -> str:
-    """Build a rich, beautiful Discord Markdown fallback message (without Embed)
-    when no Webhook URL is configured.
-    """
-    time_str = now.strftime("%H:%M")
-    segment_str = data["segment"] if data["segment"] != "無" else "日常"
-    
-    # Use GitHack to serve the repository's index.html as a web page, 
-    # making it clickable on Discord across mobile and desktop.
-    public_index_url = "https://raw.githack.com/sink6985757-web/merged-pomodoro-pulse/master/index.html"
-    
-    decomp_str = f" `{data['decomp']}`" if data['decomp'] else ""
-    
-    md = f"""🍅 **番茄工作脈搏 | {time_str} ({segment_str})**
-> **行**｜`{data['time_range']}` {data['action']}
-> **字**｜**{data['word']}** `{data['pron']}` (*{data['pos']}.*) {data['gloss']}{decomp_str}
-> **時**｜**日**: {data['day_yi_ji']}／**時**: {data['hour_yi_ji']}／`{data['chong_sha']}`
-> **勢**｜{data['hexagrams']} (變爻: `{data['moving_lines']}`)
-> **護**｜{data['hint']}
-> 
-> 🔗 [記]({public_index_url})"""
-    return md
+    """Build the same four-section card used by Discord Embed delivery."""
+    time_seg = f"{data['time_range']}　{data['segment']}" if data["segment"] != "無" else data["time_range"]
+    almanac = f"⏰ {data['hour_yi_ji']}"
+    if data["day_yi_ji"] != "無":
+        almanac += f"\n📅 {data['day_yi_ji']}"
+    almanac += f"\n⚠️ {data['chong_sha']}"
+    reflection = f"☯ {data['hexagrams']}"
+    if data["moving_lines"] != "靜":
+        reflection += f"　🎴 {data['moving_lines']}"
+    reflection += f"\n🪞 易經反思：{data['hint']}"
+    if data.get("stoic_quote"):
+        reflection += f"\n💡 斯多葛：{data['stoic_quote']}"
+    return (
+        f"🍅 **番茄工作脈搏 · {now.strftime('%H:%M')}**\n"
+        f"🕐 `{time_seg}`\n\n"
+        f"**📊 紀錄**\n[📈 開啟紀錄儀表板]({PUBLIC_RECORD_URL})\n\n"
+        f"**📖 英文**\n{build_english_display(data)}\n\n"
+        f"**🗓️ 農民曆**\n{almanac}\n\n"
+        f"**☯️ 易經 × 斯多葛**\n{reflection}\n\n"
+        "`反思參考，不代替現實判斷 · 零 Token`"
+    )
 
 
 def send_to_discord(webhook_url: str, payload: dict) -> int:
@@ -325,10 +325,9 @@ def main():
     final_lines = raw_message.splitlines()
     
     # 3. Append the working URL
-    public_index_url = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
-    final_lines.append(f"｜記｜[點此開啟紀錄儀表板]({public_index_url})")
-    
-    final_output = "\n".join(final_lines)
+    final_lines.append(f"｜記｜[點此開啟紀錄儀表板]({PUBLIC_RECORD_URL})")
+    data = parse_card_lines(final_lines)
+    final_output = build_markdown_fallback(data, now)
     payload = build_discord_embed(final_lines, now)
 
     if args.dry_run:
@@ -371,86 +370,51 @@ def build_discord_embed(final_lines: list, now: datetime) -> dict:
         color = 0x9b59b6  # Royal Purple
 
     data = parse_card_lines(final_lines)
-    public_index_url = "https://htmlpreview.github.io/?https://github.com/sink6985757-web/merged-pomodoro-pulse/blob/master/index.html"
-    
-    # 行: compact time + action
     time_seg = f"{data['time_range']}　{data['segment']}" if data['segment'] != "無" else data['time_range']
-    
-    # 字: root family + one representative word + recall prompt
-    word_line = (
-        f"🧠 **{data['root']}＝{data['root_meaning']}**\n🧩 **{data['word']}**"
-        if data['root']
-        else f"**{data['word']}**"
-    )
-    if data['pron']:
-        word_line += f" `{data['pron']}`"
-    if data['pos'] or data['gloss'] != "無":
-        word_line += f"　*{data['pos']}.* {data['gloss']}" if data['pos'] else f"　{data['gloss']}"
-    if data['decomp']:
-        word_line += f"\n`{data['decomp']}`"
-    if data['takeaway']:
-        word_line += f"\n💡 {data['takeaway']}"
-    if data['question']:
-        word_line += f"\n❓ {data['question']}"
-        if data['answer']:
-            word_line += f"　答：||{data['answer']}||"
-    
-    # 時: trim labels, use slash compact
+    word_line = build_english_display(data)
+
     time_line = f"⏰ {data['hour_yi_ji']}"
     if data['day_yi_ji'] != "無":
         time_line += f"\n📅 {data['day_yi_ji']}"
     time_line += f"\n⚠️ {data['chong_sha']}"
-    if data['priority'] != "現實優先":
-        time_line += f"\n🎯 {data['priority']}"
     
-    # 勢: compact
     hex_line = f"☯ {data['hexagrams']}"
     if data['moving_lines'] != "靜":
         hex_line += f"　🎴 {data['moving_lines']}"
-    hex_line += f"\n🛡️ {data['hint']}"
+    hex_line += f"\n🪞 **易經反思：**{data['hint']}"
+    if data.get("stoic_quote"):
+        hex_line += f"\n💡 **斯多葛：**{data['stoic_quote']}"
 
     embed = {
         "title": f"🍅 番茄工作脈搏 · {time_str}",
+        "description": f"🕐 `{time_seg}`",
         "color": color,
         "fields": [
             {
-                "name": "🎯 行·專注",
-                "value": f"🕐 {time_seg}\n🚀 {data['action']}",
+                "name": "📊 紀錄",
+                "value": f"[📈 開啟紀錄儀表板]({PUBLIC_RECORD_URL})",
                 "inline": False
             },
             {
-                "name": "📖 課程字根記憶",
+                "name": "📖 英文",
                 "value": word_line,
                 "inline": False
             },
             {
-                "name": "🗓️ 宜忌",
+                "name": "🗓️ 農民曆",
                 "value": time_line,
                 "inline": False
             },
             {
-                "name": "☯️ 卦勢",
+                "name": "☯️ 易經 × 斯多葛",
                 "value": hex_line,
-                "inline": False
-            },
-            {
-                "name": "📊 紀錄",
-                "value": f"[📈 開啟]({public_index_url})",
                 "inline": False
             }
         ],
         "footer": {
-            "text": "零 Token · Merged Pomodoro Pulse"
+            "text": "反思參考，不代替現實判斷 · 零 Token · Merged Pomodoro Pulse"
         }
     }
-    # Add Stoic quote as bottom field if present
-    stoic_val = data.get("stoic_quote", "").strip()
-    if stoic_val:
-        embed["fields"].append({
-            "name": "💡 斯多噶",
-            "value": f"*{stoic_val}*",
-            "inline": False
-        })
     return {"embeds": [embed]}
 
 

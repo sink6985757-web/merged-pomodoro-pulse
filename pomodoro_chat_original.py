@@ -7,20 +7,22 @@ No model calls. stdout/direct delivery is the Discord micro-card.
 
 Original behavior encoded:
 - Cron runs hourly on the hour, 06:00~18:00.
-- Always output a Telegram message when triggered in that window.
-- Hourly broadcast keeps a fixed four-line first-principles card:
-  字（可拆解單字）/ 行（現在唯一小步）/ 時（Gooday 宜忌）/ 勢（卦象決策護欄）.
+- Always output one internal four-line wire record when triggered in that window.
+- ``unified_broadcaster.py`` turns the wire record into the finalized order:
+  紀錄 / 英文 / 農民曆 / 易經 × 斯多葛; rhythm data becomes header metadata.
 - Add a 90-minute rhythm annotation aligned to the 06:00~18:00 workday:
   06:00, 07:30, 09:00, 10:30, 12:00, 13:30, 15:00, 16:30, 18:00.
   Because cron fires hourly, whole-hour broadcasts show the current/next
   90-minute checkpoint instead of creating extra half-hour jobs.
 - Traditional Chinese, compact, life-oriented, and decision-oriented.
-- The chat line uses Gooday goodaytw.com day/hour 宜忌 when reachable.
+- The almanac line is local by default; Gooday is an explicit online option.
 - The next-step line uses a one-shot system-random I Ching reference; it is
   symbolic guidance only, not a prediction.
-- Add one zero-token vocabulary line sampled from the archived 英文字根 .md corpus.
-- Vocabulary is persisted: no repeated word card inside a cycle; after all cards
-  are used, a new cycle begins automatically.
+- Add one zero-token course-unit vocabulary line, with the archived corpus only
+  as a deployment fallback.
+- Progress is persisted: 128 units are introduced at 15 per week and schedule
+  expanding reviews through D365, followed by annual maintenance. Day 90 never
+  resets the plan, so the same state can continue for ten years or longer.
 
 Inspection / reverse lookup:
   python pomodoro_chat_original.py --vocab-status
@@ -218,7 +220,22 @@ VOCAB_DECOMP_FORBIDDEN_RE = re.compile(
     r"<[^>]+>|�|\\[A-Za-z]+|\$|\b(?:adj|adv|prep|pron|conj|interj|noun|verb|n|v)\."
 )
 VOCAB_DECOMP_IPA_RE = re.compile(r"\[[^\]]*[ˈˌəɪʊʌɛɔɑɜθðʃʒŋ][^\]]*\]")
-VOCAB_STATE_VERSION = 3
+VOCAB_STATE_VERSION = 5
+REVIEW_DELAYS = {
+    "same_day": timedelta(hours=3),
+    "day_1": timedelta(days=1),
+    "day_3": timedelta(days=3),
+    "day_7": timedelta(days=7),
+    "day_14": timedelta(days=14),
+    "day_30": timedelta(days=30),
+    "day_60": timedelta(days=60),
+    "day_90": timedelta(days=90),
+    "day_180": timedelta(days=180),
+    "day_365": timedelta(days=365),
+}
+REVIEW_STAGES = set(REVIEW_DELAYS) | {"annual"}
+LEGACY_REVIEW_STAGE_MAP = {"short": "same_day", "next_day": "day_1", "new": "new_anchor"}
+NEW_UNIT_ANCHORS = {2: (6, 12), 3: (6, 11, 16)}
 VOCAB_ENTRY_RE = re.compile(
     r"(?<![A-Za-z])"
     r"(?P<word>[A-Za-z][A-Za-z'\-]{2,}(?:/[A-Za-z][A-Za-z'\-]{2,})?)"
@@ -548,7 +565,7 @@ def load_english_hourly_cards() -> list[dict[str, str]]:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return []
-    if data.get("version") != 1 or not isinstance(data.get("cards"), list):
+    if data.get("version") not in {1, 2} or not isinstance(data.get("cards"), list):
         return []
     required = {"id", "root", "word", "gloss", "prompt", "answer", "source"}
     cards = [
@@ -723,12 +740,14 @@ def default_vocab_state(now: datetime | None = None) -> dict[str, Any]:
         "version": VOCAB_STATE_VERSION,
         "cycle": 1,
         "cycle_started_at": iso,
+        "learning_plan_started_at": iso,
         "cycle_seen_ids": [],
         "history": [],
         "last_entry_id": None,
         "last_broadcast_at": None,
         "slot_reservations": {},
         "daily_casts": {},
+        "review_queue": [],
         "updated_at": iso,
         "corpus_signature": None,
     }
@@ -747,21 +766,96 @@ def load_vocab_state(entries: list[dict[str, str]] | None = None) -> dict[str, A
         return default_vocab_state()
 
     # Backward-compatible normalization for hand-edited or older state files.
+    try:
+        source_version = int(state.get("version", 0))
+    except (TypeError, ValueError):
+        source_version = 0
     state.setdefault("version", VOCAB_STATE_VERSION)
     state.setdefault("cycle", 1)
     state.setdefault("cycle_started_at", datetime.now(TZ_TAIPEI).isoformat(timespec="seconds"))
+    state.setdefault("learning_plan_started_at", state["cycle_started_at"])
     state.setdefault("cycle_seen_ids", [])
     state.setdefault("history", [])
     state.setdefault("last_entry_id", None)
     state.setdefault("last_broadcast_at", None)
     state.setdefault("slot_reservations", {})
     state.setdefault("daily_casts", {})
+    state.setdefault("review_queue", [])
     state.setdefault("updated_at", None)
     state.setdefault("corpus_signature", None)
 
     if entries is not None:
         valid = {entry["id"] for entry in entries}
         state["cycle_seen_ids"] = [eid for eid in state.get("cycle_seen_ids", []) if eid in valid]
+        queue = state.get("review_queue")
+        if not isinstance(queue, list):
+            queue = []
+        normalized_queue: list[dict[str, Any]] = []
+        for raw_item in queue:
+            if not isinstance(raw_item, dict):
+                continue
+            item = dict(raw_item)
+            item["stage"] = LEGACY_REVIEW_STAGE_MAP.get(str(item.get("stage")), item.get("stage"))
+            if (
+                item.get("entry_id") in valid
+                and item.get("stage") in REVIEW_STAGES
+                and isinstance(item.get("due_at"), str)
+            ):
+                normalized_queue.append(item)
+        state["review_queue"] = normalized_queue[-4096:]
+        if source_version < VOCAB_STATE_VERSION:
+            # v3/v4 treated ``cycle_seen_ids`` as a resettable cycle.  The
+            # ten-year plan treats every historically broadcast unit as learned.
+            historical_ids: list[str] = []
+            first_seen: dict[str, datetime] = {}
+            completed: dict[str, set[str]] = {}
+            for item in state.get("history", []):
+                if not isinstance(item, dict) or item.get("id") not in valid:
+                    continue
+                entry_id = str(item["id"])
+                if entry_id not in historical_ids:
+                    historical_ids.append(entry_id)
+                seen_at = parse_state_datetime(item.get("broadcasted_at"))
+                if seen_at and (entry_id not in first_seen or seen_at < first_seen[entry_id]):
+                    first_seen[entry_id] = seen_at
+                stage = LEGACY_REVIEW_STAGE_MAP.get(
+                    str(item.get("review_stage", "")), item.get("review_stage")
+                )
+                if stage:
+                    completed.setdefault(entry_id, set()).add(str(stage))
+            state["cycle_seen_ids"] = list(dict.fromkeys(state["cycle_seen_ids"] + historical_ids))
+
+            now = datetime.now(TZ_TAIPEI)
+            existing = {
+                (str(item.get("entry_id")), str(item.get("stage")))
+                for item in state["review_queue"]
+            }
+            for entry_id, learned_at in first_seen.items():
+                missing_overdue: list[tuple[timedelta, str]] = []
+                for stage, delay in REVIEW_DELAYS.items():
+                    if stage in completed.get(entry_id, set()) or (entry_id, stage) in existing:
+                        continue
+                    due_at = normalize_review_due(learned_at + delay)
+                    if due_at <= now:
+                        missing_overdue.append((delay, stage))
+                        continue
+                    state["review_queue"].append({
+                        "entry_id": entry_id,
+                        "stage": stage,
+                        "due_at": due_at.isoformat(timespec="seconds"),
+                        "created_at": learned_at.isoformat(timespec="seconds"),
+                        "first_learned_at": learned_at.isoformat(timespec="seconds"),
+                    })
+                if missing_overdue:
+                    _, stage = max(missing_overdue)
+                    state["review_queue"].append({
+                        "entry_id": entry_id,
+                        "stage": stage,
+                        "due_at": now.isoformat(timespec="seconds"),
+                        "created_at": learned_at.isoformat(timespec="seconds"),
+                        "first_learned_at": learned_at.isoformat(timespec="seconds"),
+                    })
+            state["review_queue"] = state["review_queue"][-4096:]
         # Keep historical snapshots even if the corpus changes; reverse lookup still benefits.
     return state
 
@@ -791,9 +885,15 @@ def history_stats(state: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return stats
 
 
-def mark_entry_seen(state: dict[str, Any], entry: dict[str, str], dt: datetime, total: int) -> None:
+def mark_entry_seen(
+    state: dict[str, Any],
+    entry: dict[str, str],
+    dt: datetime,
+    total: int,
+    review_stage: str = "new_anchor",
+) -> None:
     entry_id = entry["id"]
-    if entry_id not in state["cycle_seen_ids"]:
+    if review_stage == "new_anchor" and entry_id not in state["cycle_seen_ids"]:
         state["cycle_seen_ids"].append(entry_id)
     state["last_entry_id"] = entry_id
     state["last_broadcast_at"] = dt.isoformat(timespec="seconds")
@@ -809,7 +909,118 @@ def mark_entry_seen(state: dict[str, Any], entry: dict[str, str], dt: datetime, 
         "cycle_total": total,
         "broadcasted_at": dt.isoformat(timespec="seconds"),
         "time_hhmm": dt.strftime("%H:%M"),
+        "review_stage": review_stage,
     })
+
+
+def parse_state_datetime(value: object) -> datetime | None:
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=TZ_TAIPEI)
+    return parsed.astimezone(TZ_TAIPEI)
+
+
+def due_review(
+    state: dict[str, Any], entries: list[dict[str, str]], dt: datetime
+) -> tuple[int, dict[str, Any], dict[str, str]] | None:
+    by_id = {entry["id"]: entry for entry in entries}
+    queue = state.get("review_queue")
+    if not isinstance(queue, list):
+        return None
+    candidates: list[tuple[datetime, int, dict[str, Any], dict[str, str]]] = []
+    for index, item in enumerate(queue):
+        if not isinstance(item, dict):
+            continue
+        due_at = parse_state_datetime(item.get("due_at"))
+        entry = by_id.get(str(item.get("entry_id", "")))
+        if due_at is not None and due_at <= dt and entry is not None:
+            candidates.append((due_at, index, item, entry))
+    if not candidates:
+        return None
+    _, index, item, entry = min(candidates, key=lambda value: (value[0], value[1]))
+    return index, item, entry
+
+
+def normalize_review_due(dt: datetime) -> datetime:
+    """Move an out-of-window review to the next available 06:00 broadcast."""
+    if dt.hour in BROADCAST_HOURS:
+        return dt.replace(minute=0, second=0, microsecond=0)
+    if dt.hour < min(BROADCAST_HOURS):
+        return dt.replace(hour=6, minute=0, second=0, microsecond=0)
+    return (dt + timedelta(days=1)).replace(hour=6, minute=0, second=0, microsecond=0)
+
+
+def schedule_entry_reviews(state: dict[str, Any], entry: dict[str, str], dt: datetime) -> None:
+    queue = state.setdefault("review_queue", [])
+    if not isinstance(queue, list):
+        queue = []
+        state["review_queue"] = queue
+    first_learned_at = dt.isoformat(timespec="seconds")
+    for stage, delay in REVIEW_DELAYS.items():
+        due_at = normalize_review_due(dt + delay)
+        queue.append({
+            "entry_id": entry["id"],
+            "stage": stage,
+            "due_at": due_at.isoformat(timespec="seconds"),
+            "created_at": first_learned_at,
+            "first_learned_at": first_learned_at,
+        })
+    del queue[:-4096]
+
+
+def schedule_maintenance_review(
+    state: dict[str, Any], review_job: dict[str, Any], entry: dict[str, str], dt: datetime
+) -> None:
+    """Keep a mastered unit alive for ten years and beyond without resetting it."""
+    first_learned = parse_state_datetime(review_job.get("first_learned_at")) or dt
+    queue = state.setdefault("review_queue", [])
+    queue.append({
+        "entry_id": entry["id"],
+        "stage": "annual",
+        "due_at": normalize_review_due(dt + timedelta(days=365)).isoformat(timespec="seconds"),
+        "created_at": dt.isoformat(timespec="seconds"),
+        "first_learned_at": first_learned.isoformat(timespec="seconds"),
+    })
+    del queue[:-4096]
+
+
+def learning_plan_day(state: dict[str, Any], dt: datetime) -> int:
+    started = parse_state_datetime(state.get("learning_plan_started_at"))
+    if started is None or started > dt:
+        state["learning_plan_started_at"] = dt.isoformat(timespec="seconds")
+        return 1
+    return (dt.date() - started.date()).days + 1
+
+
+def new_unit_target(plan_day: int) -> int:
+    """Fifteen units per seven days: six two-unit days plus one three-unit day."""
+    return 3 if plan_day % 7 == 0 else 2
+
+
+def new_units_today(state: dict[str, Any], dt: datetime) -> int:
+    date_prefix = dt.date().isoformat()
+    return sum(
+        1
+        for item in state.get("history", [])
+        if str(item.get("broadcasted_at", "")).startswith(date_prefix)
+        and LEGACY_REVIEW_STAGE_MAP.get(str(item.get("review_stage")), item.get("review_stage"))
+        == "new_anchor"
+    )
+
+
+def new_unit_slot_available(state: dict[str, Any], dt: datetime, remaining: int) -> bool:
+    if remaining <= 0:
+        return False
+    target = new_unit_target(learning_plan_day(state, dt))
+    completed = new_units_today(state, dt)
+    anchors = NEW_UNIT_ANCHORS[target]
+    available = sum(hour <= dt.hour for hour in anchors)
+    return completed < min(target, available)
 
 
 def generate_cast_values() -> list[int]:
@@ -817,6 +1028,8 @@ def generate_cast_values() -> list[int]:
 
 
 def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[str, Any] | None:
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=TZ_TAIPEI)
     # The redesigned English course is the preferred hourly pool.  Retain the
     # previous 7,000-word corpus as a deployment-safe fallback.
     entries = load_english_hourly_cards() or eligible_vocab_entries(load_vocab_entries())
@@ -840,21 +1053,35 @@ def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[st
         if previous and isinstance(values, list) and len(values) == 6:
             item: dict[str, Any] = dict(previous)
             item["_cast_values"] = values
+            item["_review_stage"] = LEGACY_REVIEW_STAGE_MAP.get(
+                str(reservation.get("review_stage", "new_anchor")),
+                reservation.get("review_stage", "new_anchor"),
+            )
             return item
         reservations.pop(slot_key, None)
 
     seen_ids = set(state.get("cycle_seen_ids", []))
     remaining = [entry for entry in entries if entry["id"] not in seen_ids]
-
-    if not remaining:
-        state["cycle"] = int(state.get("cycle", 1)) + 1
-        state["cycle_started_at"] = dt.isoformat(timespec="seconds")
-        state["cycle_seen_ids"] = []
-        seen_ids = set()
-        remaining = entries[:]
-
-    seed = f"vocab-cycle:{state['cycle']}:{len(seen_ids)}:{dt.strftime('%Y-%m-%d-%H')}:{sig}"
-    entry = random.Random(seed).choice(remaining)
+    review_pick = due_review(state, entries, dt)
+    review_index: int | None = None
+    review_job: dict[str, Any] | None = None
+    if new_unit_slot_available(state, dt, len(remaining)):
+        review_stage = "new_anchor"
+        seed = f"vocab-plan:{len(seen_ids)}:{dt.strftime('%Y-%m-%d-%H')}:{sig}"
+        entry = random.Random(seed).choice(remaining)
+    elif review_pick is not None:
+        review_index, review_job, entry = review_pick
+        review_stage = str(review_job["stage"])
+    else:
+        # Non-anchor hours never flood the learner with extra new units. They
+        # show a compact refresh until a scheduled review becomes due.
+        review_stage = "refresh"
+        refresh_pool = [entry for entry in entries if entry["id"] in seen_ids]
+        if not refresh_pool:
+            refresh_pool = remaining or entries
+            review_stage = "new_anchor"
+        seed = f"vocab-refresh:{dt.strftime('%Y-%m-%d-%H')}:{sig}"
+        entry = random.Random(seed).choice(refresh_pool)
 
     if consume:
         daily_casts = state.get("daily_casts")
@@ -871,10 +1098,23 @@ def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[st
             daily_casts[slot_key] = cast_values
         for old_slot_key in sorted(daily_casts)[:-96]:
             daily_casts.pop(old_slot_key, None)
-        mark_entry_seen(state, entry, dt, total=len(entries))
+        if review_stage == "new_anchor":
+            schedule_entry_reviews(state, entry, dt)
+        elif review_index is not None:
+            state["review_queue"].pop(review_index)
+            if review_job and review_stage in {"day_365", "annual"}:
+                schedule_maintenance_review(state, review_job, entry, dt)
+        mark_entry_seen(
+            state,
+            entry,
+            dt,
+            total=len(entries),
+            review_stage=review_stage,
+        )
         reservations[slot_key] = {
             "entry_id": entry["id"],
             "cast_values": cast_values,
+            "review_stage": review_stage,
             "reserved_at": datetime.now(TZ_TAIPEI).isoformat(timespec="seconds"),
         }
         for old_slot in sorted(reservations)[:-96]:
@@ -882,9 +1122,12 @@ def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[st
         save_vocab_state(state)
         item: dict[str, Any] = dict(entry)
         item["_cast_values"] = cast_values
+        item["_review_stage"] = review_stage
         return item
 
-    return entry
+    item = dict(entry)
+    item["_review_stage"] = review_stage
+    return item
 
 
 def choose_vocab_entry(dt: datetime, consume: bool = False) -> dict[str, Any] | None:
@@ -907,27 +1150,146 @@ def compact_decomposition(value: str, max_chars: int = 50) -> str:
     return window[:cut].rstrip(" +；;,，") + "…"
 
 
+def compact_memory_hook(entry: dict[str, str], max_chars: int = 58) -> str:
+    """Return one short source-grounded association for a glanceable card."""
+    raw = entry.get("formation_note", "") or entry.get("takeaway", "")
+    compact = re.sub(r"\s+", " ", raw).replace("|", "/").strip()
+    if not compact:
+        return ""
+    first_sentence = re.split(r"(?<=[。！？.!?])\s*", compact, maxsplit=1)[0]
+    if len(first_sentence) <= max_chars:
+        return first_sentence
+    return first_sentence[: max_chars - 1].rstrip(" ,;，；。") + "…"
+
+
+def visible_example(entry: dict[str, str]) -> str:
+    """Return the source example with its answer visibly emphasized."""
+    answer = re.sub(r"\s+", " ", entry.get("answer", "")).strip()
+    example = re.sub(r"\s+", " ", entry.get("example_en", "")).strip()
+    if not example:
+        example = re.sub(r"^填空[：:]\s*", "", entry.get("prompt", "").strip())
+    example = example.replace("|", "/")
+    if not answer:
+        return example
+    blank = re.compile(r"_{3,}")
+    if blank.search(example):
+        return blank.sub(f"**{answer}**", example, count=1)
+    answer_pattern = re.compile(
+        rf"(?<![A-Za-z])({re.escape(answer)})(?![A-Za-z])",
+        flags=re.IGNORECASE,
+    )
+    return answer_pattern.sub(r"**\1**", example, count=1)
+
+
+def memory_reading_cue(entry: dict[str, str]) -> str:
+    """Build a short root-to-word-to-inflection reading chain."""
+    candidates: list[str] = []
+    decomp = entry.get("decomp", "")
+    root_match = re.match(r"\s*([A-Za-z-]+)\(", decomp)
+    if root_match:
+        candidates.append(root_match.group(1))
+    candidates.extend([entry.get("word", ""), entry.get("answer", "")])
+    unique: list[str] = []
+    seen: set[str] = set()
+    for value in candidates:
+        normalized = re.sub(r"\s+", " ", value).strip()
+        key = normalized.casefold()
+        if normalized and key not in seen:
+            unique.append(normalized)
+            seen.add(key)
+    return " → ".join(unique)
+
+
+def core_words_for_entry(entry: dict[str, Any]) -> list[dict[str, Any]]:
+    words = entry.get("core_words")
+    if isinstance(words, list):
+        valid = [dict(word) for word in words if isinstance(word, dict) and word.get("word")]
+        if valid:
+            return valid[:3]
+    return [{
+        key: entry.get(key, "")
+        for key in (
+            "word", "pron", "pos", "gloss", "decomp", "formation_note",
+            "prompt", "answer", "example_en", "example_zh",
+        )
+    }]
+
+
+def stage_word_and_family(
+    entry: dict[str, Any], review_stage: str
+) -> tuple[dict[str, Any], str]:
+    words = core_words_for_entry(entry)
+    if review_stage == "same_day" and len(words) >= 2:
+        primary = words[1]
+        shown = words[1:3]
+    else:
+        primary = words[0]
+        shown = words
+    family = " · ".join(
+        f"{word.get('word', '')}＝{word.get('gloss', '')}".strip("＝") for word in shown
+    )
+    return primary, family
+
+
 def format_vocab_line(entry: dict[str, str]) -> str:
     if entry.get("root"):
+        review_stage = entry.get("_review_stage", "new_anchor")
+        stage_label = {
+            "new_anchor": "首次·核心 1",
+            "same_day": "3 小時·核心 2+3",
+            "day_1": "D1·三字家族",
+            "day_3": "D3·來源例句",
+            "day_7": "D7·交錯辨識",
+            "day_14": "D14·家族壓縮",
+            "day_30": "D30·長期摘要",
+            "day_60": "D60·長期喚回",
+            "day_90": "D90·建構完成",
+            "day_180": "D180·半年喚回",
+            "day_365": "D365·年度喚回",
+            "annual": "年度·十年維護",
+            "refresh": "輪播·輕量複現",
+        }.get(review_stage, "輪播·輕量複現")
+        primary, family = stage_word_and_family(entry, review_stage)
         root = re.sub(r"\s+", " ", entry["root"]).replace("|", "/")
         meanings = [entry.get("root_meaning_en", ""), entry.get("root_meaning_zh", "")]
         meaning = " / ".join(value for value in meanings if value).replace("|", "/")
-        gloss = entry.get("gloss", "").replace("|", "/")
-        decomp = compact_decomposition(entry.get("decomp", ""), max_chars=60).replace("|", "/")
-        takeaway = re.sub(r"\s+", " ", entry.get("takeaway", "")).replace("|", "/")
-        if len(takeaway) > 72:
-            takeaway = takeaway[:71].rstrip(" ,;，；。") + "…"
-        prompt = re.sub(r"\s+", " ", entry.get("prompt", "")).replace("|", "/")
-        if len(prompt) > 88:
-            prompt = prompt[:87].rstrip(" ,;，；。") + "…"
-        answer = re.sub(r"\s+", " ", entry.get("answer", "")).replace("|", "/")
+        gloss = str(primary.get("gloss", "")).replace("|", "/")
+        pron = re.sub(r"\s+", " ", str(primary.get("pron", ""))).replace("|", "/")
+        pos = re.sub(r"\s+", " ", str(primary.get("pos", ""))).replace("|", "/")
+        decomp = compact_decomposition(str(primary.get("decomp", "")), max_chars=60).replace("|", "/")
+        hook = compact_memory_hook(primary)
+        answer = re.sub(r"\s+", " ", str(primary.get("answer", ""))).replace("|", "/")
+        example = visible_example(primary)
+        translation = re.sub(r"\s+", " ", str(primary.get("example_zh", ""))).replace("|", "/").strip()
+        reading_cue = memory_reading_cue(primary).replace("|", "/")
         head = f"｜字｜{root}＝{meaning}" if meaning else f"｜字｜{root}"
-        parts = [head, f"{entry['word']} {gloss}".strip()]
-        if decomp and decomp.lower() != root.lower():
-            parts.append(decomp)
-        if takeaway:
-            parts.append(f"提示：{takeaway}")
-        parts.append(f"問：{prompt} 答：||{answer}||")
+        parts = [
+            head,
+            f"{primary['word']} {gloss}".strip(),
+            f"課：{entry.get('course', '')}",
+            f"章：{entry.get('chapter', '')}",
+            f"單元：{entry.get('lesson', '')}",
+            f"節點：{stage_label}",
+        ]
+        if pron:
+            parts.append(f"音：{pron}")
+        if pos:
+            parts.append(f"詞：{pos}")
+        if review_stage in {"new_anchor", "same_day", "day_7"} and decomp and decomp.lower() != root.lower():
+            parts.append(f"拆：{decomp}")
+        if family:
+            parts.append(f"族：{family.replace('|', '/')}")
+        if review_stage == "new_anchor" and hook:
+            parts.append(f"聯想：{hook}")
+        show_example = review_stage in {"new_anchor", "day_3", "day_30", "day_90", "day_365", "annual"}
+        if show_example and answer:
+            parts.append(f"答：{answer}")
+        if show_example and example:
+            parts.append(f"例：{example}")
+        if show_example and translation:
+            parts.append(f"譯：{translation}")
+        if review_stage in {"new_anchor", "same_day", "day_3"} and reading_cue:
+            parts.append(f"讀：{reading_cue}")
         return "｜".join(parts)
 
     pron = f" [{entry['pron']}]" if entry.get("pron") else ""
@@ -1255,23 +1617,26 @@ def build_hexagram_next_action(dt: datetime, cast_data: dict[str, Any] | None = 
         else ""
     )
 
-    # 曾仕強教授變爻規則：根據變爻數量選擇對應爻辭
+    # 變爻選取依朱熹通行規則；呈現語氣只作曾仕強式時位／中道反思。
     text, rule = _ICHING.resolve_line_by_moving(cast["base_no"], cast["moving"])
 
     # 三爻以上變：需用變卦來解
     if len(cast["moving"]) >= 3:
         # 用變卦的卦辭
         changed_text = _ICHING.get_judgment(cast["changed_no"])
-        if "看變卦卦辭" in text or "變卦卦辭" in text:
-            text = changed_text
-        elif "變卦內卦" in text:
-            # 四爻變：變卦下卦（內卦）的卦辭
-            changed_lower_name = cast["changed_lower"]["name"]
-            essence = _ICHING.TRIGRAM_ESSENCE.get(changed_lower_name, "")
-            # Extract the hint part after the description
-            hint_parts = [p.strip() for p in essence.replace("——", "——").split("——") if p.strip()]
-            inner_hint = hint_parts[-1] if len(hint_parts) >= 2 else (hint_parts[0] if hint_parts else "")
-            text = f"{cast['changed_name']}內卦提示：{inner_hint}" if inner_hint else changed_text
+        if len(cast["moving"]) == 3:
+            text = f"本卦：{_ICHING.get_judgment(cast['base_no'])}；變卦：{changed_text}"
+        elif "兩個不變爻" in text:
+            # 四爻變：看變卦兩個不變爻，以下爻為主。
+            unchanged = sorted(i for i in range(6) if i not in cast["moving"])
+            if len(unchanged) == 2:
+                lower_idx, upper_idx = unchanged
+                text = (
+                    f"主：{_ICHING.get_line_text(cast['changed_no'], lower_idx)}；"
+                    f"參：{_ICHING.get_line_text(cast['changed_no'], upper_idx)}"
+                )
+            else:
+                text = changed_text
         elif "不變爻" in text:
             # 五爻變：找變卦中沒變的那一爻
             unchanged = [i for i in range(6) if i not in cast["moving"]]
@@ -1280,6 +1645,8 @@ def build_hexagram_next_action(dt: datetime, cast_data: dict[str, Any] | None = 
                 text = _ICHING.get_line_text(cast["changed_no"], uc_idx)
             else:
                 text = changed_text
+        elif len(cast["moving"]) == 6 and cast["base_no"] not in {1, 2}:
+            text = changed_text
 
     hint = compact_iching_text(text)
     guardrail = iching_guardrail(len(cast["moving"]))
@@ -1355,14 +1722,15 @@ def print_vocab_status(
     current_seen = len(state.get("cycle_seen_ids", []))
     remaining = max(total - current_seen, 0)
     hist = state.get("history", [])
-    print("📘 番茄鐘單字輪播狀態")
+    print("📘 番茄鐘十年英文學習狀態")
     print(f"corpus_words={corpus_total}")
     print(f"eligible_root_words={total}")
-    print(f"cycle={state.get('cycle', 1)}")
-    print(f"broadcasted_this_cycle={current_seen}")
-    print(f"remaining_this_cycle={remaining}")
+    print(f"legacy_cycle={state.get('cycle', 1)}")
+    print(f"learned_units={current_seen}")
+    print(f"unlearned_units={remaining}")
     print(f"broadcasted_history_total={len(hist)}")
-    print(f"cycle_started_at={state.get('cycle_started_at')}")
+    print(f"pending_reviews={len(state.get('review_queue', []))}")
+    print(f"learning_plan_started_at={state.get('learning_plan_started_at')}")
     print(f"last_broadcast_at={state.get('last_broadcast_at')}")
     print(f"state_path={vocab_state_path().as_posix()}")
     if hist:
@@ -1371,7 +1739,7 @@ def print_vocab_status(
             "last_word="
             f"{last.get('word')} {last.get('pron', '')}｜{last.get('pos')}. {last.get('gloss')}"
         )
-    print("cycle_rule=只播有字根拆解且通過品質閘門的字；cycle 內不重複")
+    print("plan_rule=每週15單元；D0/D1/D3/D7/D14/D30/D60/D90/D180/D365；之後年度維護，不自動歸零")
 
 
 def list_total(limit_text: str | None, as_json: bool = False) -> None:

@@ -2,58 +2,69 @@
 
 ## 目前狀態
 
-- 整體：`VERIFIED`（本機 Hermes 部署完成並實際播報驗證；歷史 reflog 缺失 tree 未修復）。
-- GitHub：`VERIFIED_REMOTE`。新版已提交至 `master`，README、installer、英文資料與本 handoff 回讀一致。
-- Hermes／Discord：本機 Hermes 已安裝（`install_offline_runtime.py` 7 檔同步、`--check` 全綠）；未修改 cron／頻道；2026-08-10 08:00–13:00 每小時實際播報驗證通過。
-- 收工時間：2026-08-10（Asia/Taipei）。
-- Agent／電腦：Hermes／`DESKTOP-P5NQS9D`（部署與驗證）。
+- 整體：`PARTIAL`。定案十年版已完成並驗證；GitHub 與 Hermes 正式播報仍是上一版。
+- 本機：`VERIFIED_LOCAL`，分支 `master`；定案版正在 GitHub delivery 流程。
+- GitHub：`DEPLOYED_PREVIOUS`，`origin/master` 為 `fb914e2` 上一版。
+- Hermes／Discord：`DESKTOP-P5NQS9D` 已安裝上一版並於 2026-08-10 08:00–13:00 每小時實際播報驗證通過；本次定案版尚未重裝，未修改既有 `no_agent` cron／頻道。
+- 收工日期：2026-08-10（Asia/Taipei）；Agent／電腦：Codex／`YULIN-SFG16-72`。
 
 ## 本輪完成
 
-1. 英文資料完整性與正確度
-   - 3 套課程、128/128 正式單元；32 份逐課乾淨逐字稿加 96 份合併 ASR 交叉證據，另讀取 256 題組／1,967 題來源題目。
-   - 代表字現在必須匹配結構化 `word_roots`；修正 27 個把 `foot`、`star`、`mind` 等英譯詞誤當代表字的單元，結果為 128/128 結構化匹配。
-   - 18 個來源例句的複數、過去式或分詞答案已保留實際詞形；128/128 均為來源例句填空。
-   - 15 句英文作窄範圍文法、用字或事實修正，衍生卡保留 `example_editorial_note` 與來源 reference。
-   - 課程分組改稱「課程字根記憶」：保留教學助記價值，不把整組宣稱成嚴格歷史語源同源。
+1. 定案播報模板
+   - 正文固定依權重顯示：`紀錄 → 英文 → 農民曆 → 易經 × 斯多葛`。
+   - 原紀錄儀表板公開連結保留並排第一；90 分鐘時段／S 段只放標題，不再有獨立「行」。
+   - Hermes stdout 與 Discord Embed 使用同一份結構化資料與相同順序。
+   - 移除「讀一次／問自己」等提示詞；有例句的節點直接顯示答案。
 
-2. 其他離線資料
-   - `data/stoic_daily_quotes.json` 完整覆蓋閏年 366 天；62 個 PDF／Markdown 轉錄字形、漏字或標點問題已正規化。
-   - 只有 2 筆曾夾帶長引文、其餘 364 筆沒有；現已統一為 `{MM-DD: {title}}`，避免 runtime schema 不一致。
-   - 原始 `Hui Dao Zi Ji De Nei Xin ... Ryan Holiday_20260405.md` 只作唯讀核對，未修改、未納入 installer、仍保持 untracked。
+2. 英文課程資料與十年記憶
+   - 3 套課程、128 個正式單元、3,261 張來源字卡；每單元選 3 個不同且有來源例句的核心字，共 384 字。
+   - 卡片固定顯示 `課程 › 章節`、正式單元、字根定義、記憶節點與三字家族。
+   - `path = feeling 感情` 實例為 `sympathy / apathy / empathy`。
+   - 60 日導入規則：每週 15 單元（六天各 2、一天 3）；未看時不一次補發整串。
+   - 每單元節點：首次、3 小時、D1、D3、D7、D14、D30、D60、D90、D180、D365；之後每 365 天年度喚回，可持續十年以上。
+   - 狀態升級 v5，保留 v3/v4 history、reservation、已學單元與舊 review queue；不在第 91 天歸零。
+   - 新增 `data/english_transcript_crosscheck.json`，記錄 Drive 合併逐字稿檔案 `1Gg-H5a9aHTPraXuEX39SstOtZjbt00D3`、134 段與 96 個單元匹配；不保存 ASR 全文。
 
-3. 離線 Hermes runtime 與文件
-   - 修正明確 `POMODORO_DATA_DIR` 被覆寫的可攜路徑 bug；臨時 Hermes 安裝在錯誤 `LOCALAPPDATA` 下仍可依指定資料根目錄正確執行。
-   - Python 需求由錯誤的 3.8+ 修正為 3.10+（建議 3.11）。
-   - README 已明示本機／GitHub／目標 Hermes 三層部署狀態；部署文件收斂成先 delivery、再 installer、再 dry-run、最後核准觀察既有 cron。
-   - installer 只同步 7 個必要檔案，不複製 `.env`、webhook、原始課程／影音／逐字稿或 `pomodoro_vocab_state.json`，也不建立排程。
+3. 易經與斯多葛
+   - 易經保留三錢法、64 卦、384 爻位與完整 0–6 變爻處理。
+   - 修正舊四爻變「變卦內卦」錯法；現採朱熹通行規則：四爻變看變卦兩個不變爻並以下爻為主。
+   - 二爻變改為兩爻並看、以上為主；三爻變改為本卦與變卦卦辭並看。
+   - 曾仕強教授的定位限定為變易、時位、中道、自省的反思框架，不把摘要冒充教授原文或現實判決。
+   - 斯多葛與易經在同一區分行顯示，兩者不混成同一判讀。
+
+4. 離線與搬機
+   - 內容生成仍為純 Python、零模型 token；農民曆預設本機，Discord 傳輸本身仍需網路。
+   - installer 仍只同步 7 個 runtime 檔，不碰 cron、`.env`、credential 或 `pomodoro_vocab_state.json`。
+   - 十年進度搬機需在舊機停播後，人工備份並複製 `data/pomodoro_vocab_state.json`；同時只能一台使用 `--consume`。
 
 ## 驗證證據
 
+- `py_compile`：核心、builder、broadcaster、易經資料均 PASS。
 - 英文 builder `--check`：PASS（courses=3、cards=128、transcripts=32、raw_asr=96、questions=1967）。
-- `verify_english_hourly_cards.py`：PASS（groups=256）。
-- `verify_english_content_accuracy.py`：PASS（structured_roots=128、fill_prompts=128、editorial_corrections=15、V5 spelling cross-check=123、reviewed exceptions=5）。
-- Stoic normalizer `--check` 與 `verify_stoic_daily_quotes.py`：PASS（dates=366、curated=62）。
-- `verify_offline_runtime.py`：PASS（offline local almanac、runtime_files=7、portable explicit data root）。
-- `verify_pomodoro_enhancements.py`、`verify_vocab_decomposition.py`、`verify_pomodoro_final.py`、`verify_iching.py`、`verify_casting.py`、`verify_crossref.py`：全部 PASS。
-- `py_compile`、`git diff --check`、變更範圍 secret scan、可攜資料絕對路徑 scan：PASS。
-- Git active refs：`HEAD`、`master`、`origin/master` 均指向 `42cdc87424dae1eb2d257520df271278dbde0b41`；active-ref object walk PASS。
-- Git 完整物件庫：`git fsck --full` 非零。歷史 reflog 的 commit `d04405b88c1c74070f242928461af602c1f2035f` 指向缺失 tree `09f93e7589edaaa0b7a91254e51dfd647dc39e54`，另有 dangling objects；不在目前 branch／remote 可達歷史，本輪未做破壞性修復。
+- `verify_english_hourly_cards.py`：PASS（units=128、source_words=3261、core_words=384、四區模板順序）。
+- `verify_english_content_accuracy.py`：PASS（structured_roots=128、fill_prompts=128、editorial_corrections=15、V5 spelling cross-check=123）。
+- `verify_spaced_repetition.py`：PASS（128 單元／60 日、11 節點、annual=365、v4 migration）。
+- `verify_offline_runtime.py`：PASS（local almanac、7-file temporary Hermes install/readback）。
+- `verify_pomodoro_final.py`：PASS（4,096 起卦組合、960 個四爻變案例、併發冪等）。
+- `verify_iching.py`、`verify_casting.py`、`verify_crossref.py`、`verify_pomodoro_enhancements.py`、`verify_vocab_decomposition.py`、`verify_stoic_daily_quotes.py`：PASS。
+- `git diff --check`、變更範圍 secret scan、衍生資料絕對路徑 scan：PASS。
+- Git base：`origin/master` 已更新至 `fb914e2`；`git fsck --full --no-reflogs` exit 0（只有 dangling objects）。
+- `git fsck --full` exit 2：歷史 reflog commit `d04405b88c1c74070f242928461af602c1f2035f` 仍缺 tree `09f93e7589edaaa0b7a91254e51dfd647dc39e54`；不在 active refs，本輪不做破壞性修復。
 
 ## 安全與工作樹邊界
 
-- 本機 `unified_broadcaster.py` 已移除硬編碼 webhook；變更範圍未檢出 credential。
-- 遠端舊版曾含 webhook 字串；新版來源已移除，但使用者仍需在 Discord 端輪替，不要把新 webhook 寫進 Git。
-- 本次只提交新版程式、精簡資料、測試與交接文件；原始 Ryan Holiday Markdown 保持 untracked。未修復 Git object database、未安裝目標 Hermes，也未修改外部排程。
+- 保留未追蹤 `.codex-remote-attachments/` 與 Ryan Holiday Markdown；不納入本輪交付範圍。
+- 不提交 webhook、token、credential、原始課程影片或完整逐字稿。
+- 遠端舊版曾含 webhook 字串；新版來源不保存 credential，使用者仍需自行輪替舊 webhook。
 
 ## 回復方式
 
-- Repository 新版已提交；若需回復，另做可追蹤的 revert，不使用 `git reset --hard` 覆蓋未知檔案。
-- 本機 Hermes 已部署。日後安裝若需回復，從最近的 `%LOCALAPPDATA%\hermes\backups\offline-runtime-*` 複製原檔回 `scripts/` 與 `data/`；installer 不改 cron。
+- Repository 變更若需回復，另做可追蹤的 revert，不使用 `git reset --hard` 覆蓋未知檔案。
+- Hermes 上一版已部署；未來更新若需回復，從最近的 `%LOCALAPPDATA%\hermes\backups\offline-runtime-*` 複製原檔回 `scripts/` 與 `data/`，installer 不改 cron。
 
 ## 唯一續跑點
 
-剩餘續跑：① 使用者輪替 Discord webhook（遠端舊版曾含 webhook 字串）；② 如需在其他電腦部署，執行：
+GitHub delivery 回讀成功後，在 Hermes 電腦執行：
 
 ```powershell
 git pull
@@ -62,4 +73,4 @@ py -3.11 install_offline_runtime.py --check
 py -3.11 "$env:LOCALAPPDATA\hermes\scripts\unified_broadcaster.py" --at 09:00 --dry-run
 ```
 
-確認「課程字根記憶」、例句填空與 spoiler 答案後，只觀察既有 Hermes `no_agent` cron；不要另建 Windows 排程或第二個 cron。
+確認畫面依序為「紀錄、英文、農民曆、易經 × 斯多葛」，再由使用者核准觀察既有 `no_agent` cron；不要另建 Windows 排程或第二個 cron。

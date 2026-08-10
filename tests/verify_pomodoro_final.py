@@ -40,18 +40,23 @@ for values_tuple in itertools.product((6, 7, 8, 9), repeat=6):
     elif count == 1:
         expected_text = mod._ICHING.get_line_text(cast["base_no"], cast["moving"][0])
     elif count == 2:
-        expected_text = mod._ICHING.get_line_text(cast["base_no"], max(cast["moving"]))
+        lower, upper = sorted(cast["moving"])
+        expected_text = (
+            f"主：{mod._ICHING.get_line_text(cast['base_no'], upper)}；"
+            f"參：{mod._ICHING.get_line_text(cast['base_no'], lower)}"
+        )
     elif count == 3:
-        expected_text = mod._ICHING.get_judgment(cast["changed_no"])
+        expected_text = (
+            f"本卦：{mod._ICHING.get_judgment(cast['base_no'])}；"
+            f"變卦：{mod._ICHING.get_judgment(cast['changed_no'])}"
+        )
     elif count == 4:
         four_count += 1
-        changed = [not (value % 2 == 1) if value in {6, 9} else (value % 2 == 1) for value in values]
-        expected_lower = mod.TRIGRAM_BY_LINES[tuple(changed[:3])]["name"]
-        assert cast["changed_lower"]["name"] == expected_lower
-        essence = mod._ICHING.TRIGRAM_ESSENCE[expected_lower]
-        hint_parts = [p.strip() for p in essence.replace("——", "——").split("——") if p.strip()]
-        inner_hint = hint_parts[-1] if len(hint_parts) >= 2 else (hint_parts[0] if hint_parts else "")
-        expected_text = f"{cast['changed_name']}內卦提示：{inner_hint}"
+        lower, upper = sorted(index for index in range(6) if index not in cast["moving"])
+        expected_text = (
+            f"主：{mod._ICHING.get_line_text(cast['changed_no'], lower)}；"
+            f"參：{mod._ICHING.get_line_text(cast['changed_no'], upper)}"
+        )
     elif count == 5:
         unchanged = next(index for index in range(6) if index not in cast["moving"])
         expected_text = mod._ICHING.get_line_text(cast["changed_no"], unchanged)
@@ -155,7 +160,8 @@ with tempfile.TemporaryDirectory() as td:
     assert len(state["daily_casts"]) == 2
     for slot_key, reservation in state["slot_reservations"].items():
         assert state["daily_casts"][slot_key] == reservation["cast_values"]
-    assert state["history"][0]["word"].lower() != state["history"][1]["word"].lower()
+    assert state["history"][0]["word"].lower() == state["history"][1]["word"].lower()
+    assert state["history"][1]["review_stage"] == "refresh"
     print("Starting manual run checks (non-consuming 11:00)...")
 
     before = hashlib.sha256(state_path.read_bytes()).hexdigest()

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-pomodoro_iching_data.py — 曾仕強教授易經六十四卦辭 × 爻辭資料庫
+pomodoro_iching_data.py — 易經六十四卦反思摘要 × 爻位資料庫
 
-以曾仕強教授《易經的奧秘》《易經的智慧》體系為核心：
+反思語氣參考曾仕強教授《易經的奧秘》《易經的智慧》重視的
+「變易、時位、中道、自我反省」，但不是教授原文或占斷代言：
 - 每一卦有卦辭（整體判斷），反映自然規律與人事智慧
 - 每一爻有爻辭，按「時位」對應不同階段的處世之道
-- 變爻解讀規則採用曾仕強教授傳統架構：
-  0變爻→本卦卦辭 | 1變爻→該爻爻辭 | 2變爻→上爻
-  3變爻→變卦卦辭 | 4變爻→變卦下卦 | 5變爻→變卦不變爻 | 6變爻→變卦卦辭（乾坤用九/用六）
+- 變爻機械選取採朱熹《易學啟蒙》通行規則：
+  0變爻→本卦卦辭 | 1變爻→本卦該爻 | 2變爻→本卦兩爻、以上為主
+  3變爻→本卦與變卦卦辭 | 4變爻→變卦兩個不變爻、以下為主
+  5變爻→變卦唯一不變爻 | 6變爻→變卦卦辭（乾坤用九/用六）
 
 輸出格式為 compact one-liner，配合 pomodoro micro-card 字數限制。
 """
@@ -843,14 +845,14 @@ def get_line_text(hex_no: int, line_idx: int) -> str:
 
 
 def resolve_line_by_moving(hex_no: int, moving_indexes: list[int]) -> str:
-    """Resolve which interpretation to show based on 變爻 rules (曾仕強教授體系).
+    """Resolve which interpretation to show using the traditional Zhu Xi rules.
     
     Rules:
       0 變爻 (靜卦) → 本卦卦辭
       1 變爻 → 該爻爻辭（本卦）
-      2 變爻 → 取上爻爻辭（本卦）
-      3 變爻 → 變卦卦辭
-      4 變爻 → 變卦下卦（內卦）卦辭
+      2 變爻 → 本卦兩爻爻辭（以上爻為主）
+      3 變爻 → 本卦與變卦卦辭
+      4 變爻 → 變卦兩個不變爻（以下爻為主）
       5 變爻 → 變卦不變爻爻辭
       6 變爻 → 變卦卦辭（乾坤用九/用六）
     
@@ -874,19 +876,22 @@ def resolve_line_by_moving(hex_no: int, moving_indexes: list[int]) -> str:
         return text, f"一爻變，{LINE_POSITION[idx]['name']}爻爻辭"
     
     elif count == 2:
-        # 二爻變：看上爻
-        idx = max(moving_indexes)
-        text = get_line_text(hex_no, idx)
-        return text, f"二爻變，上{LINE_POSITION[idx]['name']}爻爻辭"
+        # 二爻變：兩爻並看，以上爻為主。
+        lower_idx, upper_idx = sorted(moving_indexes)
+        text = (
+            f"主：{get_line_text(hex_no, upper_idx)}；"
+            f"參：{get_line_text(hex_no, lower_idx)}"
+        )
+        return text, f"二爻變，兩爻並看，以上{LINE_POSITION[upper_idx]['name']}爻為主"
     
     elif count == 3:
-        # 三爻變：看變卦卦辭
+        # 三爻變：本卦與變卦卦辭並看，交由呼叫端補變卦。
         # The caller needs to compute the changed hexagram number
-        return "三爻變，看變卦卦辭", "三爻變，變卦卦辭"
+        return "三爻變，本卦與變卦卦辭並看", "三爻變，本卦與變卦卦辭"
     
     elif count == 4:
-        # 四爻變：看變卦下卦（內卦）
-        return "四爻變，看變卦內卦卦辭", "四爻變，變卦內卦"
+        # 四爻變：變卦兩個不變爻並看，以下爻為主。
+        return "四爻變，看變卦兩個不變爻，以下爻為主", "四爻變，兩個不變爻"
     
     elif count == 5:
         # 五爻變：看變卦不變爻

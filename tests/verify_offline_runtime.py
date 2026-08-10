@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify offline content generation and portable Hermes installation."""
+"""Verify zero-network generation and portable Hermes installation."""
 from __future__ import annotations
 
 import json
@@ -38,11 +38,7 @@ def main() -> int:
         target = Path(temp_dir) / "hermes"
         install = subprocess.run(
             [sys.executable, str(ROOT / "install_offline_runtime.py"), "--target", str(target)],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
+            cwd=ROOT, check=True, capture_output=True, text=True, encoding="utf-8",
         )
         install_result = json.loads(install.stdout)
         assert install_result["ok"] is True
@@ -52,41 +48,30 @@ def main() -> int:
 
         check = subprocess.run(
             [sys.executable, str(ROOT / "install_offline_runtime.py"), "--target", str(target), "--check"],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
+            cwd=ROOT, check=True, capture_output=True, text=True, encoding="utf-8",
         )
         check_result = json.loads(check.stdout)
         assert check_result["ok"] is True
         assert all(row["matches"] for row in check_result["files"])
 
         runtime_env = os.environ.copy()
-        # An explicit portable root must win even when LOCALAPPDATA points
-        # somewhere unrelated to the installed runtime.
         runtime_env["LOCALAPPDATA"] = str(Path(temp_dir) / "unrelated-local-app-data")
         runtime_env["POMODORO_DATA_DIR"] = str(target)
         runtime_env.pop("DISCORD_WEBHOOK_URL", None)
         runtime = subprocess.run(
-            [
-                sys.executable,
-                str(target / "scripts" / "unified_broadcaster.py"),
-                "--at",
-                "09:00",
-                "--dry-run",
-            ],
-            cwd=target / "scripts",
-            env=runtime_env,
-            check=True,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
+            [sys.executable, str(target / "scripts" / "unified_broadcaster.py"), "--at", "09:00"],
+            cwd=target / "scripts", env=runtime_env, check=True,
+            capture_output=True, text=True, encoding="utf-8",
         )
-        assert "｜字｜" in runtime.stdout
-        assert "｜提示：" in runtime.stdout
-        assert '"name": "📖 課程字根記憶"' in runtime.stdout
-        assert "答：||" in runtime.stdout
+        assert "**📊 紀錄**" in runtime.stdout
+        assert "**📖 英文**" in runtime.stdout
+        assert "**🗓️ 農民曆**" in runtime.stdout
+        assert "**☯️ 易經 × 斯多葛**" in runtime.stdout
+        assert "課：" not in runtime.stdout  # parsed into human-facing course path
+        assert "字根字首魔法學院" in runtime.stdout
+        assert "答案：" in runtime.stdout
+        assert "反思參考，不代替現實判斷" in runtime.stdout
+        assert "||" not in runtime.stdout
 
     print(f"PASS offline_source={almanac['source']} runtime_files={len(check_result['files'])}")
     return 0

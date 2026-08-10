@@ -1,11 +1,11 @@
 ---
 name: pomodoro-micro-card
-description: "Maintain and troubleshoot the zero-token Pomodoro micro-card cron system — offline English root-family course cards, 曾仕強 I Ching data, local almanac, and Discord-only Hermes delivery."
+description: "Maintain and troubleshoot the zero-token Pomodoro micro-card cron system — long-term offline English course units, local almanac, I Ching and Stoic reflection, and Hermes Discord delivery."
 ---
 
 # Pomodoro Micro-Card System (Merged Pomodoro Pulse)
 
-Zero-token `no_agent` cron runtime that uses pure Python to produce one compact micro-card for Discord #英文字根 every hour 06:00–18:00. Hermes owns stdout delivery; the runtime never calls a language model. The card has four axes: `行` (one real-life action), `字` (offline root-family lesson, representative word, video takeaway, and recall Q&A), `時` (local almanac), and `勢` (I Ching reference). Reality and `行` always outrank symbolic lines.
+Zero-token `no_agent` cron runtime that uses pure Python to produce one compact micro-card every hour 06:00–18:00. Hermes owns stdout delivery; the runtime never calls a language model. The finalized priority is fixed: `紀錄 → 英文 → 農民曆 → 易經 × 斯多葛`. The 90-minute segment stays in the header; there is no separate `行` field. Symbolic material is reflection only and never overrides reality.
 
 ---
 
@@ -44,6 +44,7 @@ python install_offline_runtime.py --check
 python tests/verify_english_hourly_cards.py
 python tests/verify_english_content_accuracy.py
 python tests/verify_stoic_daily_quotes.py
+python tests/verify_spaced_repetition.py
 python tests/verify_offline_runtime.py
 python tests/verify_pomodoro_final.py
 ```
@@ -56,10 +57,10 @@ python tests/verify_pomodoro_final.py
 unified_broadcaster.py      ← 播報主腳本（當 Dry-run 時會直接格式化輸出 CJK 繁體中文卡片）
 ├── pomodoro_chat_original.py   ← 計算核心與狀態引擎（計算週期、易經起卦、農民曆抓取）
 │   ├── data/
-│   │   ├── english_hourly_cards.json # 128 個正式課程單元的精簡衍生卡
+│   │   ├── english_hourly_cards.json # 128 單元、384 核心字的精簡衍生卡
 │   │   └── stoic_daily_quotes.json   # 366 日行動輔助摘要
-│   ├── pomodoro_iching_data.py  # 曾仕強教授 64 卦、384 爻辭、變爻規則數據庫
-│   └── pomodoro_vocab_state.json # 狀態記錄檔（含鎖、目前 Cycle 與消耗進度）
+│   ├── pomodoro_iching_data.py  # 64 卦反思摘要、384 爻位、朱熹變爻選取規則
+│   └── pomodoro_vocab_state.json # v5 狀態檔（128 單元與十年複習節點）
 ├── lunar_almanac.py        # 🏮 備用離線農民曆：干支沖煞算法
 ├── pomodoro_focus.py       # 🔧 專注 90 分鐘番茄鐘與休息提示變體邏輯
 └── index.html              # 📊 脈搏紀錄儀表板：單檔 Web App，使用 LocalStorage 儲存
@@ -69,19 +70,22 @@ unified_broadcaster.py      ← 播報主腳本（當 Dry-run 時會直接格式
 
 ## 📐 輸出卡片規範 (Output Contract)
 
-### 1. 純文字模式（單一 authority 播報）
+### 1. Hermes stdout（單一 authority 播報）
 ```text
-｜行｜<90m 時段>｜<mode> <S{N}/8[ 收尾]|完成>｜<action>
-｜字｜<root>=<meaning>｜<word> <gloss>｜<decomposition>｜提示：<video takeaway>｜問：<prompt> 答：||<answer>||
-｜時｜<day 宜忌>｜<hour 宜忌>｜<沖煞>｜現實優先
-｜勢｜第<N>卦 <glyph> <name>[→第<M>卦 <glyph> <changed_name>]｜<moving|靜>｜<hint>
+🍅 番茄工作脈搏 · <HH:MM>  <90m 時段 / S{N}/8>
+📊 紀錄：<原本的公開紀錄連結>
+📖 英文：<課程 › 章節> / <正式單元> / <記憶節點> / <三字家族> / <直接答案與例句>
+🗓️ 農民曆：<時辰宜忌> / <日宜忌> / <沖煞>
+☯️ 易經 × 斯多葛：<卦象與變爻> / <易經反思> / <當日斯多葛摘要>
 ```
 
 ### 2. 播報卡片格式細節與規範
-- **行計數系統統一**：每日劃分為 8 個 90 分鐘區段。首小時卡片顯示 `S{N}/8`（例如：`S1/8`），次小時（收尾小時）顯示 `S{N}/8 收尾`，18:00 卡片則顯示 `完成`。
+- **時段計數系統統一**：每日劃分為 8 個 90 分鐘區段。首小時顯示 `S{N}/8`，次小時顯示 `S{N}/8 收尾`，18:00 顯示 `完成`；只放在標題描述。
 - **勢 決策提示**：刪除了原尾部的 `｜守主線…｜只改一處…` 等決策護欄提示文字（2026-07-20 移去），此行在 interpretation hint 處結束。
-- **勢 四爻變規則**：依曾仕強教授體系，四爻變時需擷取**變卦下卦（內卦）**之卦德提示，並以前綴 `{changed_name}內卦提示：` 呈現，避免長篇幅文字溢出。
+- **勢 判讀分層**：變爻的機械選取採朱熹通行規則；四爻變看變卦兩個不變爻並以下爻為主。曾仕強教授只作「變易、時位、中道、自省」的反思框架參考，不把摘要冒充教授原文或現實判決。
 - **字 課程 authority**：優先使用 3 套課程的 128 個正式單元；字根拼法、定義和拆解由課程資料與逐課摘要交叉校正，合併 ASR 逐字稿只作證據層，不直接成為顯示文字。課程家族是助記分組，不等於逐項歷史語源認證。舊 V5 字庫僅在本機存在且課程卡不存在時回退。
+- **字 快速記憶格式**：不使用 Discord spoiler，也不播「請念一次／問自己」等提示詞。答案直接加粗顯示；每卡固定顯示課程、章節、單元與節點。
+- **字 十年排程**：每週導入 15 單元，正常約 60 天完成 128 單元首次接觸。節點為首次、3 小時、D1、D3、D7、D14、D30、D60、D90、D180、D365，之後每 365 天年度喚回；其他整點只做已學單元輕量輪播。v3/v4 狀態相容升級為 v5，不在第 91 天重置。
 - **時 宜忌基準**：`unified_broadcaster.py --consume` 預設只用 `lunar_almanac.py`；只有明確傳入 `--online-almanac` 才允許抓取 Gooday。
 
 ---
@@ -93,7 +97,6 @@ unified_broadcaster.py      ← 播報主腳本（當 Dry-run 時會直接格式
 python pomodoro_chat_original.py --at 14:00             # 全卡片模擬（不消耗進度）
 python pomodoro_chat_original.py --vocab-status          # 檢視單字庫消耗統計
 python pomodoro_chat_original.py --lookup abandon        # 快速查詢特定單字
-python pomodoro_chat_original.py --reset-cycle           # 重設並開啟全新 Cycle
 ```
 *注意：手動測試時請勿傳遞 `--consume` 參數，以免污染正式的單字消耗進度。*
 
@@ -120,7 +123,7 @@ python tests/verify_crossref.py
 ## ⚠️ 關鍵踩坑與防護機制 (Critical Pitfalls)
 
 1. **易經矩陣查表順序**：
-   曾仕強教授體系的卦象查表順序為 `KING_WEN_MATRIX[lower_trigram][upper_trigram]`（下卦在左，上卦在頂）。**若顛倒為 `[upper][lower]`，64 卦中會有 56 卦傳回錯誤的卦號與爻辭**，僅 8 個八純卦（上下卦相同）能倖免。
+   卦象查表順序為 `KING_WEN_MATRIX[lower_trigram][upper_trigram]`（下卦在左，上卦在頂）。**若顛倒為 `[upper][lower]`，64 卦中會有 56 卦傳回錯誤的卦號與爻辭**，僅 8 個八純卦能倖免。
 2. **路徑跨平台相容性**：
    明確設定的 `POMODORO_DATA_DIR` 具有最高優先權，必須是目前 Python 可辨識且包含 `data/` 的 Hermes 根目錄。未設定時，程式會自動尋找腳本同層的 `data/`，或 `scripts/` 的上一層 `data/`；不要把 Git-bash/MSYS 的 `/c/Users/...` 路徑傳給原生 Windows `python.exe`。
 3. **Cron 播報 stdout 污染**：

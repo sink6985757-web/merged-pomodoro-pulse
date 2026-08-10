@@ -23,6 +23,7 @@ Thumbs.db
 # Data (user-local by default; the compact generated course index is portable)
 data/*
 !data/english_hourly_cards.json
+!data/english_transcript_crosscheck.json
 !data/stoic_daily_quotes.json
 pomodoro_vocab_state.json
 vocab_decomposition.json
