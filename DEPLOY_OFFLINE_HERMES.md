@@ -2,7 +2,7 @@
 
 ## 現況與執行契約
 
-- 本機十年版已驗證；GitHub `master`（`3ae5329`）與另一台 Hermes 仍是上一版。本輪收工未 commit、push 或重裝。
+- 本機十年版與 GitHub `master`（功能 commit `cbe57d2`）已驗證；另一台 Hermes 仍是上一版，尚未重裝本次 runtime。
 - 保留目前穩定的 Hermes `no_agent` cron 與 Discord `--deliver`，不建立 Windows 工作排程，也不另建第二個 cron。
 - Hermes 執行 `unified_broadcaster.py --consume`；Python 只產生 stdout，沒有模型呼叫，因此內容生成使用 0 token。
 - Discord 傳輸仍需要網路；「離線」是指內容生成不依賴 Google Drive、Gooday、影音、逐字稿或模型 API。

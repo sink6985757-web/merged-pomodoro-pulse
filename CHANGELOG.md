@@ -40,8 +40,8 @@
 - `HEAD`、`master`、`origin/master` 與 active-ref object walk：PASS；`git fsck --full` 仍因歷史 reflog commit 指向缺失 tree 而非零結束，未經 Git 修復閘門不清理或重寫。
 
 ### Delivery
-- 本次定案十年版：`LOCAL_ONLY`，尚未 commit／push。
-- GitHub：`DEPLOYED_PREVIOUS`。上一版已由 `fb914e2` 標記為 `VERIFIED_REMOTE`。
+- 本次定案十年版：`VERIFIED_REMOTE`，功能 commit `cbe57d2` 已推送至 `master`。
+- GitHub：已回讀遠端 ref 與功能 commit；上一版 Hermes 部署證據 `fb914e2` 已保留在歷史。
 - 目標 Hermes：`DEPLOYED_PREVIOUS`。`DESKTOP-P5NQS9D` 已安裝上一版並於 2026-08-10 08:00–13:00 實際播報正常；本次定案版需 GitHub delivery 後再執行 installer。
 - 安全續跑：遠端舊版曾含 webhook 字串；新版已移除，使用者仍需在 Discord 端輪替該 webhook。
 

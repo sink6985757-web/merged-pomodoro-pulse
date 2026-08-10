@@ -2,9 +2,9 @@
 
 ## 目前狀態
 
-- 整體：`PARTIAL`。定案十年版已完成並驗證；GitHub 與 Hermes 正式播報仍是上一版。
-- 本機：`VERIFIED_LOCAL`，分支 `master`；定案版正在 GitHub delivery 流程。
-- GitHub：`DEPLOYED_PREVIOUS`，`origin/master` 為 `fb914e2` 上一版。
+- 整體：`PARTIAL`。定案十年版與 GitHub delivery 已完成；Hermes 正式播報仍是上一版。
+- 本機：`VERIFIED_LOCAL`，分支 `master`，功能 commit `cbe57d2`。
+- GitHub：`VERIFIED_REMOTE`，`master` 已含 `cbe57d2` 並完成 ref 回讀。
 - Hermes／Discord：`DESKTOP-P5NQS9D` 已安裝上一版並於 2026-08-10 08:00–13:00 每小時實際播報驗證通過；本次定案版尚未重裝，未修改既有 `no_agent` cron／頻道。
 - 收工日期：2026-08-10（Asia/Taipei）；Agent／電腦：Codex／`YULIN-SFG16-72`。
 
@@ -48,7 +48,7 @@
 - `verify_pomodoro_final.py`：PASS（4,096 起卦組合、960 個四爻變案例、併發冪等）。
 - `verify_iching.py`、`verify_casting.py`、`verify_crossref.py`、`verify_pomodoro_enhancements.py`、`verify_vocab_decomposition.py`、`verify_stoic_daily_quotes.py`：PASS。
 - `git diff --check`、變更範圍 secret scan、衍生資料絕對路徑 scan：PASS。
-- Git base：`origin/master` 已更新至 `fb914e2`；`git fsck --full --no-reflogs` exit 0（只有 dangling objects）。
+- Git active refs：功能 push 後 `HEAD`、`master`、`origin/master` 均為 `cbe57d2`；`git fsck --full --no-reflogs` exit 0（只有 dangling objects）。
 - `git fsck --full` exit 2：歷史 reflog commit `d04405b88c1c74070f242928461af602c1f2035f` 仍缺 tree `09f93e7589edaaa0b7a91254e51dfd647dc39e54`；不在 active refs，本輪不做破壞性修復。
 
 ## 安全與工作樹邊界
@@ -64,7 +64,7 @@
 
 ## 唯一續跑點
 
-GitHub delivery 回讀成功後，在 Hermes 電腦執行：
+在 Hermes 電腦執行：
 
 ```powershell
 git pull

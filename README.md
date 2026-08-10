@@ -11,10 +11,10 @@
 | 層級 | 狀態 | 說明 |
 |---|---|---|
 | 本機工作樹 | `VERIFIED_LOCAL` | 定案四區模板、128 單元／384 核心字與十年記憶節點已通過完整回歸 |
-| GitHub `master` | `DEPLOYED_PREVIOUS` | `3ae5329` 是上一版；本次十年版尚未 commit／push |
+| GitHub `master` | `VERIFIED_REMOTE` | 定案十年版已推送為 `cbe57d2` 並完成遠端 ref 回讀 |
 | 另一台 Hermes | `DEPLOYED_PREVIOUS` | 使用者已安裝上一版；本次十年版尚未更新 |
 
-本次定案版目前是 `LOCAL_ONLY`；需另行放行 commit／push，之後再在 Hermes 重跑 installer。收工本身不包含這兩個外部動作。
+本次定案版已完成 GitHub delivery；Hermes 仍需重跑 installer 與 dry-run，才會從上一版升級。
 
 ---
 
