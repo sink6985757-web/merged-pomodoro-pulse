@@ -48,7 +48,7 @@
 - `verify_pomodoro_final.py`：PASS（4,096 起卦組合、960 個四爻變案例、併發冪等）。
 - `verify_iching.py`、`verify_casting.py`、`verify_crossref.py`、`verify_pomodoro_enhancements.py`、`verify_vocab_decomposition.py`、`verify_stoic_daily_quotes.py`：PASS。
 - `git diff --check`、變更範圍 secret scan、衍生資料絕對路徑 scan：PASS。
-- Git active refs：功能 push 後 `HEAD`、`master`、`origin/master` 均為 `cbe57d2`；`git fsck --full --no-reflogs` exit 0（只有 dangling objects）。
+- Git active refs：最終 delivery 已回讀確認 `HEAD`、`master`、`origin/master` 一致，且功能 commit `cbe57d2` 可由 `master` 到達；`git fsck --full --no-reflogs` exit 0（只有 dangling objects）。
 - `git fsck --full` exit 2：歷史 reflog commit `d04405b88c1c74070f242928461af602c1f2035f` 仍缺 tree `09f93e7589edaaa0b7a91254e51dfd647dc39e54`；不在 active refs，本輪不做破壞性修復。
 
 ## 安全與工作樹邊界
