@@ -32,7 +32,7 @@
 
 ### Delivery
 - GitHub：`VERIFIED_REMOTE`。新版已 commit／push 至 `master`，並回讀 README、installer、英文資料與 handoff。
-- 目標電腦：`PENDING`。GitHub delivery 完成後，在另一台電腦執行 `install_offline_runtime.py` 並回讀驗證。
+- 目標電腦：`VERIFIED`（2026-08-10 本機 Hermes 部署完成）。`install_offline_runtime.py` 安裝 7 檔並回讀 `--check` 全綠；`scripts/.env` 含 `DISCORD_WEBHOOK_URL`，`load_webhook_url()` 解析 OK；今日 08:00–13:00 每小時實際播報正常（`daily_casts`／`slot_reservations` 逐時消耗、`last_broadcast_at` 更新）。
 - 安全續跑：遠端舊版曾含 webhook 字串；新版已移除，使用者仍需在 Discord 端輪替該 webhook。
 
 ## [Governance] - 2026-08-09

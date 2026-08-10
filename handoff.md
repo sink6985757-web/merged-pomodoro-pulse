@@ -2,11 +2,11 @@
 
 ## 目前狀態
 
-- 整體：`PARTIAL`（本機功能、資料與 GitHub `VERIFIED`；目標 Hermes 未部署；歷史 reflog 有缺失 tree）。
+- 整體：`VERIFIED`（本機 Hermes 部署完成並實際播報驗證；歷史 reflog 缺失 tree 未修復）。
 - GitHub：`VERIFIED_REMOTE`。新版已提交至 `master`，README、installer、英文資料與本 handoff 回讀一致。
-- Hermes／Discord：未安裝目標電腦、未修改 cron／頻道、未發送正式播報。
+- Hermes／Discord：本機 Hermes 已安裝（`install_offline_runtime.py` 7 檔同步、`--check` 全綠）；未修改 cron／頻道；2026-08-10 08:00–13:00 每小時實際播報驗證通過。
 - 收工時間：2026-08-10（Asia/Taipei）。
-- Agent／電腦：Codex／`YULIN-SFG16-72`。
+- Agent／電腦：Hermes／`DESKTOP-P5NQS9D`（部署與驗證）。
 
 ## 本輪完成
 
@@ -49,11 +49,11 @@
 ## 回復方式
 
 - Repository 新版已提交；若需回復，另做可追蹤的 revert，不使用 `git reset --hard` 覆蓋未知檔案。
-- 目標 Hermes 尚未部署。日後安裝若需回復，從最近的 `%LOCALAPPDATA%\hermes\backups\offline-runtime-*` 複製原檔回 `scripts/` 與 `data/`；installer 不改 cron。
+- 本機 Hermes 已部署。日後安裝若需回復，從最近的 `%LOCALAPPDATA%\hermes\backups\offline-runtime-*` 複製原檔回 `scripts/` 與 `data/`；installer 不改 cron。
 
 ## 唯一續跑點
 
-由使用者輪替 Discord webhook，再到另一台電腦執行：
+剩餘續跑：① 使用者輪替 Discord webhook（遠端舊版曾含 webhook 字串）；② 如需在其他電腦部署，執行：
 
 ```powershell
 git pull
