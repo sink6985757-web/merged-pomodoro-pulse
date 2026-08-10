@@ -111,6 +111,13 @@ GOODAY_URL = "https://www.goodaytw.com/"
 GOODAY_TIMEOUT_SECONDS = 18
 GOODAY_CACHE_VERSION = 1
 
+
+def offline_mode_enabled() -> bool:
+    """Return whether all content sources must stay local to this machine."""
+    return os.environ.get("POMODORO_OFFLINE", "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }
+
 BRANCH_BY_TIME = [
     (23, 1, "子"), (1, 3, "丑"), (3, 5, "寅"), (5, 7, "卯"),
     (7, 9, "辰"), (9, 11, "巳"), (11, 13, "午"), (13, 15, "未"),
@@ -504,6 +511,53 @@ def stable_vocab_id(word: str, pron: str, pos: str, gloss: str, source: str) -> 
 
 
 _VOCAB_ENTRIES_CACHE: list[dict[str, str]] | None = None
+_ENGLISH_HOURLY_CARDS_CACHE: tuple[str, int, list[dict[str, str]]] | None = None
+
+
+def english_hourly_cards_path() -> Path | None:
+    """Resolve the generated course-card database without persisting host paths."""
+    override = os.environ.get("POMODORO_ENGLISH_CARDS")
+    candidates = []
+    if override:
+        candidates.append(Path(override))
+    candidates.extend(
+        [
+            vocab_data_dir() / "english_hourly_cards.json",
+            Path(__file__).resolve().parent / "data" / "english_hourly_cards.json",
+        ]
+    )
+    return next((path for path in candidates if path.is_file()), None)
+
+
+def load_english_hourly_cards() -> list[dict[str, str]]:
+    """Load the Drive-derived root-family course cards when available."""
+    global _ENGLISH_HOURLY_CARDS_CACHE
+    path = english_hourly_cards_path()
+    if path is None:
+        return []
+    try:
+        stamp = path.stat().st_mtime_ns
+    except OSError:
+        return []
+    key = str(path.resolve())
+    if _ENGLISH_HOURLY_CARDS_CACHE:
+        cached_path, cached_stamp, cached_cards = _ENGLISH_HOURLY_CARDS_CACHE
+        if cached_path == key and cached_stamp == stamp:
+            return cached_cards
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if data.get("version") != 1 or not isinstance(data.get("cards"), list):
+        return []
+    required = {"id", "root", "word", "gloss", "prompt", "answer", "source"}
+    cards = [
+        dict(card)
+        for card in data["cards"]
+        if isinstance(card, dict) and required.issubset(card) and all(card.get(field) for field in required)
+    ]
+    _ENGLISH_HOURLY_CARDS_CACHE = (key, stamp, cards)
+    return cards
 
 
 def load_vocab_entries() -> list[dict[str, str]]:
@@ -763,7 +817,9 @@ def generate_cast_values() -> list[int]:
 
 
 def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[str, Any] | None:
-    entries = eligible_vocab_entries(load_vocab_entries())
+    # The redesigned English course is the preferred hourly pool.  Retain the
+    # previous 7,000-word corpus as a deployment-safe fallback.
+    entries = load_english_hourly_cards() or eligible_vocab_entries(load_vocab_entries())
     if not entries:
         return None
 
@@ -852,6 +908,28 @@ def compact_decomposition(value: str, max_chars: int = 50) -> str:
 
 
 def format_vocab_line(entry: dict[str, str]) -> str:
+    if entry.get("root"):
+        root = re.sub(r"\s+", " ", entry["root"]).replace("|", "/")
+        meanings = [entry.get("root_meaning_en", ""), entry.get("root_meaning_zh", "")]
+        meaning = " / ".join(value for value in meanings if value).replace("|", "/")
+        gloss = entry.get("gloss", "").replace("|", "/")
+        decomp = compact_decomposition(entry.get("decomp", ""), max_chars=60).replace("|", "/")
+        takeaway = re.sub(r"\s+", " ", entry.get("takeaway", "")).replace("|", "/")
+        if len(takeaway) > 72:
+            takeaway = takeaway[:71].rstrip(" ,;，；。") + "…"
+        prompt = re.sub(r"\s+", " ", entry.get("prompt", "")).replace("|", "/")
+        if len(prompt) > 88:
+            prompt = prompt[:87].rstrip(" ,;，；。") + "…"
+        answer = re.sub(r"\s+", " ", entry.get("answer", "")).replace("|", "/")
+        head = f"｜字｜{root}＝{meaning}" if meaning else f"｜字｜{root}"
+        parts = [head, f"{entry['word']} {gloss}".strip()]
+        if decomp and decomp.lower() != root.lower():
+            parts.append(decomp)
+        if takeaway:
+            parts.append(f"提示：{takeaway}")
+        parts.append(f"問：{prompt} 答：||{answer}||")
+        return "｜".join(parts)
+
     pron = f" [{entry['pron']}]" if entry.get("pron") else ""
     pos = f"{entry['pos']} " if entry.get("pos") else ""
     base = f"｜字｜{entry['word']}{pron}｜{pos}{entry['gloss']}"
@@ -960,6 +1038,9 @@ def fetch_gooday_almanac(dt: datetime) -> dict[str, Any]:
     hourly, so cache per date to avoid hammering the site. If the network/parser
     fails, return a soft failure; Pomodoro delivery must still work.
     """
+    if offline_mode_enabled():
+        return build_local_almanac(dt)
+
     date_key = dt.strftime("%Y-%m-%d")
     cache_path = gooday_cache_path()
     try:
@@ -975,8 +1056,8 @@ def fetch_gooday_almanac(dt: datetime) -> dict[str, Any]:
         req = urllib.request.Request(GOODAY_URL, headers={"User-Agent": "Hermes-Pomodoro/1.0 Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=GOODAY_TIMEOUT_SECONDS) as resp:
             raw_html = resp.read(250_000).decode("utf-8", errors="replace")
-    except Exception as exc:
-        return {"ok": False, "source": GOODAY_URL, "error": f"fetch {type(exc).__name__}"}
+    except Exception:
+        return build_local_almanac(dt)
 
     lines = html_to_lines(raw_html)
     day_yi = first_label_value(lines, "宜")
@@ -1002,6 +1083,44 @@ def fetch_gooday_almanac(dt: datetime) -> dict[str, Any]:
         except Exception:
             pass
     return data
+
+
+def build_local_almanac(dt: datetime) -> dict[str, Any]:
+    """Build a deterministic almanac card without cache or network access."""
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "lunar_almanac",
+            Path(__file__).resolve().parent / "lunar_almanac.py",
+        )
+        if spec is None or spec.loader is None:
+            raise ImportError("lunar_almanac loader unavailable")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        info = module.get_lunar_day_info(dt)
+    except Exception as exc:
+        return {
+            "ok": False,
+            "source": "local:lunar_almanac.py",
+            "error": f"local {type(exc).__name__}",
+        }
+
+    hours = {branch: {} for branch in BRANCHES}
+    branch = str(info.get("branch") or current_branch(dt))
+    hours.setdefault(branch, {})
+    hours[branch] = {
+        "宜": str(info.get("hour_yi") or "資料不足"),
+        "忌": str(info.get("hour_ji") or "資料不足"),
+    }
+    return {
+        "ok": True,
+        "source": "local:lunar_almanac.py",
+        "date": dt.strftime("%Y-%m-%d"),
+        "day_yi": str(info.get("day_yi") or "資料不足"),
+        "day_ji": str(info.get("day_ji") or "資料不足"),
+        "day_chong": str(info.get("chong") or "資料不足"),
+        "day_sha": str(info.get("sha") or "資料不足"),
+        "hours": hours,
+    }
 
 
 def current_branch(dt: datetime) -> str:
@@ -1371,7 +1490,15 @@ def main() -> int:
     parser.add_argument("--export-total", metavar="PATH", help="export total corpus with seen status to CSV or JSON")
     parser.add_argument("--export-seen", metavar="PATH", help="export broadcast history to CSV or JSON")
     parser.add_argument("--reset-cycle", action="store_true", help="start a fresh cycle without destroying history")
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="use local card/almanac data only; never fetch Gooday",
+    )
     args = parser.parse_args()
+
+    if args.offline:
+        os.environ["POMODORO_OFFLINE"] = "1"
 
     if args.reset_cycle:
         reset_cycle()

@@ -6,7 +6,8 @@ unified_broadcaster.py
 Unified Discord Broadcaster for Merged Pomodoro Pulse.
 Integrates full dynamic calculations from pomodoro_chat_original.py
 and lunar_almanac.py, outputting a highly structured and aesthetic CJK
-Discord Embed. Supports portability, custom webhooks, and manual testing.
+Discord Embed. Content generation is offline by default; Hermes can deliver
+stdout without invoking a model, while direct webhook delivery remains optional.
 """
 import sys
 import os
@@ -16,15 +17,14 @@ import urllib.request
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-# 1. Force the database and state directories to be self-contained in this workspace
+# 1. Resolve the adjacent workspace/Hermes data root without discarding an
+# explicit portable override.
 BASE_DIR = Path(__file__).parent.resolve()
-if (BASE_DIR / "data").exists():
-    os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR)
-else:
-    # If running in Hermes live scripts directory, let it fall back to standard
-    # LOCALAPPDATA/hermes native Windows pathing (clear any override)
-    if "POMODORO_DATA_DIR" in os.environ:
-        del os.environ["POMODORO_DATA_DIR"]
+if not os.environ.get("POMODORO_DATA_DIR"):
+    if (BASE_DIR / "data").is_dir():
+        os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR)
+    elif BASE_DIR.name.lower() == "scripts" and (BASE_DIR.parent / "data").is_dir():
+        os.environ["POMODORO_DATA_DIR"] = str(BASE_DIR.parent)
 
 # Import the core logic (now that POMODORO_DATA_DIR is set)
 try:
@@ -34,7 +34,6 @@ except ImportError as e:
     sys.exit(1)
 
 TZ_TAIPEI = timezone(timedelta(hours=8))
-DEFAULT_WEBHOOK = "https://discord.com/api/webhooks/1532019963735314555/ZBIrVwPz_zd7aUkuLjBECMZyorjyB9YQ-e9kYvq0i0ITUmKzA1grXsKEnc43Hsc4r8k_"
 
 
 def parse_arguments():
@@ -43,6 +42,11 @@ def parse_arguments():
     parser.add_argument("--consume", action="store_true", help="是否消耗單字庫中的單字 (Cron 執行時請啟用)")
     parser.add_argument("--webhook", type=str, help="指定自訂 Discord Webhook URL")
     parser.add_argument("--dry-run", action="store_true", help="預覽 Embed Payload，不實際發送到 Discord")
+    parser.add_argument(
+        "--online-almanac",
+        action="store_true",
+        help="明確允許抓取 Gooday；預設內容完全使用本機資料",
+    )
     return parser.parse_args()
 
 
@@ -51,7 +55,7 @@ def load_webhook_url(args_webhook=None) -> str:
     1. Command line --webhook argument
     2. Environment variable DISCORD_WEBHOOK_URL
     3. Local .env file (DISCORD_WEBHOOK_URL=...)
-    4. Hardcoded constant
+    No webhook is bundled in source control or portable packages.
     """
     if args_webhook:
         return args_webhook
@@ -72,7 +76,7 @@ def load_webhook_url(args_webhook=None) -> str:
         except Exception:
             pass
 
-    return DEFAULT_WEBHOOK
+    return ""
 
 
 def parse_card_lines(final_lines: list) -> dict:
@@ -80,13 +84,15 @@ def parse_card_lines(final_lines: list) -> dict:
     
     Expected format from build_message:
     ｜行｜HH:MM→HH:MM｜segment｜action
-    ｜字｜word [pron]｜pos gloss ｜decomp
+    ｜字｜root＝meaning｜word gloss｜decomp｜提示：takeaway｜問：prompt 答：||answer||
+    舊版相容：｜字｜word [pron]｜pos gloss｜decomp
     ｜時｜hour_yi_ji ｜ day_yi_ji ｜ chong_sha ｜ priority
     ｜勢｜hexagrams｜moving_lines｜hint
     """
     data = {
         "time_range": "無", "segment": "無", "action": "無", "stoic_quote": "",
         "word": "無", "pron": "", "pos": "", "gloss": "無", "decomp": "",
+        "root": "", "root_meaning": "", "takeaway": "", "question": "", "answer": "",
         "day_yi_ji": "無", "hour_yi_ji": "無", "chong_sha": "無",
         "priority": "現實優先",
         "hexagrams": "無", "moving_lines": "靜", "hint": "無"
@@ -114,9 +120,30 @@ def parse_card_lines(final_lines: list) -> dict:
                     data["action"] = raw_action
 
         elif line.startswith("｜字｜"):
-            # ｜字｜word [pron]｜pos gloss ｜decomp
             parts = [p.strip() for p in line.split("｜") if p.strip()]
-            if len(parts) >= 4:
+            if len(parts) >= 3 and "＝" in parts[1]:
+                # New root-family course card.
+                data["root"], data["root_meaning"] = (
+                    value.strip() for value in parts[1].split("＝", 1)
+                )
+                word_gloss = parts[2].split(maxsplit=1)
+                data["word"] = word_gloss[0]
+                data["gloss"] = word_gloss[1] if len(word_gloss) > 1 else "無"
+                for part in parts[3:]:
+                    if part.startswith("提示："):
+                        data["takeaway"] = part[len("提示：") :].strip()
+                    elif part.startswith("問："):
+                        qa = part[len("問：") :].strip()
+                        match = __import__("re").match(r"(.+?)\s+答：\|\|(.+?)\|\|$", qa)
+                        if match:
+                            data["question"] = match.group(1).strip()
+                            data["answer"] = match.group(2).strip()
+                        else:
+                            data["question"] = qa
+                    elif not data["decomp"]:
+                        data["decomp"] = part
+            elif len(parts) >= 4:
+                # Legacy single-word card.
                 # parts[1] = "word [pron]" or just "word"
                 wp = parts[1]
                 if "[" in wp:
@@ -168,7 +195,7 @@ def build_discord_payload(data: dict, now: datetime) -> dict:
     time_str = now.strftime("%H:%M")
     segment_str = data["segment"] if data["segment"] != "無" else "日常"
     
-    # Pre-calculate file path URL to avoid backslashes inside f-string (Python 3.8-3.11 compatibility)
+    # Pre-calculate the file URL so backslashes never enter an f-string.
     local_index_path = str(BASE_DIR / 'index.html').replace('\\', '/')
 
     # Emojis and CJK format
@@ -184,9 +211,18 @@ def build_discord_payload(data: dict, now: datetime) -> dict:
             },
             {
                 "name": "｜ 字 ｜ 零 Token 英文字根",
-                "value": f"📝 **單字**: **{data['word']}**  `{data['pron']}`\n"
-                         f"🏷️ **釋義**: *{data['pos']}.* {data['gloss']}" +
-                         (f"\n📖 **字根**: `{data['decomp']}`" if data['decomp'] else ""),
+                "value": (
+                    (f"🧠 **{data['root']}＝{data['root_meaning']}**\n" if data['root'] else "")
+                    + f"📝 **單字**: **{data['word']}**  `{data['pron']}`\n"
+                    + f"🏷️ **釋義**: {data['gloss']}"
+                    + (f"\n🧩 **拆解**: `{data['decomp']}`" if data['decomp'] else "")
+                    + (f"\n💡 **影片重點**: {data['takeaway']}" if data['takeaway'] else "")
+                    + (
+                        f"\n❓ **回想**: {data['question']} 答：||{data['answer']}||"
+                        if data['question'] and data['answer']
+                        else ""
+                    )
+                ),
                 "inline": False
             },
             {
@@ -258,6 +294,9 @@ def send_to_discord(webhook_url: str, payload: dict) -> int:
 
 def main():
     args = parse_arguments()
+
+    if not args.online_almanac:
+        os.environ["POMODORO_OFFLINE"] = "1"
     
     # Setup correct local timezone datetime
     now = datetime.now(TZ_TAIPEI)
@@ -302,6 +341,8 @@ def main():
     # 4. Resolve webhook and send
     webhook_url = load_webhook_url(args.webhook)
     if not webhook_url.startswith("https://discord.com/api/webhooks/"):
+        # Existing zero-token Hermes contract: stdout is the single delivery
+        # payload and Hermes performs the configured Discord fan-out.
         print(final_output)
         sys.exit(0)
 
@@ -335,14 +376,24 @@ def build_discord_embed(final_lines: list, now: datetime) -> dict:
     # 行: compact time + action
     time_seg = f"{data['time_range']}　{data['segment']}" if data['segment'] != "無" else data['time_range']
     
-    # 字: single compact line
-    word_line = f"**{data['word']}**"
+    # 字: root family + one representative word + recall prompt
+    word_line = (
+        f"🧠 **{data['root']}＝{data['root_meaning']}**\n🧩 **{data['word']}**"
+        if data['root']
+        else f"**{data['word']}**"
+    )
     if data['pron']:
         word_line += f" `{data['pron']}`"
     if data['pos'] or data['gloss'] != "無":
         word_line += f"　*{data['pos']}.* {data['gloss']}" if data['pos'] else f"　{data['gloss']}"
     if data['decomp']:
         word_line += f"\n`{data['decomp']}`"
+    if data['takeaway']:
+        word_line += f"\n💡 {data['takeaway']}"
+    if data['question']:
+        word_line += f"\n❓ {data['question']}"
+        if data['answer']:
+            word_line += f"　答：||{data['answer']}||"
     
     # 時: trim labels, use slash compact
     time_line = f"⏰ {data['hour_yi_ji']}"
@@ -368,7 +419,7 @@ def build_discord_embed(final_lines: list, now: datetime) -> dict:
                 "inline": False
             },
             {
-                "name": "📖 單字",
+                "name": "📖 課程字根記憶",
                 "value": word_line,
                 "inline": False
             },

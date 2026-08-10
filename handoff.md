@@ -1,45 +1,65 @@
 # Handoff
 
-## 目前做到哪
-1. **iPhone 12 一頁式 Discord Rich Embed 卡片美化升級**：
-   - 實現帶側邊主題顏色邊框 (`color`) 的 Discord Rich Embed 卡片，隨時間動態變幻（晨綠 `0x2ecc71`、藍 `0x3498db`、琥珀 `0xe67e22`、紫 `0x9b59b6`）。
-   - 五大高顏值 Icon 欄位（🎯行、📖字、🗓️時、☯️勢、📊記），控縮文字長度防手機版折行，達成 iPhone 12 / 4.1~6.1 吋手機上 **100% 一頁式無滑動瀏覽**。
-2. **《每天讀點斯多噶 (The Daily Stoic)》366 天哲思融合**：
-   - 從 Markdown 版書籍解析出 366 天 (1/1 ~ 12/31) 的每日主題名句，建立 [data/stoic_daily_quotes.json](file:///g:/%E6%88%91%E7%9A%84%E9%9B%B2%E7%AB%AF%E7%A1%AC%E7%A2%9F/gogoYulin/merged-pomodoro-pulse/data/stoic_daily_quotes.json) 並同步 AppData。
-   - 在「｜行｜」後半段動態融合當天斯多噶心法（如 `💡 斯多噶：修補⾃⼰`），單行極致精簡。
-3. **三路合併與 11,464 單字庫超大升級與權威稽核**：
-   - 結合專案 V5 最新單字、SQLite 字根庫（MD 無損定位提取）以及學測/指考 7000 單的全部基礎單字（包括 ability, side 等），完成去重與規範標註，容量高達 **11,464 筆單字**。
-4. **專案檔案簡化與歸檔**：
-   - 刪除 `README.md.bak` 冗餘備份，精簡與優化專案結構。
-5. **回歸測試 100% PASS 與 GitHub Push**：
-   - `tests/verify_vocab_decomposition.py` 與 `tests/verify_pomodoro_final.py` 雙驗證皆 100% 透過，全天 10 時段 Cycle 測試 100% PASS，已 Successfully Push 至 GitHub。
-
 ## 目前狀態
-- 可執行：是
-- 已驗證：是 (verify_vocab_decomposition.py + verify_pomodoro_final.py 雙 100% PASS)
-- 未完成：無 (全部完成，已收工)
 
-## 下一步
-1. 播報卡片將每日自動帶來最新的斯多噶心法與 11,464 筆權威單字庫。
-2. 若需更新單字，可執行 `py -3.11 build_vocab_db.py`。
-3. 隨時執行 `py -3.11 tests/verify_vocab_decomposition.py` 驗證單字庫結構正確性。
+- 整體：`PARTIAL`（本機功能、資料與 GitHub `VERIFIED`；目標 Hermes 未部署；歷史 reflog 有缺失 tree）。
+- GitHub：`VERIFIED_REMOTE`。新版已提交至 `master`，README、installer、英文資料與本 handoff 回讀一致。
+- Hermes／Discord：未安裝目標電腦、未修改 cron／頻道、未發送正式播報。
+- 收工時間：2026-08-10（Asia/Taipei）。
+- Agent／電腦：Codex／`YULIN-SFG16-72`。
 
-## 注意事項
-- 請務必使用 **`py -3.11`** 執行 Python 腳本，避免系統預設 Python 3.14 缺少套件。
-- 專案的 `data/` 目錄與 AppData 中皆已同步備妥 V4、V5 與斯多噶 366 哲理資料庫。
+## 本輪完成
 
-## 最近更新
-- 時間：2026-07-29 21:06 (GMT+8)
-- 更新者：Antigravity (Google DeepMind)
-- 電腦：DESKTOP-P5NQS9D
-- 成果 commit：b2c0f71
-- Git push：VERIFIED (SUCCESS)
-- Obsidian：SYNCED
+1. 英文資料完整性與正確度
+   - 3 套課程、128/128 正式單元；32 份逐課乾淨逐字稿加 96 份合併 ASR 交叉證據，另讀取 256 題組／1,967 題來源題目。
+   - 代表字現在必須匹配結構化 `word_roots`；修正 27 個把 `foot`、`star`、`mind` 等英譯詞誤當代表字的單元，結果為 128/128 結構化匹配。
+   - 18 個來源例句的複數、過去式或分詞答案已保留實際詞形；128/128 均為來源例句填空。
+   - 15 句英文作窄範圍文法、用字或事實修正，衍生卡保留 `example_editorial_note` 與來源 reference。
+   - 課程分組改稱「課程字根記憶」：保留教學助記價值，不把整組宣稱成嚴格歷史語源同源。
 
-## 2026-08-09 生命週期權威更新
+2. 其他離線資料
+   - `data/stoic_daily_quotes.json` 完整覆蓋閏年 366 天；62 個 PDF／Markdown 轉錄字形、漏字或標點問題已正規化。
+   - 只有 2 筆曾夾帶長引文、其餘 364 筆沒有；現已統一為 `{MM-DD: {title}}`，避免 runtime schema 不一致。
+   - 原始 `Hui Dao Zi Ji De Nei Xin ... Ryan Holiday_20260405.md` 只作唯讀核對，未修改、未納入 installer、仍保持 untracked。
 
-- 上述執行與同步紀錄保留；Obsidian 行只作歷史證據，不再是收工要求。
-- 新增 CHANGELOG，更新 AGENTS／README；既有未知 untracked Markdown 保留且不 stage。
-- 程式、排程與 Discord 未執行；GitHub 治理 commit `4a266be1ab4ceb7a9ddd7e4c598809e48c730ad9` 已推送 `master` 並回讀一致。
-- Reachable object connectivity 通過；自動 geometric repack 仍會命中舊的不可達壞 tree，後續 Git 命令暫以單次 `maintenance.auto=false` 執行。
-- 唯一續跑點：另案修復不可達 object／repack，不影響目前 branch 交付。
+3. 離線 Hermes runtime 與文件
+   - 修正明確 `POMODORO_DATA_DIR` 被覆寫的可攜路徑 bug；臨時 Hermes 安裝在錯誤 `LOCALAPPDATA` 下仍可依指定資料根目錄正確執行。
+   - Python 需求由錯誤的 3.8+ 修正為 3.10+（建議 3.11）。
+   - README 已明示本機／GitHub／目標 Hermes 三層部署狀態；部署文件收斂成先 delivery、再 installer、再 dry-run、最後核准觀察既有 cron。
+   - installer 只同步 7 個必要檔案，不複製 `.env`、webhook、原始課程／影音／逐字稿或 `pomodoro_vocab_state.json`，也不建立排程。
+
+## 驗證證據
+
+- 英文 builder `--check`：PASS（courses=3、cards=128、transcripts=32、raw_asr=96、questions=1967）。
+- `verify_english_hourly_cards.py`：PASS（groups=256）。
+- `verify_english_content_accuracy.py`：PASS（structured_roots=128、fill_prompts=128、editorial_corrections=15、V5 spelling cross-check=123、reviewed exceptions=5）。
+- Stoic normalizer `--check` 與 `verify_stoic_daily_quotes.py`：PASS（dates=366、curated=62）。
+- `verify_offline_runtime.py`：PASS（offline local almanac、runtime_files=7、portable explicit data root）。
+- `verify_pomodoro_enhancements.py`、`verify_vocab_decomposition.py`、`verify_pomodoro_final.py`、`verify_iching.py`、`verify_casting.py`、`verify_crossref.py`：全部 PASS。
+- `py_compile`、`git diff --check`、變更範圍 secret scan、可攜資料絕對路徑 scan：PASS。
+- Git active refs：`HEAD`、`master`、`origin/master` 均指向 `42cdc87424dae1eb2d257520df271278dbde0b41`；active-ref object walk PASS。
+- Git 完整物件庫：`git fsck --full` 非零。歷史 reflog 的 commit `d04405b88c1c74070f242928461af602c1f2035f` 指向缺失 tree `09f93e7589edaaa0b7a91254e51dfd647dc39e54`，另有 dangling objects；不在目前 branch／remote 可達歷史，本輪未做破壞性修復。
+
+## 安全與工作樹邊界
+
+- 本機 `unified_broadcaster.py` 已移除硬編碼 webhook；變更範圍未檢出 credential。
+- 遠端舊版曾含 webhook 字串；新版來源已移除，但使用者仍需在 Discord 端輪替，不要把新 webhook 寫進 Git。
+- 本次只提交新版程式、精簡資料、測試與交接文件；原始 Ryan Holiday Markdown 保持 untracked。未修復 Git object database、未安裝目標 Hermes，也未修改外部排程。
+
+## 回復方式
+
+- Repository 新版已提交；若需回復，另做可追蹤的 revert，不使用 `git reset --hard` 覆蓋未知檔案。
+- 目標 Hermes 尚未部署。日後安裝若需回復，從最近的 `%LOCALAPPDATA%\hermes\backups\offline-runtime-*` 複製原檔回 `scripts/` 與 `data/`；installer 不改 cron。
+
+## 唯一續跑點
+
+由使用者輪替 Discord webhook，再到另一台電腦執行：
+
+```powershell
+git pull
+py -3.11 install_offline_runtime.py
+py -3.11 install_offline_runtime.py --check
+py -3.11 "$env:LOCALAPPDATA\hermes\scripts\unified_broadcaster.py" --at 09:00 --dry-run
+```
+
+確認「課程字根記憶」、例句填空與 spoiler 答案後，只觀察既有 Hermes `no_agent` cron；不要另建 Windows 排程或第二個 cron。

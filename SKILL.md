@@ -1,11 +1,11 @@
 ---
 name: pomodoro-micro-card
-description: "Maintain and troubleshoot the zero-token Pomodoro micro-card cron system — vocabulary word with pronunciation, 曾仕強 I Ching hexagram divination, Gooday almanac, and Discord-only scheduler delivery."
+description: "Maintain and troubleshoot the zero-token Pomodoro micro-card cron system — offline English root-family course cards, 曾仕強 I Ching data, local almanac, and Discord-only Hermes delivery."
 ---
 
 # Pomodoro Micro-Card System (Merged Pomodoro Pulse)
 
-Zero-token `no_agent` cron script (`pomodoro_chat_original.py`) that delivers one compact micro-card to Discord #英文字根 every hour 06:00–18:00. The final-converged card has exactly four one-character axes in action-first order: `行` (the user's one real-life action now), `字` (vocabulary word with pronunciation and definition), `時` (Gooday day/hour rhythm), and `勢` (I Ching numbered glyph, uncertainty prompt, and interpretation). Reality and the `行` line always outrank symbolic lines.
+Zero-token `no_agent` cron runtime that uses pure Python to produce one compact micro-card for Discord #英文字根 every hour 06:00–18:00. Hermes owns stdout delivery; the runtime never calls a language model. The card has four axes: `行` (one real-life action), `字` (offline root-family lesson, representative word, video takeaway, and recall Q&A), `時` (local almanac), and `勢` (I Ching reference). Reality and `行` always outrank symbolic lines.
 
 ---
 
@@ -26,28 +26,27 @@ git clone https://github.com/sink6985757-web/merged-pomodoro-pulse.git
 cd merged-pomodoro-pulse
 ```
 
-### 3. 配置環境變數
-在克隆下來的專案根目錄下，建立一個 `.env` 檔案（或寫入宿主全域 `.env`）：
-```env
-DISCORD_WEBHOOK_URL=your_discord_webhook_url_here
-```
-
-### 4. 建立自動化定時任務 (Cron Job)
-使用以下命令，在 Hermes 中建立完全相容、格式一致的自動消耗播報任務：
+### 3. 安裝精簡離線 runtime
+將 repository 內的純 Python 程式與兩個精簡資料檔複製到 Hermes 既有路徑；不修改 cron、`.env` 或消耗狀態：
 ```bash
-hermes cron create "0 6-18 * * *" \
-  --name "每日無為天機｜life-pomodoro micro-card" \
-  --prompt "Run the Python script at ~/AppData/Local/hermes/scripts/unified_broadcaster.py with --consume using the terminal tool, timeout 60s. Output its stdout EXACTLY as-is — raw text, no markdown wrapping, no code fences, no extra formatting, no commentary. Never use triple backticks or any other wrapper. The raw text IS the final message." \
-  --deliver "discord:1521867388440543316"
+python install_offline_runtime.py
+python install_offline_runtime.py --check
 ```
-*(注意：路徑請根據宿主實際克隆或安裝的 `unified_broadcaster.py` 絕對路徑進行替換)*
+需要 Python 3.10 以上，建議 Python 3.11。
+使用 Hermes `--deliver` 時不需要 Discord webhook。只有選用 Python 直送時，才在本機 `.env` 設定 `DISCORD_WEBHOOK_URL`。
+
+### 4. 沿用自動化定時任務 (Cron Job)
+既有任務不需改排程架構。確認它仍以零 Token `no_agent` 方式呼叫 `<LOCALAPPDATA>/hermes/scripts/unified_broadcaster.py --consume`，並由 Hermes `--deliver` 原樣傳送 stdout。安裝器不建立 cron；全新主機的排程與 Discord 頻道須由使用者另行授權設定。
 
 ### 5. 一鍵執行全套自動化驗證
-執行自動化測試套件，確保起卦亂數、生肖干支、詞彙過濾與路徑相容性全數綠燈通過：
+執行自動化測試套件，確保離線資料、英文字根卡、起卦亂數與路徑相容性全數綠燈通過：
 ```bash
+python tests/verify_english_hourly_cards.py
+python tests/verify_english_content_accuracy.py
+python tests/verify_stoic_daily_quotes.py
+python tests/verify_offline_runtime.py
 python tests/verify_pomodoro_final.py
 ```
-若輸出 `PASS casts_4moving=960 eligible=6180 cards=130 concurrent_outputs=1`，代表部署 100% 成功。
 
 ---
 
@@ -57,10 +56,9 @@ python tests/verify_pomodoro_final.py
 unified_broadcaster.py      ← 播報主腳本（當 Dry-run 時會直接格式化輸出 CJK 繁體中文卡片）
 ├── pomodoro_chat_original.py   ← 計算核心與狀態引擎（計算週期、易經起卦、農民曆抓取）
 │   ├── data/
-│   │   ├── vocab_decomposition.json # 離線字根拆解資料庫
-│   │   └── vocab_corpus/            # 字根 markdown 原始語料庫
+│   │   ├── english_hourly_cards.json # 128 個正式課程單元的精簡衍生卡
+│   │   └── stoic_daily_quotes.json   # 366 日行動輔助摘要
 │   ├── pomodoro_iching_data.py  # 曾仕強教授 64 卦、384 爻辭、變爻規則數據庫
-│   ├── Gooday almanac cache    # 每日/每時辰宜忌快取
 │   └── pomodoro_vocab_state.json # 狀態記錄檔（含鎖、目前 Cycle 與消耗進度）
 ├── lunar_almanac.py        # 🏮 備用離線農民曆：干支沖煞算法
 ├── pomodoro_focus.py       # 🔧 專注 90 分鐘番茄鐘與休息提示變體邏輯
@@ -74,7 +72,7 @@ unified_broadcaster.py      ← 播報主腳本（當 Dry-run 時會直接格式
 ### 1. 純文字模式（單一 authority 播報）
 ```text
 ｜行｜<90m 時段>｜<mode> <S{N}/8[ 收尾]|完成>｜<action>
-｜字｜<word> [pron]｜<pos>. <gloss>
+｜字｜<root>=<meaning>｜<word> <gloss>｜<decomposition>｜提示：<video takeaway>｜問：<prompt> 答：||<answer>||
 ｜時｜<day 宜忌>｜<hour 宜忌>｜<沖煞>｜現實優先
 ｜勢｜第<N>卦 <glyph> <name>[→第<M>卦 <glyph> <changed_name>]｜<moving|靜>｜<hint>
 ```
@@ -83,8 +81,8 @@ unified_broadcaster.py      ← 播報主腳本（當 Dry-run 時會直接格式
 - **行計數系統統一**：每日劃分為 8 個 90 分鐘區段。首小時卡片顯示 `S{N}/8`（例如：`S1/8`），次小時（收尾小時）顯示 `S{N}/8 收尾`，18:00 卡片則顯示 `完成`。
 - **勢 決策提示**：刪除了原尾部的 `｜守主線…｜只改一處…` 等決策護欄提示文字（2026-07-20 移去），此行在 interpretation hint 處結束。
 - **勢 四爻變規則**：依曾仕強教授體系，四爻變時需擷取**變卦下卦（內卦）**之卦德提示，並以前綴 `{changed_name}內卦提示：` 呈現，避免長篇幅文字溢出。
-- **字 詞彙 pool 品質門檻**：表面文字不重複，僅讀取經過 v4 結構化比對與 Morpheme-match 驗證之有效詞彙，移除了對 Morpheme Decomposition 欄位的強制要求（Decomposition 變為可選），使可用 pool 大幅擴增至 6,180 筆優質常用單字。
-- **時 宜忌基準**：抓取 Gooday 官網為優先；斷線時自動切換至 `lunar_almanac` 基於傳統干支的本機推算算法。
+- **字 課程 authority**：優先使用 3 套課程的 128 個正式單元；字根拼法、定義和拆解由課程資料與逐課摘要交叉校正，合併 ASR 逐字稿只作證據層，不直接成為顯示文字。課程家族是助記分組，不等於逐項歷史語源認證。舊 V5 字庫僅在本機存在且課程卡不存在時回退。
+- **時 宜忌基準**：`unified_broadcaster.py --consume` 預設只用 `lunar_almanac.py`；只有明確傳入 `--online-almanac` 才允許抓取 Gooday。
 
 ---
 
@@ -124,10 +122,10 @@ python tests/verify_crossref.py
 1. **易經矩陣查表順序**：
    曾仕強教授體系的卦象查表順序為 `KING_WEN_MATRIX[lower_trigram][upper_trigram]`（下卦在左，上卦在頂）。**若顛倒為 `[upper][lower]`，64 卦中會有 56 卦傳回錯誤的卦號與爻辭**，僅 8 個八純卦（上下卦相同）能倖免。
 2. **路徑跨平台相容性**：
-   在 Git-bash/MSYS 等 Windows 模擬 bash 環境中，`Path(__file__).resolve()` 會展開為 POSIX 風格路徑（`/c/Users/...`）。若將此路徑寫入 Python 的 `POMODORO_DATA_DIR` 環境變數中，原生 Windows `python.exe` 解譯器將無法識別而導致資料庫載入失敗（單字顯示為 "無"）。在 live 環境中，請直接刪除或不設置 `POMODORO_DATA_DIR`，讓其自然回退至由驅動器識別的 `LOCALAPPDATA/hermes`。
+   明確設定的 `POMODORO_DATA_DIR` 具有最高優先權，必須是目前 Python 可辨識且包含 `data/` 的 Hermes 根目錄。未設定時，程式會自動尋找腳本同層的 `data/`，或 `scripts/` 的上一層 `data/`；不要把 Git-bash/MSYS 的 `/c/Users/...` 路徑傳給原生 Windows `python.exe`。
 3. **Cron 播報 stdout 污染**：
    在 headless/no_agent 定時排程中，所有的 `sys.stderr` 警告或除錯訊息（如 `⚠️ 警告: 目前使用預設 Webhook...`）會與 stdout 混合。務必將非必要的 debug print 全部關閉或導流，保持 stdout 輸出的純淨。
 4. **字根提取空行跳脫陷阱**：
    在 `vocab_decomp_extract.py` 提取字根時，遇到空行必須使用 `continue` 繼續向下掃描，而非 `break`。因為劉毅的語料 markdown 中，單字定義與 `《...》` 拆解公式之間常有空行，使用 `break` 將導致超過 576 筆字根定義遺失。
-5. **雙重提交一致性**：
-   在收工（Shutdown）或同步時，如果修改了核心邏輯，務必在 **本機實體 `AppData/Local/hermes/scripts/`** 與 **本倉庫 `merged-pomodoro-pulse/`** 兩個目錄中同時進行 patch 修改，保持兩側代碼 100% 同步與乾淨。
+5. **Repository 與 runtime 一致性**：
+   核心邏輯只在 repository 維護。取得 GitHub／Hermes 部署授權後，使用 `install_offline_runtime.py` 同步至目標，再以 `--check` 的 SHA-256 回讀驗證；不要在收工時手動雙邊 patch。
