@@ -157,9 +157,12 @@ with tempfile.TemporaryDirectory() as td:
     state = json.loads(state_path.read_text(encoding="utf-8"))
     assert len(state["history"]) == 2
     assert len(state["slot_reservations"]) == 2
-    assert len(state["daily_casts"]) == 2
-    for slot_key, reservation in state["slot_reservations"].items():
-        assert state["daily_casts"][slot_key] == reservation["cast_values"]
+    # 一天一卦（2026-08-11 改）：09:00 與 10:00 同一天共用同一 daily_casts key；
+    # 各時段 reservation 存的 cast_values 必須等於當天那一卦。
+    assert len(state["daily_casts"]) == 1
+    day_values = next(iter(state["daily_casts"].values()))
+    for _slot_key, reservation in state["slot_reservations"].items():
+        assert day_values == reservation["cast_values"]
     assert state["history"][0]["word"].lower() == state["history"][1]["word"].lower()
     assert state["history"][1]["review_stage"] == "refresh"
     print("Starting manual run checks (non-consuming 11:00)...")

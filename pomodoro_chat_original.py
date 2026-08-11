@@ -1041,6 +1041,10 @@ def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[st
     state["corpus_signature"] = sig
 
     slot_key = dt.strftime("%Y-%m-%dT%H")
+    # 2026-08-11 起改為一天一卦：daily_casts 以「日期」為 key，
+    # 全天 13 個整點時段（06:00~18:00）共用同一個起卦結果；
+    # slot_reservations 仍以小時為 key 保持時段冪等（同 slot 重試重用同一字+同一卦）。
+    day_key = dt.strftime("%Y-%m-%d")
     reservations = state.get("slot_reservations")
     if not isinstance(reservations, dict):
         reservations = {}
@@ -1088,14 +1092,15 @@ def _choose_vocab_entry_unlocked(dt: datetime, consume: bool = False) -> dict[st
         if not isinstance(daily_casts, dict):
             daily_casts = {}
             state["daily_casts"] = daily_casts
-        cast_values = daily_casts.get(slot_key)
+        # 一天一卦：以日期為 key，全天共用同一卦（2026-08-11 改）
+        cast_values = daily_casts.get(day_key)
         if (
             not isinstance(cast_values, list)
             or len(cast_values) != 6
             or any(value not in {6, 7, 8, 9} for value in cast_values)
         ):
             cast_values = generate_cast_values()
-            daily_casts[slot_key] = cast_values
+            daily_casts[day_key] = cast_values
         for old_slot_key in sorted(daily_casts)[:-96]:
             daily_casts.pop(old_slot_key, None)
         if review_stage == "new_anchor":
