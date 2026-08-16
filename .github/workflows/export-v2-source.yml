@@ -1,0 +1,21 @@
+name: Export V2 Source
+
+on:
+  push:
+    branches: ["v2-source-export"]
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Create source archive
+        run: git archive --format=zip --output=merged-pomodoro-pulse-original-source.zip HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merged-pomodoro-pulse-original-source
+          path: merged-pomodoro-pulse-original-source.zip
+          retention-days: 3
